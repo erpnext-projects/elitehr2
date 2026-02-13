@@ -1,0 +1,105 @@
+{
+ "actions": [],
+ "allow_copy": 1,
+ "autoname": "autoincrement",
+ "creation": "2026-02-07 21:58:46.101769",
+ "default_view": "List",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "shift_schedule_name",
+  "en_name",
+  "type",
+  "color",
+  "description",
+  "active",
+  "days"
+ ],
+ "fields": [
+  {
+   "fieldname": "shift_schedule_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "\u0627\u0633\u0645 \u0627\u0644\u062c\u062f\u0648\u0644",
+   "reqd": 1
+  },
+  {
+   "fieldname": "en_name",
+   "fieldtype": "Data",
+   "label": "\u0627\u0644\u0627\u0633\u0645 \u0628\u0627\u0644\u0625\u0646\u062c\u0644\u064a\u0632\u064a\u0629"
+  },
+  {
+   "fieldname": "type",
+   "fieldtype": "Select",
+   "label": "\u0646\u0648\u0639 \u0627\u0644\u062c\u062f\u0648\u0644",
+   "options": "\u062b\u0627\u0628\u062a\n\u0645\u0631\u0646\n\u062f\u0648\u0631\u064a\n\u0645\u062e\u0635\u0635",
+   "reqd": 1
+  },
+  {
+   "fieldname": "color",
+   "fieldtype": "Color",
+   "label": "\u0627\u0644\u0644\u0648\u0646"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "\u0627\u0644\u0648\u0635\u0641"
+  },
+  {
+   "default": "0",
+   "fieldname": "active",
+   "fieldtype": "Check",
+   "label": "\u0645\u0641\u0639\u0644"
+  },
+  {
+   "fieldname": "days",
+   "fieldtype": "Table",
+   "label": "\u0623\u064a\u0627\u0645 \u0648\u0633\u0627\u0639\u0627\u062a \u0627\u0644\u0639\u0645\u0644",
+   "options": "Elitehr Shifts Days",
+   "reqd": 1
+  }
+ ],
+ "force_re_route_to_default_view": 1,
+ "grid_page_length": 50,
+ "hide_toolbar": 1,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-02-09 14:35:43.899532",
+ "modified_by": "Administrator",
+ "module": "EliteHr2",
+ "name": "Elitehr Shift Schedule",
+ "naming_rule": "Autoincrement",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Elite HR Admin",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "quick_entry": 1,
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

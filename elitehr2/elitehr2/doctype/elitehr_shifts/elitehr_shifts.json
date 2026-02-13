@@ -1,0 +1,161 @@
+{
+ "actions": [],
+ "allow_copy": 1,
+ "autoname": "autoincrement",
+ "creation": "2026-02-07 22:00:15.844706",
+ "default_view": "List",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "shift_name",
+  "type",
+  "start_time",
+  "column_break_lyks",
+  "en_name",
+  "color",
+  "end_time",
+  "section_break_lmth",
+  "grace_period",
+  "column_break_yzhx",
+  "break",
+  "column_break_ckxl",
+  "early_departure",
+  "section_break_obro",
+  "shift_night",
+  "active"
+ ],
+ "fields": [
+  {
+   "fieldname": "shift_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "\u0627\u0633\u0645 \u0627\u0644\u0648\u0631\u062f\u064a\u0629",
+   "reqd": 1
+  },
+  {
+   "fieldname": "en_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "\u0627\u0644\u0627\u0633\u0645 \u0628\u0627\u0644\u0625\u0646\u062c\u0644\u064a\u0632\u064a\u0629"
+  },
+  {
+   "fieldname": "type",
+   "fieldtype": "Select",
+   "label": " \u0646\u0648\u0639 \u0627\u0644\u0648\u0631\u062f\u064a\u0629",
+   "options": "\u0635\u0628\u0627\u062d\u064a\u0629\n\u0645\u0633\u0627\u0626\u064a\u0629\n\u0644\u064a\u0644\u064a\u0629\n\u0645\u0631\u0646\u0629\n\u0645\u0646\u0642\u0633\u0645\u0629"
+  },
+  {
+   "fieldname": "color",
+   "fieldtype": "Color",
+   "label": "\u0627\u0644\u0644\u0648\u0646"
+  },
+  {
+   "fieldname": "start_time",
+   "fieldtype": "Time",
+   "label": "\u0648\u0642\u062a \u0627\u0644\u0628\u062f\u0627\u064a\u0629",
+   "reqd": 1
+  },
+  {
+   "fieldname": "end_time",
+   "fieldtype": "Time",
+   "label": "\u0648\u0642\u062a \u0627\u0644\u0646\u0647\u0627\u064a\u0629 ",
+   "reqd": 1
+  },
+  {
+   "fieldname": "grace_period",
+   "fieldtype": "Duration",
+   "hide_days": 1,
+   "hide_seconds": 1,
+   "label": "\u0641\u062a\u0631\u0629 \u0627\u0644\u0633\u0645\u0627\u062d"
+  },
+  {
+   "fieldname": "break",
+   "fieldtype": "Duration",
+   "hide_days": 1,
+   "hide_seconds": 1,
+   "label": "\u0627\u0644\u0627\u0633\u062a\u0631\u0627\u062d\u0629"
+  },
+  {
+   "fieldname": "early_departure",
+   "fieldtype": "Duration",
+   "hide_days": 1,
+   "hide_seconds": 1,
+   "label": "\u0627\u0646\u0635\u0631\u0627\u0641 \u0645\u0628\u0643\u0631"
+  },
+  {
+   "fieldname": "column_break_lyks",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_lmth",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_yzhx",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_ckxl",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_obro",
+   "fieldtype": "Section Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "shift_night",
+   "fieldtype": "Check",
+   "label": "\u0648\u0631\u062f\u064a\u0629 \u0644\u064a\u0644\u064a\u0629"
+  },
+  {
+   "default": "1",
+   "fieldname": "active",
+   "fieldtype": "Check",
+   "label": "\u062a\u0641\u0639\u064a\u0644 \u0627\u0644\u0648\u0631\u062f\u064a\u0629"
+  }
+ ],
+ "force_re_route_to_default_view": 1,
+ "grid_page_length": 50,
+ "hide_toolbar": 1,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-02-09 14:35:43.089009",
+ "modified_by": "Administrator",
+ "module": "EliteHr2",
+ "name": "Elitehr Shifts",
+ "naming_rule": "Autoincrement",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Elite HR Admin",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "quick_entry": 1,
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

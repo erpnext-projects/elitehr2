@@ -1,0 +1,273 @@
+{
+ "actions": [],
+ "autoname": "format: {naming_series} {employee_id} - {#####}",
+ "creation": "2026-02-04 08:50:17.031749",
+ "default_view": "List",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "\u0627\u0644\u0645\u0639\u0644\u0648\u0645\u0627\u062a_\u0627\u0644\u0634\u062e\u0635\u064a\u0629_tab",
+  "naming_series",
+  "employee_id",
+  "employee_name",
+  "column_break_zvvr",
+  "email",
+  "phone_number",
+  "status",
+  "employee_type",
+  "\u0627\u0644\u0628\u064a\u0627\u0646\u0627\u062a_\u0627\u0644\u0648\u0638\u064a\u0641\u064a\u0629_tab",
+  "department",
+  "branche",
+  "date_of_appointment",
+  "column_break_efhq",
+  "type_of_contract",
+  "salary",
+  "registration_date",
+  "\u0627\u0644\u0628\u064a\u0627\u0646\u0627\u062a_\u0627\u0644\u0628\u0646\u0643\u064a\u0629_tab",
+  "bank_name",
+  "iban",
+  "column_break_zdug",
+  "account_number",
+  "salary_transfer_method",
+  "\u0627\u0644\u0645\u0633\u062a\u0646\u062f\u0627\u062a_tab",
+  "attachments",
+  "\u0627\u0644\u0639\u0642\u0648\u062f_tab",
+  "contracts",
+  "supply_contract",
+  "\u0627\u0644\u0627\u062c\u0627\u0632\u0627\u062a_tab",
+  "table_leaves",
+  "\u0645\u0648\u0627\u0642\u0639_\u0627\u0644\u0628\u0635\u0645\u0629_tab",
+  "\u0627\u0644\u062a\u062d\u0648\u064a\u0644\u0627\u062a_tab"
+ ],
+ "fields": [
+  {
+   "fieldname": "employee_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "\u0627\u0644\u0631\u0642\u0645 \u0627\u0644\u0648\u0638\u064a\u0641\u064a",
+   "reqd": 1,
+   "set_only_once": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "employee_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "\u0627\u0644\u0627\u0633\u0645",
+   "reqd": 1
+  },
+  {
+   "default": "\u0646\u0634\u0637",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "\u0627\u0644\u062d\u0627\u0644\u0629",
+   "options": "\u0646\u0634\u0637\n\u0645\u0624\u0631\u0634\u0641",
+   "reqd": 1
+  },
+  {
+   "fieldname": "department",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "\u0627\u0644\u0642\u0633\u0645 / \u0627\u0644\u0627\u062f\u0627\u0631\u0629",
+   "options": "Elitehr Departments"
+  },
+  {
+   "fieldname": "salary",
+   "fieldtype": "Data",
+   "label": "\u0627\u0644\u0631\u0627\u062a\u0628 \u0627\u0644\u0627\u0633\u0627\u0633\u064a"
+  },
+  {
+   "fieldname": "phone_number",
+   "fieldtype": "Data",
+   "label": "\u0631\u0642\u0645 \u0627\u0644\u0647\u0627\u062a\u0641"
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "\u0627\u0644\u0628\u0631\u064a\u062f \u0627\u0644\u0627\u0644\u0643\u062a\u0631\u0648\u0646\u064a"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "ID",
+   "no_copy": 1,
+   "options": "Emp -",
+   "reqd": 1
+  },
+  {
+   "fieldname": "branche",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "\u0627\u0644\u0641\u0631\u0639",
+   "options": "Elitehr Branches"
+  },
+  {
+   "fieldname": "\u0627\u0644\u0645\u0639\u0644\u0648\u0645\u0627\u062a_\u0627\u0644\u0634\u062e\u0635\u064a\u0629_tab",
+   "fieldtype": "Tab Break",
+   "label": "\u0627\u0644\u0645\u0639\u0644\u0648\u0645\u0627\u062a \u0627\u0644\u0634\u062e\u0635\u064a\u0629"
+  },
+  {
+   "fieldname": "\u0627\u0644\u0628\u064a\u0627\u0646\u0627\u062a_\u0627\u0644\u0648\u0638\u064a\u0641\u064a\u0629_tab",
+   "fieldtype": "Tab Break",
+   "label": "\u0627\u0644\u0628\u064a\u0627\u0646\u0627\u062a \u0627\u0644\u0648\u0638\u064a\u0641\u064a\u0629"
+  },
+  {
+   "fieldname": "\u0627\u0644\u0628\u064a\u0627\u0646\u0627\u062a_\u0627\u0644\u0628\u0646\u0643\u064a\u0629_tab",
+   "fieldtype": "Tab Break",
+   "label": "\u0627\u0644\u0628\u064a\u0627\u0646\u0627\u062a \u0627\u0644\u0628\u0646\u0643\u064a\u0629"
+  },
+  {
+   "fieldname": "\u0627\u0644\u0645\u0633\u062a\u0646\u062f\u0627\u062a_tab",
+   "fieldtype": "Tab Break",
+   "label": "\u0627\u0644\u0645\u0633\u062a\u0646\u062f\u0627\u062a"
+  },
+  {
+   "fieldname": "\u0645\u0648\u0627\u0642\u0639_\u0627\u0644\u0628\u0635\u0645\u0629_tab",
+   "fieldtype": "Tab Break",
+   "label": "\u0645\u0648\u0627\u0642\u0639 \u0627\u0644\u0628\u0635\u0645\u0629"
+  },
+  {
+   "fieldname": "\u0627\u0644\u062a\u062d\u0648\u064a\u0644\u0627\u062a_tab",
+   "fieldtype": "Tab Break",
+   "label": "\u0627\u0644\u062a\u062d\u0648\u064a\u0644\u0627\u062a"
+  },
+  {
+   "fieldname": "type_of_contract",
+   "fieldtype": "Data",
+   "label": "\u0646\u0648\u0639 \u0627\u0644\u062a\u0639\u0627\u0642\u062f"
+  },
+  {
+   "fieldname": "date_of_appointment",
+   "fieldtype": "Date",
+   "label": "\u062a\u0627\u0631\u064a\u062e \u0627\u0644\u062a\u0639\u064a\u064a\u0646"
+  },
+  {
+   "fieldname": "column_break_efhq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "registration_date",
+   "fieldtype": "Date",
+   "label": "\u062a\u0627\u0631\u064a\u062e \u0627\u0644\u062a\u0633\u062c\u064a\u0644"
+  },
+  {
+   "fieldname": "column_break_zvvr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "\u0645\u0648\u0638\u0641 \u0627\u0633\u0627\u0633\u064a",
+   "fieldname": "employee_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "\u0646\u0648\u0639 \u0627\u0644\u0645\u0648\u0638\u0641",
+   "options": "\u0645\u0648\u0638\u0641 \u0627\u0633\u0627\u0633\u064a\n\u0639\u0627\u0645\u0644",
+   "reqd": 1
+  },
+  {
+   "fieldname": "bank_name",
+   "fieldtype": "Data",
+   "label": "\u0627\u0633\u0645 \u0627\u0644\u0628\u0646\u0643"
+  },
+  {
+   "fieldname": "iban",
+   "fieldtype": "Select",
+   "label": "\u0631\u0642\u0645 \u0627\u0644\u0622\u064a\u0628\u0627\u0646 (IBAN)",
+   "options": "\u0627\u0644\u0628\u0646\u0643 \u0627\u0644\u0623\u0647\u0644\u064a \u0627\u0644\u0633\u0639\u0648\u062f\u064a (SNB)\n\u0645\u0635\u0631\u0641 \u0627\u0644\u0631\u0627\u062c\u062d\u064a\n\u0628\u0646\u0643 \u0627\u0644\u0631\u064a\u0627\u0636\n\u0627\u0644\u0628\u0646\u0643 \u0627\u0644\u0633\u0639\u0648\u062f\u064a \u0627\u0644\u0623\u0648\u0644 (SAB)\n\u0645\u0635\u0631\u0641 \u0627\u0644\u0625\u0646\u0645\u0627\u0621\n\u0627\u0644\u0628\u0646\u0643 \u0627\u0644\u0633\u0639\u0648\u062f\u064a \u0627\u0644\u0641\u0631\u0646\u0633\u064a\n\u0627\u0644\u0628\u0646\u0643 \u0627\u0644\u0639\u0631\u0628\u064a \u0627\u0644\u0648\u0637\u0646\u064a\n\u0628\u0646\u0643 \u0627\u0644\u0628\u0644\u0627\u062f\n\u0628\u0646\u0643 \u0627\u0644\u062c\u0632\u064a\u0631\u0629\n\u0627\u0644\u0628\u0646\u0643 \u0627\u0644\u0633\u0639\u0648\u062f\u064a \u0644\u0644\u0627\u0633\u062a\u062b\u0645\u0627\u0631\n\u0628\u0646\u0643 \u0627\u0644\u062e\u0644\u064a\u062c \u0627\u0644\u062f\u0648\u0644\u064a - \u0627\u0644\u0633\u0639\u0648\u062f\u064a\u0629\n\u0623\u062e\u0631\u064a"
+  },
+  {
+   "fieldname": "column_break_zdug",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "account_number",
+   "fieldtype": "Data",
+   "label": "\u0631\u0642\u0645 \u0627\u0644\u062d\u0633\u0627\u0628"
+  },
+  {
+   "fieldname": "salary_transfer_method",
+   "fieldtype": "Select",
+   "label": "\u0637\u0631\u064a\u0642\u0629 \u062a\u062d\u0648\u064a\u0644 \u0627\u0644\u0631\u0627\u062a\u0628",
+   "options": "\u062a\u062d\u0648\u064a\u0644 \u0628\u0646\u0643\u064a\n\u0646\u0642\u062f\u064a\n\u0634\u064a\u0643\n\u0623\u062e\u0631\u064a"
+  },
+  {
+   "fieldname": "attachments",
+   "fieldtype": "Table",
+   "options": "Elitehr Attachments"
+  },
+  {
+   "fieldname": "\u0627\u0644\u0639\u0642\u0648\u062f_tab",
+   "fieldtype": "Tab Break",
+   "label": "\u0627\u0644\u0639\u0642\u0648\u062f"
+  },
+  {
+   "depends_on": "eval: doc.employee_type == \"\u0645\u0648\u0638\u0641 \u0627\u0633\u0627\u0633\u064a\";",
+   "fieldname": "contracts",
+   "fieldtype": "Table",
+   "options": "Eliteht Employee Contracts"
+  },
+  {
+   "depends_on": "eval: doc.employee_type == \"\u0639\u0627\u0645\u0644\"",
+   "fieldname": "supply_contract",
+   "fieldtype": "Link",
+   "label": "\u0639\u0642\u062f \u0627\u0644\u0639\u0627\u0645\u0644",
+   "options": "Elitehr Supply Contract"
+  },
+  {
+   "fieldname": "\u0627\u0644\u0627\u062c\u0627\u0632\u0627\u062a_tab",
+   "fieldtype": "Tab Break",
+   "label": "\u0627\u0644\u0627\u062c\u0627\u0632\u0627\u062a"
+  },
+  {
+   "fieldname": "table_leaves",
+   "fieldtype": "Table",
+   "options": "Elitehr Employee Leaves Child Table"
+  }
+ ],
+ "grid_page_length": 50,
+ "hide_toolbar": 1,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-02-10 20:52:35.337676",
+ "modified_by": "Administrator",
+ "module": "EliteHr2",
+ "name": "Elitehr Employee",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Elite HR Admin",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "search_fields": "employee_name",
+ "show_preview_popup": 1,
+ "show_title_field_in_link": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "employee_name"
+}

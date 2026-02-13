@@ -1,0 +1,98 @@
+{
+ "actions": [],
+ "autoname": "format: Employment-{#####}",
+ "creation": "2026-02-07 18:54:36.750882",
+ "default_view": "List",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "\u0627\u0644\u0645\u0633\u0645\u064a_\u0627\u0644\u0648\u0638\u064a\u0641\u064a",
+  "department",
+  "\u0627\u0644\u062a\u0627\u0631\u064a\u062e",
+  "number",
+  "additional_requirements",
+  "status"
+ ],
+ "fields": [
+  {
+   "fieldname": "\u0627\u0644\u0645\u0633\u0645\u064a_\u0627\u0644\u0648\u0638\u064a\u0641\u064a",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "\u0627\u0644\u0645\u0633\u0645\u064a \u0627\u0644\u0648\u0638\u064a\u0641\u064a",
+   "reqd": 1
+  },
+  {
+   "fieldname": "department",
+   "fieldtype": "Link",
+   "label": "\u0627\u0644\u0642\u0633\u0645",
+   "options": "Elitehr Departments"
+  },
+  {
+   "fieldname": "\u0627\u0644\u062a\u0627\u0631\u064a\u062e",
+   "fieldtype": "Date",
+   "label": "\u0627\u0644\u062a\u0627\u0631\u064a\u062e"
+  },
+  {
+   "fieldname": "number",
+   "fieldtype": "Int",
+   "label": "\u0639\u062f\u062f \u0627\u0644\u0645\u0637\u0644\u0648\u0628",
+   "non_negative": 1
+  },
+  {
+   "fieldname": "additional_requirements",
+   "fieldtype": "Data",
+   "label": "\u0645\u062a\u0637\u0644\u0628\u0627\u062a \u0625\u0636\u0627\u0641\u064a\u0629",
+   "placeholder": "\u0627\u0644\u062e\u0628\u0631\u0629, \u0627\u0644\u0645\u0624\u0647\u0644\u0627\u062a, \u0627\u0644\u0645\u0647\u0627\u0631\u0627\u062a..."
+  },
+  {
+   "default": "\u0645\u0641\u062a\u0648\u062d",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "\u0645\u0641\u062a\u0648\u062d\n\u0642\u064a\u062f \u0627\u0644\u0627\u0646\u062a\u0638\u0627\u0631\n\u0645\u0643\u062a\u0645\u0644",
+   "reqd": 1
+  }
+ ],
+ "force_re_route_to_default_view": 1,
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-02-09 14:35:48.005643",
+ "modified_by": "Administrator",
+ "module": "EliteHr2",
+ "name": "Elitehr Employment",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Elite HR Admin",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

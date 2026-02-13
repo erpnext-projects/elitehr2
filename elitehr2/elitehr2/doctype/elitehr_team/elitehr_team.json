@@ -1,0 +1,90 @@
+{
+ "actions": [],
+ "allow_copy": 1,
+ "allow_rename": 1,
+ "autoname": "field:team_name",
+ "creation": "2026-02-10 20:18:00.453572",
+ "default_view": "List",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "team_name",
+  "team_description",
+  "team_color",
+  "section",
+  "team_leader"
+ ],
+ "fields": [
+  {
+   "fieldname": "team_description",
+   "fieldtype": "Small Text",
+   "label": "\u0648\u0635\u0641 \u0627\u0644\u0641\u0631\u064a\u0642"
+  },
+  {
+   "fieldname": "team_color",
+   "fieldtype": "Color",
+   "label": "\u0644\u0648\u0646 \u0627\u0644\u0641\u0631\u064a\u0642"
+  },
+  {
+   "fieldname": "section",
+   "fieldtype": "Data",
+   "label": "\u0627\u0644\u0642\u0633\u0645"
+  },
+  {
+   "fieldname": "team_leader",
+   "fieldtype": "Link",
+   "label": "\u0642\u0627\u0626\u062f \u0627\u0644\u0641\u0631\u064a\u0642",
+   "options": "Elitehr Employee"
+  },
+  {
+   "fieldname": "team_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "\u0627\u0633\u0645 \u0627\u0644\u0641\u0631\u064a\u0642",
+   "reqd": 1,
+   "unique": 1
+  }
+ ],
+ "force_re_route_to_default_view": 1,
+ "grid_page_length": 50,
+ "hide_toolbar": 1,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-02-11 19:48:24.117666",
+ "modified_by": "Administrator",
+ "module": "EliteHr2",
+ "name": "Elitehr Team",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Elite HR Admin",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

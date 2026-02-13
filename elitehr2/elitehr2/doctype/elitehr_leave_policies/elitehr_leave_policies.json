@@ -1,0 +1,171 @@
+{
+ "actions": [],
+ "allow_copy": 1,
+ "autoname": "autoincrement",
+ "creation": "2026-02-09 17:42:41.443474",
+ "default_view": "List",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "ar_name",
+  "column_break_kzhv",
+  "code",
+  "section_break_uose",
+  "normal_days",
+  "column_break_eidp",
+  "minimum_days",
+  "column_break_jceu",
+  "maximum_days",
+  "section_break_bdrj",
+  "pay_percentage",
+  "column_break_vgts",
+  "gender",
+  "section_break_osff",
+  "need_submit",
+  "need_attachment",
+  "can_transfer"
+ ],
+ "fields": [
+  {
+   "fieldname": "ar_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "\u0627\u0633\u0645 \u0627\u0644\u0633\u064a\u0627\u0633\u0629 (\u0639\u0631\u0628\u064a)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "\u0627\u0644\u0631\u0645\u0632",
+   "placeholder": "\u0645\u062b\u0627\u0644: Annual",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_kzhv",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_uose",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "normal_days",
+   "fieldtype": "Int",
+   "label": "\u0627\u0644\u0623\u064a\u0627\u0645 \u0627\u0644\u0627\u0641\u062a\u0631\u0627\u0636\u064a\u0629",
+   "non_negative": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_eidp",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "minimum_days",
+   "fieldtype": "Int",
+   "label": "\u0627\u0644\u062d\u062f \u0627\u0644\u0623\u062f\u0646\u064a",
+   "non_negative": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_jceu",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "maximum_days",
+   "fieldtype": "Int",
+   "label": "\u0627\u0644\u062d\u062f \u0627\u0644\u0623\u0642\u0635\u064a",
+   "non_negative": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_bdrj",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "pay_percentage",
+   "fieldtype": "Int",
+   "label": "\u0646\u0633\u0628\u0629 \u0627\u0644\u0623\u062c\u0631 (%)",
+   "non_negative": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_vgts",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "\u0627\u0644\u062c\u0645\u064a\u0639",
+   "fieldname": "gender",
+   "fieldtype": "Select",
+   "label": "\u0627\u0644\u062c\u0646\u0633 \u0627\u0644\u0645\u0637\u0627\u0628\u0642",
+   "options": "\u0627\u0644\u062c\u0645\u064a\u0639\n\u0630\u0643\u0648\u0631 \u0641\u0642\u0637\n\u0625\u0646\u0627\u062b \u0641\u0642\u0637",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_osff",
+   "fieldtype": "Section Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "need_submit",
+   "fieldtype": "Check",
+   "label": "\u064a\u062a\u0637\u0644\u0628 \u0645\u0648\u0627\u0641\u0642\u0629"
+  },
+  {
+   "default": "0",
+   "fieldname": "need_attachment",
+   "fieldtype": "Check",
+   "label": "\u064a\u062a\u0637\u0644\u0628 \u0645\u0633\u062a\u0646\u062f"
+  },
+  {
+   "default": "0",
+   "fieldname": "can_transfer",
+   "fieldtype": "Check",
+   "label": "\u064a\u0645\u0643\u0646 \u062a\u0631\u062d\u064a\u0644 \u0627\u0644\u0631\u0635\u064a\u062f"
+  }
+ ],
+ "force_re_route_to_default_view": 1,
+ "grid_page_length": 50,
+ "hide_toolbar": 1,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-02-10 17:28:12.296543",
+ "modified_by": "Administrator",
+ "module": "EliteHr2",
+ "name": "Elitehr Leave Policies",
+ "naming_rule": "Autoincrement",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Elite HR Admin",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "show_title_field_in_link": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "ar_name"
+}

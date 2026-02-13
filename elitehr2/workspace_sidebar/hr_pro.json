@@ -1,0 +1,51 @@
+{
+ "app": "elitehr2",
+ "creation": "2026-02-13 15:33:04.074943",
+ "docstatus": 0,
+ "doctype": "Workspace Sidebar",
+ "header_icon": "arrow-up-right",
+ "idx": 0,
+ "items": [
+  {
+   "child": 0,
+   "collapsible": 1,
+   "icon": "folder-kanban",
+   "indent": 1,
+   "keep_closed": 0,
+   "label": "\u0627\u0644\u0645\u0634\u0627\u0631\u064a\u0639 \u0648\u0627\u0644\u0645\u0647\u0627\u0645",
+   "link_type": "DocType",
+   "show_arrow": 0,
+   "type": "Section Break"
+  },
+  {
+   "child": 1,
+   "collapsible": 1,
+   "icon": "app-window",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "\u0627\u0644\u0645\u0634\u0627\u0631\u064a\u0639",
+   "link_to": "Elitehr Projects",
+   "link_type": "DocType",
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
+   "child": 1,
+   "collapsible": 1,
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "\u0627\u0644\u0645\u0647\u0627\u0645",
+   "link_to": "Elitehr Tasks",
+   "link_type": "DocType",
+   "show_arrow": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-02-13 17:07:38.417317",
+ "modified_by": "Administrator",
+ "module": "Core",
+ "name": "Hr Pro",
+ "owner": "Administrator",
+ "standard": 1,
+ "title": "Hr Pro"
+}

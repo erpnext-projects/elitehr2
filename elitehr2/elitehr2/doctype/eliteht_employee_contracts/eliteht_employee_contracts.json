@@ -1,0 +1,141 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-02-06 07:47:11.097964",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "contract_name",
+  "start_date",
+  "basic_salary",
+  "column_break_txaz",
+  "contract_type",
+  "end_date",
+  "status",
+  "\u0627\u0644\u0628\u062f\u0644\u0627\u062a_section",
+  "instead_of_housing",
+  "instead_of_phone",
+  "column_break_tpmw",
+  "instead_of_travel",
+  "instead_of_others",
+  "column_break_qoka",
+  "instead_of_food",
+  "section_break_qjgi",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "column_break_txaz",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "\u0627\u0644\u0628\u062f\u0644\u0627\u062a_section",
+   "fieldtype": "Section Break",
+   "label": "\u0627\u0644\u0628\u062f\u0644\u0627\u062a"
+  },
+  {
+   "fieldname": "section_break_qjgi",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "\u0627\u0644\u0645\u0644\u0627\u062d\u0638\u0627\u062a"
+  },
+  {
+   "fieldname": "instead_of_housing",
+   "fieldtype": "Float",
+   "label": "\u0628\u062f\u0644 \u0627\u0644\u0633\u0643\u0646",
+   "non_negative": 1,
+   "precision": "2"
+  },
+  {
+   "fieldname": "instead_of_phone",
+   "fieldtype": "Float",
+   "label": "\u0628\u062f\u0644 \u0627\u0644\u0647\u0627\u062a\u0641",
+   "non_negative": 1,
+   "precision": "2"
+  },
+  {
+   "fieldname": "column_break_tpmw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "instead_of_travel",
+   "fieldtype": "Float",
+   "label": "\u0628\u062f\u0644\u0627\u062a \u0627\u0644\u0645\u0648\u0627\u0635\u0644\u0627\u062a",
+   "non_negative": 1,
+   "precision": "2"
+  },
+  {
+   "fieldname": "instead_of_others",
+   "fieldtype": "Float",
+   "label": "\u0628\u062f\u0644\u0627\u062a \u0623\u062e\u0631\u064a",
+   "non_negative": 1,
+   "precision": "2"
+  },
+  {
+   "fieldname": "column_break_qoka",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "instead_of_food",
+   "fieldtype": "Float",
+   "label": "\u0628\u062f\u0644 \u0627\u0644\u0637\u0639\u0627\u0645",
+   "non_negative": 1,
+   "precision": "2"
+  },
+  {
+   "fieldname": "contract_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "\u0631\u0642\u0645 \u0627\u0644\u0639\u0642\u062f"
+  },
+  {
+   "fieldname": "start_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "\u062a\u0627\u0631\u064a\u062e \u0627\u0644\u0628\u062f\u0621"
+  },
+  {
+   "fieldname": "basic_salary",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "\u0627\u0644\u0631\u0627\u062a\u0628 \u0627\u0644\u0627\u0633\u0627\u0633\u064a"
+  },
+  {
+   "fieldname": "contract_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "\u0646\u0648\u0639 \u0627\u0644\u0639\u0642\u062f",
+   "options": "\n\u062f\u0627\u0626\u0645\n\u0645\u0624\u0642\u062a\n\u062a\u062f\u0631\u064a\u0628\n\u0627\u0633\u062a\u0634\u0627\u0631\u064a\n\u062f\u0648\u0627\u0645 \u062c\u0632\u0626\u064a"
+  },
+  {
+   "fieldname": "end_date",
+   "fieldtype": "Date",
+   "label": "\u062a\u0627\u0631\u064a\u062e \u0627\u0644\u0627\u0646\u062a\u0647\u0627\u0621"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "\u062d\u0627\u0644\u0629 \u0627\u0644\u0639\u0642\u062f",
+   "options": "\u0633\u0627\u0631\u064a\n\u0642\u064a\u062f \u0627\u0644\u0645\u0631\u0627\u062c\u0639\u0629\n\u0645\u0646\u062a\u0647\u064a"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-02-11 19:47:32.326047",
+ "modified_by": "Administrator",
+ "module": "EliteHr2",
+ "name": "Eliteht Employee Contracts",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
