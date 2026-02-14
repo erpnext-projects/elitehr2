@@ -33,6 +33,7 @@
   {
    "fieldname": "type",
    "fieldtype": "Select",
+   "in_list_view": 1,
    "label": "\u0646\u0648\u0639 \u0627\u0644\u0645\u0623\u0645\u0648\u0631\u064a\u0629",
    "options": "\u062f\u0627\u062e\u0644\u064a\u0629\n\u062e\u0627\u0631\u062c\u064a\u0629\n\u062a\u062f\u0631\u064a\u0628\n\u0627\u062c\u062a\u0645\u0627\u0639\n\u0632\u064a\u0627\u0631\u0629 \u0639\u0645\u0644",
    "reqd": 1
@@ -40,12 +41,14 @@
   {
    "fieldname": "address",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "\u0639\u0646\u0648\u0627\u0646 \u0627\u0644\u0645\u0623\u0645\u0648\u0631\u064a\u0629",
    "reqd": 1
   },
   {
    "fieldname": "destination",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "\u0627\u0644\u0648\u062c\u0647\u0629",
    "reqd": 1
   },
@@ -98,9 +101,9 @@
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-02-09 19:24:45.913654",
+ "modified": "2026-02-13 21:49:08.272297",
  "modified_by": "Administrator",
- "module": "EliteHr2",
+ "module": "Elitehr2",
  "name": "Elitehr Business Trip Request",
  "naming_rule": "Autoincrement",
  "owner": "Administrator",

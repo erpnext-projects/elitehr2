@@ -1,0 +1,64 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-02-14 15:00:46.425749",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_qp8p",
+  "amended_from",
+  "type"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_qp8p",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Elitehr Requests",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "\u0646\u0648\u0639 \u0627\u0644\u0637\u0644\u0628",
+   "options": "\u0625\u062c\u0627\u0632\u0629 \u0633\u0646\u0648\u064a\u0629\n\u0625\u062c\u0627\u0632\u0629 \u0637\u0627\u0631\u0626\u0629\n\u0625\u062c\u0627\u0632\u0629 \u0645\u0631\u0636\u064a\u0629\n\u0627\u0633\u062a\u0642\u0627\u0644\u0629\n\u062a\u062f\u0631\u064a\u0628\n\u062a\u0631\u0641\u064a\u0629\n\u062a\u0639\u062f\u064a\u0644 \u062d\u0636\u0648\u0631\n\u0633\u0644\u0641\u0629 \u0631\u0627\u062a\u0628\n\u0637\u0644\u0628 \u0645\u0633\u062a\u0646\u062f\n\u0639\u0645\u0644 \u0625\u0636\u0627\u0641\u064a\n\u0645\u0635\u0631\u0648\u0641\u0627\u062a \u0633\u0641\u0631",
+   "reqd": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-02-14 19:09:15.321884",
+ "modified_by": "Administrator",
+ "module": "Elitehr2",
+ "name": "Elitehr Requests",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Elite HR Admin",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

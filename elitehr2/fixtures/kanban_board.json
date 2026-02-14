@@ -1,0 +1,41 @@
+[
+ {
+  "columns": [
+   {
+    "column_name": "Open",
+    "indicator": "Gray",
+    "order": "[\n \"13-02-26-00004\"\n]",
+    "status": "Active"
+   },
+   {
+    "column_name": "Closed",
+    "indicator": "Gray",
+    "order": "[]",
+    "status": "Active"
+   },
+   {
+    "column_name": "Cancelled",
+    "indicator": "Gray",
+    "order": "[]",
+    "status": "Active"
+   },
+   {
+    "column_name": "Completed",
+    "indicator": "Orange",
+    "order": "[\n \"13-02-26-00005\",\n \"13-02-26-00001\"\n]",
+    "status": "Active"
+   }
+  ],
+  "docstatus": 0,
+  "doctype": "Kanban Board",
+  "field_name": "status",
+  "fields": "[\"subject\", \"due_date\", \"priority\"]",
+  "filters": null,
+  "kanban_board_name": "Tasks View",
+  "modified": "2026-02-13 17:21:22.874122",
+  "name": "Tasks View",
+  "private": 0,
+  "reference_doctype": "Elitehr Tasks",
+  "show_labels": 0
+ }
+]

@@ -6,7 +6,7 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "\u0627\u0644\u0645\u0633\u0645\u064a_\u0627\u0644\u0648\u0638\u064a\u0641\u064a",
+  "job_position",
   "department",
   "\u0627\u0644\u062a\u0627\u0631\u064a\u062e",
   "number",
@@ -14,13 +14,6 @@
   "status"
  ],
  "fields": [
-  {
-   "fieldname": "\u0627\u0644\u0645\u0633\u0645\u064a_\u0627\u0644\u0648\u0638\u064a\u0641\u064a",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "\u0627\u0644\u0645\u0633\u0645\u064a \u0627\u0644\u0648\u0638\u064a\u0641\u064a",
-   "reqd": 1
-  },
   {
    "fieldname": "department",
    "fieldtype": "Link",
@@ -52,17 +45,24 @@
    "label": "Status",
    "options": "\u0645\u0641\u062a\u0648\u062d\n\u0642\u064a\u062f \u0627\u0644\u0627\u0646\u062a\u0638\u0627\u0631\n\u0645\u0643\u062a\u0645\u0644",
    "reqd": 1
+  },
+  {
+   "fieldname": "job_position",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "\u0627\u0644\u0645\u0633\u0645\u064a \u0627\u0644\u0648\u0638\u064a\u0641\u064a",
+   "reqd": 1
   }
  ],
  "force_re_route_to_default_view": 1,
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-02-09 14:35:48.005643",
+ "modified": "2026-02-14 14:00:11.978875",
  "modified_by": "Administrator",
- "module": "EliteHr2",
+ "module": "Elitehr2",
  "name": "Elitehr Employment",
- "naming_rule": "Expression",
+ "naming_rule": "Expression (old style)",
  "owner": "Administrator",
  "permissions": [
   {

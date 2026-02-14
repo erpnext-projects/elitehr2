@@ -1,0 +1,20 @@
+{
+ "cards": [],
+ "charts": [
+  {
+   "width": "Half"
+  }
+ ],
+ "creation": "2026-02-14 14:52:07.182341",
+ "dashboard_name": "Home Dashboard",
+ "docstatus": 0,
+ "doctype": "Dashboard",
+ "idx": 0,
+ "is_default": 0,
+ "is_standard": 1,
+ "modified": "2026-02-14 14:52:07.182341",
+ "modified_by": "Administrator",
+ "module": "Elitehr2",
+ "name": "Home Dashboard",
+ "owner": "Administrator"
+}

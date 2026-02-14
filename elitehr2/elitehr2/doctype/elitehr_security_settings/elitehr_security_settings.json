@@ -1,0 +1,84 @@
+{
+ "actions": [],
+ "allow_copy": 1,
+ "allow_rename": 1,
+ "creation": "2026-02-14 14:29:14.849098",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "password_policies_section",
+  "minimum_length",
+  "capital_letters_are_required",
+  "numbers_required",
+  "special_codes_are_required"
+ ],
+ "fields": [
+  {
+   "fieldname": "password_policies_section",
+   "fieldtype": "Section Break",
+   "label": "Password policies"
+  },
+  {
+   "default": "8",
+   "fieldname": "minimum_length",
+   "fieldtype": "Select",
+   "label": "Minimum length",
+   "options": "6\n8\n10\n12"
+  },
+  {
+   "default": "1",
+   "fieldname": "capital_letters_are_required",
+   "fieldtype": "Check",
+   "label": "Capital letters are required"
+  },
+  {
+   "default": "1",
+   "fieldname": "numbers_required",
+   "fieldtype": "Check",
+   "label": "Numbers required"
+  },
+  {
+   "default": "1",
+   "fieldname": "special_codes_are_required",
+   "fieldtype": "Check",
+   "label": "Special codes are required"
+  }
+ ],
+ "grid_page_length": 50,
+ "hide_toolbar": 1,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-02-14 19:09:14.936714",
+ "modified_by": "Administrator",
+ "module": "Elitehr2",
+ "name": "Elitehr Security Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Elite HR Admin",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

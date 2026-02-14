@@ -1,0 +1,22 @@
+/* .search-bar,.dropdown-notifications,.dropdown-help {
+    display: none !important;
+}
+
+.btn-reset.standard-sidebar-label{
+    display: none;
+} */
+
+
+
+.desk-sidebar-item.selected {
+    background: black !important;
+}
+.desk-sidebar-item.selected a {
+    color: white;
+}
+.desk-sidebar-item.selected svg{
+    stroke: white !important;
+}
+.desk-sidebar-item a {
+    font-size: 16px;
+}
