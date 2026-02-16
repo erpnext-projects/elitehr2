@@ -92,7 +92,7 @@ def create_admin_user():
             "Elitehr Supply Contract",
             "Elitehr Resignations",
             "Elitehr Employment",
-            "Elitehr Organizational structure",
+            "Elitehr Org Structure",
             "Eliteht Employee Contracts",
             "Elitehr Leave Policies",
             "Elitehr Short Leave Requests",

@@ -4,7 +4,7 @@
    {
     "column_name": "Open",
     "indicator": "Gray",
-    "order": "[\n \"13-02-26-00004\"\n]",
+    "order": "[]",
     "status": "Active"
    },
    {
@@ -22,7 +22,7 @@
    {
     "column_name": "Completed",
     "indicator": "Orange",
-    "order": "[\n \"13-02-26-00005\",\n \"13-02-26-00001\"\n]",
+    "order": "[]",
     "status": "Active"
    }
   ],

@@ -1,8 +1,9 @@
 {
  "actions": [],
+ "allow_copy": 1,
  "allow_rename": 1,
  "autoname": "field:ar_name",
- "creation": "2026-02-07 17:25:52.788576",
+ "creation": "2026-02-16 18:48:49.112672",
  "default_view": "Tree",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -10,20 +11,22 @@
   "ar_name",
   "en_name",
   "type",
+  "column_break_lzyd",
   "manager",
-  "description",
-  "sort",
+  "order",
   "active",
-  "section_break_kr6x",
+  "section_break_glrw",
+  "description",
+  "section_break_5amn",
   "lft",
   "rgt",
   "is_group",
   "old_parent",
-  "parent_elitehr_organizational_structure"
+  "parent_elitehr_org_structure"
  ],
  "fields": [
   {
-   "fieldname": "section_break_kr6x",
+   "fieldname": "section_break_5amn",
    "fieldtype": "Section Break"
   },
   {
@@ -51,80 +54,83 @@
   {
    "fieldname": "old_parent",
    "fieldtype": "Link",
+   "hidden": 1,
    "label": "Old Parent",
-   "options": "Elitehr Organizational structure"
+   "options": "Elitehr Org Structure"
   },
   {
-   "fieldname": "parent_elitehr_organizational_structure",
+   "fieldname": "parent_elitehr_org_structure",
    "fieldtype": "Link",
    "ignore_user_permissions": 1,
-   "label": "Parent Elitehr Organizational structure",
-   "options": "Elitehr Organizational structure"
+   "label": "Parent Elitehr Org Structure",
+   "options": "Elitehr Org Structure"
   },
   {
-   "allow_in_quick_entry": 1,
+   "fieldname": "ar_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "\u0627\u0644\u0627\u0633\u0645 \u0628\u0627\u0644\u0639\u0631\u0628\u064a\u0629",
+   "options": "Name",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "en_name",
+   "fieldtype": "Data",
+   "label": "\u0627\u0644\u0627\u0633\u0645 \u0628\u0627\u0644\u0627\u0646\u062c\u0644\u064a\u0632\u064a\u0629",
+   "options": "Name"
+  },
+  {
    "fieldname": "type",
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "\u0627\u0644\u0646\u0648\u0639",
    "options": "\u0627\u0644\u0634\u0631\u0643\u0629\n\u0627\u0644\u0645\u0646\u0637\u0642\u0629\n\u0627\u0644\u0641\u0631\u0639\n\u0627\u0644\u0625\u062f\u0627\u0631\u0629\n\u0627\u0644\u0642\u0633\u0645",
-   "reqd": 1,
-   "sort_options": 1
+   "reqd": 1
   },
   {
-   "allow_in_quick_entry": 1,
-   "fieldname": "ar_name",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "\u0627\u0644\u0627\u0633\u0645 \u0628\u0627\u0644\u0639\u0631\u0628\u064a\u0629",
-   "reqd": 1,
-   "unique": 1
+   "fieldname": "column_break_lzyd",
+   "fieldtype": "Column Break"
   },
   {
-   "allow_in_quick_entry": 1,
-   "fieldname": "en_name",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "\u0627\u0644\u0627\u0633\u0645 \u0628\u0627\u0644\u0627\u0646\u062c\u0644\u064a\u0632\u064a\u0629"
-  },
-  {
-   "allow_in_quick_entry": 1,
    "fieldname": "manager",
    "fieldtype": "Link",
    "label": "\u0627\u0644\u0645\u062f\u064a\u0631",
    "options": "Elitehr Employee"
   },
   {
-   "allow_in_quick_entry": 1,
-   "fieldname": "description",
-   "fieldtype": "Small Text",
-   "label": "\u0627\u0644\u0648\u0635\u0641"
-  },
-  {
-   "allow_in_quick_entry": 1,
    "default": "1",
    "fieldname": "active",
    "fieldtype": "Check",
    "label": "\u0646\u0634\u0637"
   },
   {
-   "default": "0",
-   "fieldname": "sort",
+   "fieldname": "section_break_glrw",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "\u0627\u0644\u0648\u0635\u0641"
+  },
+  {
+   "fieldname": "order",
    "fieldtype": "Int",
    "label": "\u062a\u0631\u062a\u064a\u0628 \u0627\u0644\u0639\u0631\u0636"
   }
  ],
  "force_re_route_to_default_view": 1,
  "grid_page_length": 50,
+ "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "is_tree": 1,
  "links": [],
- "modified": "2026-02-09 14:35:48.803071",
+ "modified": "2026-02-16 20:45:49.857731",
  "modified_by": "Administrator",
- "module": "EliteHr2",
- "name": "Elitehr Organizational structure",
+ "module": "Elitehr2",
+ "name": "Elitehr Org Structure",
  "naming_rule": "By fieldname",
- "nsm_parent_field": "parent_elitehr_organizational_structure",
+ "nsm_parent_field": "parent_elitehr_org_structure",
  "owner": "Administrator",
  "permissions": [
   {
@@ -152,11 +158,9 @@
    "write": 1
   }
  ],
- "quick_entry": 1,
  "row_format": "Dynamic",
  "rows_threshold_for_grid_search": 20,
- "search_fields": "type",
- "sort_field": "sort",
+ "sort_field": "order",
  "sort_order": "ASC",
  "states": []
 }

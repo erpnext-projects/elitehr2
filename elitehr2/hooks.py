@@ -27,8 +27,8 @@ app_license = "mit"
 # include js, css files in header of desk.html
 # app_include_css = "/assets/elitehr2/css/elitehr2.css"
 # app_include_js = "/assets/elitehr2/js/elitehr2.js"
-app_include_css = "/assets/elitehr/css/elitehr.css"
-app_include_js = "/assets/elitehr/js/elitehr.js"
+app_include_css = "/assets/elitehr2/css/elitehr.css"
+app_include_js = "/assets/elitehr2/js/elitehr.js"
 
 # include js, css files in header of web template
 # web_include_css = "/assets/elitehr2/css/elitehr2.css"
@@ -252,4 +252,4 @@ after_install = "elitehr2.install.after_install"
 # ------------
 # List of apps whose translatable strings should be excluded from this app's translations.
 # ignore_translatable_strings_from = []
-fixtures = ["Navbar Settings","Custom HTML Block","Kanban Board"]
+fixtures = ["Navbar Settings","Custom HTML Block","Kanban Board","Workspace","System Settings"]

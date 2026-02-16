@@ -6,15 +6,15 @@
   }
  ],
  "creation": "2026-02-14 14:52:07.182341",
- "dashboard_name": "Home Dashboard",
+ "dashboard_name": "\u0627\u0644\u0631\u0626\u064a\u0633\u064a\u0629",
  "docstatus": 0,
  "doctype": "Dashboard",
  "idx": 0,
  "is_default": 0,
  "is_standard": 1,
- "modified": "2026-02-14 14:52:07.182341",
+ "modified": "2026-02-16 20:52:11.536937",
  "modified_by": "Administrator",
  "module": "Elitehr2",
- "name": "Home Dashboard",
+ "name": "\u0627\u0644\u0631\u0626\u064a\u0633\u064a\u0629",
  "owner": "Administrator"
 }

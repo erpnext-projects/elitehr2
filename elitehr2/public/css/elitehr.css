@@ -1,10 +1,10 @@
-/* .search-bar,.dropdown-notifications,.dropdown-help {
+.navbar-search-bar,.dropdown-notifications,.dropdown-help,.frappe-menu{
     display: none !important;
 }
 
 .btn-reset.standard-sidebar-label{
     display: none;
-} */
+}
 
 
 

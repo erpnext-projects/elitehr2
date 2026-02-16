@@ -7,6 +7,8 @@
  "engine": "InnoDB",
  "field_order": [
   "\u0645\u0639\u0644\u0648\u0645\u0627\u062a_\u0627\u0644\u0634\u0631\u0643\u0629_section",
+  "\u0625\u062f\u0627\u0631\u0629_\u0627\u0644\u0645\u0639\u0644\u0648\u0645\u0627\u062a_\u0627\u0644\u0623\u0633\u0627\u0633\u064a\u0629_\u0644\u0644\u0634\u0631\u0643\u0629",
+  "section_break_dbha",
   "email",
   "country",
   "column_break_dazn",
@@ -44,8 +46,16 @@
   },
   {
    "fieldname": "\u0645\u0639\u0644\u0648\u0645\u0627\u062a_\u0627\u0644\u0634\u0631\u0643\u0629_section",
-   "fieldtype": "Section Break",
-   "label": "\u0645\u0639\u0644\u0648\u0645\u0627\u062a \u0627\u0644\u0634\u0631\u0643\u0629"
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "\u0625\u062f\u0627\u0631\u0629_\u0627\u0644\u0645\u0639\u0644\u0648\u0645\u0627\u062a_\u0627\u0644\u0623\u0633\u0627\u0633\u064a\u0629_\u0644\u0644\u0634\u0631\u0643\u0629",
+   "fieldtype": "Heading",
+   "label": "\u0625\u062f\u0627\u0631\u0629 \u0627\u0644\u0645\u0639\u0644\u0648\u0645\u0627\u062a \u0627\u0644\u0623\u0633\u0627\u0633\u064a\u0629 \u0644\u0644\u0634\u0631\u0643\u0629"
+  },
+  {
+   "fieldname": "section_break_dbha",
+   "fieldtype": "Section Break"
   }
  ],
  "grid_page_length": 50,
@@ -53,7 +63,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-02-14 19:09:13.549024",
+ "modified": "2026-02-16 20:36:41.432834",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Company",
@@ -84,5 +94,6 @@
  "rows_threshold_for_grid_search": 20,
  "sort_field": "creation",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "title_field": "company_name"
 }
