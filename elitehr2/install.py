@@ -15,7 +15,7 @@ def after_install():
     frappe.db.set_value("System Settings","System Settings","language","ar")
     frappe.db.commit()
 
-    disallow_user_create_workspace()
+    # disallow_user_create_workspace()
     create_hr_role()
     create_admin_user()
     
