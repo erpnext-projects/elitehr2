@@ -51,7 +51,7 @@ def create_admin_user():
     email = "hradmin@company.local"
     password = "Admin@123!"
     role_name = "Elite HR Admin"
-    module_name = "EliteHr"
+    module_name = "EliteHr2"
 
 
     if not frappe.db.exists("User", email):
