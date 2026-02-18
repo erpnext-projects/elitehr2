@@ -1,4 +1,5 @@
 import frappe
+from frappe.permissions import add_permission, update_permission_property
 
 
 # def before_install():
@@ -110,7 +111,8 @@ def create_admin_user():
             "Elite Themes",
             "Elitehr Fingerprint Sites",
             "Elitehr Security Settings",
-            "Elitehr Requests"
+            "Elitehr Requests",
+            "asdds"
         ]
         for r in roles:
             allow_role_read_doctype(role_name,r)
@@ -149,36 +151,41 @@ def allow_only_specific_module(email, allowed_module_name):
 
 def allow_role_read_doctype(role_name, doctype_name):
     # Check if permission already exists
-    exists = frappe.db.exists(
-        "DocPerm",
-        {
-            "parent": doctype_name,
-            "role": role_name,
-            "permlevel": 0
-        }
-    )
+    # exists = frappe.db.exists(
+    #     "DocPerm",
+    #     {
+    #         "parent": doctype_name,
+    #         "role": role_name,
+    #         "permlevel": 0
+    #     }
+    # )
 
-    if exists:
-        print(f"Permission already exists: {role_name} -> {doctype_name}")
-        return
+    # if exists:
+    #     print(f"Permission already exists: {role_name} -> {doctype_name}")
+    #     return
 
-    doc = frappe.get_doc("DocType", doctype_name)
-
-    doc.append("permissions", {
-        "role": role_name,
-        "read": 1,
-        "write": 1,
-        "create": 1,
-        "delete": 1,
-        "submit": 0,
-        "cancel": 0,
-        "amend": 0,
-        "permlevel": 0
-    })
-
-    doc.save(ignore_permissions=True)
-    frappe.db.commit()
+    add_permission(doctype_name, role_name)
+    update_permission_property(doctype_name, role_name, 0, "read", 1)
+    update_permission_property(doctype_name, role_name, 0, "write", 1)
+    update_permission_property(doctype_name, role_name, 0, "create", 1)
+    update_permission_property(doctype_name, role_name, 0, "delete", 1)
     frappe.clear_cache()
+
+    # doc = frappe.get_doc("DocType", doctype_name)
+    # doc.append("permissions", {
+    #     "role": role_name,
+    #     "read": 1,
+    #     "write": 1,
+    #     "create": 1,
+    #     "delete": 1,
+    #     "submit": 0,
+    #     "cancel": 0,
+    #     "amend": 0,
+    #     "permlevel": 0
+    # })
+    # doc.save(ignore_permissions=True)
+    # frappe.db.commit()
+    # frappe.clear_cache()
 
     print(f"Success: Role '{role_name}' can READ '{doctype_name}'")
 
