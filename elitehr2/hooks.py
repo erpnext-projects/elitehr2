@@ -252,4 +252,4 @@ after_install = "elitehr2.install.after_install"
 # ------------
 # List of apps whose translatable strings should be excluded from this app's translations.
 # ignore_translatable_strings_from = []
-fixtures = ["Navbar Settings","Custom HTML Block","Kanban Board","Workspace","System Settings"]
+fixtures = ["Navbar Settings","Custom HTML Block","Kanban Board","System Settings"]
