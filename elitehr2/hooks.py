@@ -27,7 +27,10 @@ app_license = "mit"
 # include js, css files in header of desk.html
 # app_include_css = "/assets/elitehr2/css/elitehr2.css"
 # app_include_js = "/assets/elitehr2/js/elitehr2.js"
-app_include_css = "/assets/elitehr2/css/elitehr.css"
+app_include_css = [
+    "https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap",
+    "/assets/elitehr2/css/elitehr.css"
+    ]
 app_include_js = "/assets/elitehr2/js/elitehr.js"
 
 # include js, css files in header of web template
