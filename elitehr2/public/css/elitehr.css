@@ -6,9 +6,49 @@
     display: none;
 }
 
+/* .body-sidebar {
+	background: #1C2B40 !important;
+} */
+.sidebar-item-label,.sidebar-item-icon {
+	color: white !important;
+    font-size: 16px !important;
+}
+.header-title{
+    font-size: 20px !important;
+    font-weight: 800 !important;
+}
+.standard-sidebar-item{
+    padding: 10px 12px;
+}
+/* .standard-sidebar-item.active-sidebar{
+    background: #3240524D !important;
+}
+.standard-sidebar-item:hover {
+    background: #3240524D !important;
+} */
 
+.standard-sidebar-item .icon {
+	stroke: white;
+	width: 22px;
+	height: 22px;
+}
+/* .body-sidebar-container.expanded .body-sidebar{
+    width: 320px !important;
+} */
+.body-sidebar-bottom span,.body-sidebar-bottom .icon{
+    color: white !important;
+    stroke: white !important;
+ }
+:root{
+    --sidebar-width: 288px !important;
+    --surface-menu-bar: #1C2B40 !important;
+    --sidebar-hover-color: #3240524D !important;
+    --sidebar-active-color: #3240524D !important;
+    --font-stack: "Cairo", "Amiri", "Actor", sans-serif !important;
+}
 
-.desk-sidebar-item.selected {
+/* #26314900 */
+/* .desk-sidebar-item.selected {
     background: black !important;
 }
 .desk-sidebar-item.selected a {
@@ -19,4 +59,12 @@
 }
 .desk-sidebar-item a {
     font-size: 16px;
+} */
+
+
+.navbar-breadcrumbs a {
+    pointer-events: none;   /* يمنع الضغط */
+    cursor: default;        /* يشيل شكل اليد */
+    color: inherit;         /* يخلي الشكل طبيعي */
+    text-decoration: none;  /* يشيل underline */
 }
