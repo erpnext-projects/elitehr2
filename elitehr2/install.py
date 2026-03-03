@@ -91,7 +91,6 @@ def create_admin_user():
             "Elitehr Attendance Correction Request",
             "Elitehr Leaves",
             "Elitehr Supply Contract",
-            "Elitehr Resignations",
             "Elitehr Employment",
             "Elitehr Org Structure",
             "Eliteht Employee Contracts",
