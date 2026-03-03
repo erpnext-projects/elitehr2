@@ -5,5 +5,5 @@
 from frappe.model.document import Document
 
 
-class ElitehrResignations(Document):
+class ElitehrRequestsTypes(Document):
 	pass

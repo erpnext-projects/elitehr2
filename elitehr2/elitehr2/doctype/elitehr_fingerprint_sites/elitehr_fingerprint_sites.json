@@ -1,8 +1,6 @@
 {
  "actions": [],
- "allow_copy": 1,
- "allow_rename": 1,
- "autoname": "field:site_name",
+ "autoname": "FS-.#####",
  "creation": "2026-02-14 14:25:00.883750",
  "default_view": "List",
  "doctype": "DocType",
@@ -13,6 +11,10 @@
   "site_name",
   "column_break_plxe",
   "city",
+  "section_break_aeqp",
+  "branch",
+  "column_break_iijz",
+  "branch_name",
   "section_break_yzdi",
   "address",
   "description"
@@ -62,19 +64,38 @@
    "fieldname": "description",
    "fieldtype": "Small Text",
    "label": "Description"
+  },
+  {
+   "fieldname": "section_break_aeqp",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "branch",
+   "fieldtype": "Link",
+   "label": "Branch",
+   "options": "Elitehr Branches"
+  },
+  {
+   "fieldname": "column_break_iijz",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "branch.branch_name",
+   "fieldname": "branch_name",
+   "fieldtype": "Data",
+   "label": "Branch Name"
   }
  ],
  "force_re_route_to_default_view": 1,
  "grid_page_length": 50,
- "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-02-14 19:09:14.583614",
+ "modified": "2026-03-03 11:25:31.273677",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Fingerprint Sites",
- "naming_rule": "By fieldname",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {
@@ -108,5 +129,5 @@
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],
- "title_field": "site_name"
+ "track_changes": 1
 }

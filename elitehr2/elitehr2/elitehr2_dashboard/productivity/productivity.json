@@ -21,15 +21,15 @@
   }
  ],
  "creation": "2026-02-13 17:31:57.416159",
- "dashboard_name": "\u0627\u0644\u0627\u0646\u062a\u0627\u062c\u064a\u0629",
+ "dashboard_name": "Productivity",
  "docstatus": 0,
  "doctype": "Dashboard",
  "idx": 0,
  "is_default": 0,
  "is_standard": 1,
- "modified": "2026-02-13 17:55:42.523827",
+ "modified": "2026-02-19 11:13:11.267936",
  "modified_by": "Administrator",
  "module": "Elitehr2",
- "name": "\u0627\u0644\u0627\u0646\u062a\u0627\u062c\u064a\u0629",
+ "name": "Productivity",
  "owner": "Administrator"
 }

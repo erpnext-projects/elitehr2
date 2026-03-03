@@ -13,9 +13,9 @@ IGNORE_TEST_RECORD_DEPENDENCIES = []  # eg. ["User"]
 
 
 
-class IntegrationTestElitehrOrgStructure(IntegrationTestCase):
+class IntegrationTestElitehrRequestsTypes(IntegrationTestCase):
 	"""
-	Integration tests for ElitehrOrgStructure.
+	Integration tests for ElitehrRequestsTypes.
 	Use this class for testing interactions between multiple components.
 	"""
 

@@ -11,8 +11,11 @@
 "ID","ID"
 "Elitehr Tasks","مهام"
 "Responsable","المسؤول"
-"Due Date","التاريخ المتوقع "
+"Due Date","تاريخ الاستحقاق"
+Task Title, عنوان المهمة
+Task Description, وصف المهمة
 "Open","مفتوح"
+Hours Expected, الساعات المقدرة
 "Responsable Name","اسم المسؤول"
 "Subject","الموضوع" 
 "Elitehr Attachments","مرفقات"
@@ -28,13 +31,17 @@
 "Elitehr Leaves","الإجازات"
 "Elitehr Supply Contract","عقد توريد"
 "Elitehr Resignations","الاستقالات"
+"Resignations","الاستقالات"
 "Elitehr Employment","التوظيف"
 "Elitehr Org Structure","الهيكل التنظيمي"
+Organization Structure, الهيكل التنظيمي
 "Eliteht Employee Contracts","عقود الموظفين"
 "Elitehr Leave Policies","سياسات الأجازات",
 "Elitehr Short Leave Requests","اذن"
 "Elitehr Leave Policies Rules","قواعد حساب السياسات"
 "Elitehr Projects","مشروع"
+Project, المشروع
+Project Name, اسم المشروع
 "Elitehr Team","فريق العمل"
 "Elitehr Extra Work","عمل اضافي"
 "Elitehr Business Trip Request", "مأمورية"
@@ -43,6 +50,7 @@
 "Elitehr Users","المستخدمين"
 "Elite Themes","المظهر والتخصيص"
 "Elitehr Fingerprint Sites","مواقع البصمة"
+"Fingerprint Sites","مواقع البصمة"
 "Elitehr Security Settings","إعدادات الأمان"
 "Elitehr Requests","الطلبات"
 "Collapse","تصغير",
@@ -69,3 +77,85 @@
 "Saved Filters","حفظ الفلاتر"
 "Save Current Filter","حفظ الفلتر الحالي"
 "Add {0}", اضافة {0}
+"Home", الرئيسية
+"Home Dashboard", الرئيسية
+"Employee Affairs", شؤون الموظفين
+"Employees", الموظفين
+"Organizational Structure", الهيكل التنظيمي
+"Settings", الاعدادات
+"Company Information", معلومات الشركة
+"Projects & Tasks", المشاريع والمهام
+"Projects", المشاريع
+"Tasks", المهام 
+"Tasks View", المهام 
+"Teams", فريق العمل
+"Productivity", الانتاجية
+"Customize Quick Filters", بحث سريع
+"Assigned To", تم تعيينها الي
+"Description", الوصف
+"Priority", الأولوية
+"Approvals", الموافقات
+"Elitehr Requests",طلب 
+Requests, طلباتي
+"Elitehr Requests Types", نوع طلب
+"Requests Types", أنواع الطلبات
+"Arabic Type Name", اسم النوع (عربي)
+"English Type Name", الاسم بالانجليزية
+"Code", الرمز
+"Category", التصنيف
+"Minimum Apporvals", الحد الأدني لمستويات الموافقة 
+"Maximun Apporvals Copy",  الحد الأقصي لمستويات الموافقة
+"Maxmum buget (for mony request)", الحد الأقصي للمبلغ (للطلبات المالية)
+"Auto Approval if lower", موافقة تلقائية اذا اقل من
+"Attachment Required?", يتطلب مرفقات
+Created On, تاريخ الانشاء
+Actions, اجراءات
+Copy To Clipboard, نسخ الي الحافظة
+Status, الحالة
+Start Date, تاريخ البداية
+Start Date 
+Points, نقاط الانجاز
+High, عالي
+Medium, متوسط
+Low, عادي
+Closed, مغلق
+Cancelled, ملغي
+Completed, مكتمل
+Request Type, نوع الطلب
+Required approval levels, مستويات الموافقة المطلوبة
+Details, التفاصيل
+End Date, تاريخ النهاية
+Attachments, المرفقات
+Budget, المبلغ
+Reason for resignation, سبب الاستقالة
+Last suggested working day, اخر يوم عمل مقترح
+Current job title, المسمي الوظيفي الحالي
+Proposed job title, المسمي الوظيفي المقترح
+Estimated cost, التكلفة التقديرية
+Course name, اسم الدورة التدريبية 
+Provider Name, الجهة المقدمة
+Modification type, نوع التعديل
+Modification date, تاريخ التعديل
+Original attendance time, وقت الحضور الأصلي
+Required attendance time, وقت الحضور المطلوب 
+Request Type Name, اسم نوع الطلب
+Type of document required, نوع المستند المطلوب
+Type of overtime work, نوع العمل الاضافي
+Date of overtime work, تاريخ العمل الاضافي
+From time, من الساعة 
+To time, الي الساعة
+Expense category, فئة المصروف
+Expense date, تاريخ المصروف
+From department, من القسم
+To department, الي القسم
+From branch, من الفرع
+To branch,  الي الفرع
+Proposed transfer date, تاريخ النقل المقترح
+Company Branches, فروع الشركة
+Branch Name, اسم الفرع
+Order, الترتيب
+Department Name, اسم القسم/الادارة
+Address, الوصف
+Comments, التعليقات
+Activity, سجل التعديلات
+Branch, الفرع

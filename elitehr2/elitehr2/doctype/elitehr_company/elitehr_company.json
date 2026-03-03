@@ -1,6 +1,5 @@
 {
  "actions": [],
- "allow_copy": 1,
  "allow_rename": 1,
  "creation": "2026-02-14 14:06:55.171602",
  "doctype": "DocType",
@@ -59,11 +58,10 @@
   }
  ],
  "grid_page_length": 50,
- "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-02-16 20:36:41.432834",
+ "modified": "2026-03-03 11:16:51.204307",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Company",
@@ -95,5 +93,6 @@
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],
- "title_field": "company_name"
+ "title_field": "company_name",
+ "track_changes": 1
 }

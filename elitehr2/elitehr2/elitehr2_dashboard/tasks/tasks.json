@@ -18,7 +18,7 @@
   }
  ],
  "creation": "2026-02-13 17:31:57.416159",
- "dashboard_name": "\u0644\u0648\u062d\u0629 \u0627\u0644\u0645\u0647\u0627\u0645",
+ "dashboard_name": "Tasks",
  "docstatus": 0,
  "doctype": "Dashboard",
  "idx": 0,
@@ -27,6 +27,6 @@
  "modified": "2026-02-16 20:51:50.303493",
  "modified_by": "Administrator",
  "module": "Elitehr2",
- "name": "\u0644\u0648\u062d\u0629 \u0627\u0644\u0645\u0647\u0627\u0645",
+ "name": "Tasks",
  "owner": "Administrator"
 }

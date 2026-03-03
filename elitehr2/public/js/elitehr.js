@@ -8,8 +8,8 @@ $( document ).ajaxSuccess(function(){
     // }
 
     
-    let route = frappe.get_route();
-    if (route[0] === "dashboard-view") {
+    let route = frappe.get_route();   
+    if (route != null && route.length > 0 && route[0] === "dashboard-view") {
         let breadcrumbs = document.querySelectorAll(".navbar-breadcrumbs li");
         if (breadcrumbs.length > 2) {
             breadcrumbs.forEach((breadcrumb, index) => {
@@ -23,22 +23,22 @@ $( document ).ajaxSuccess(function(){
 
 frappe.router.on('change', () => {
 
-    let route = frappe.get_route();
-    console.log(route);
+    // let route = frappe.get_route();
+    // console.log(route);
     
-    // لو إحنا في workspace
-    if (route[0] === "dashboard-view") {
-        let breadcrumbs = document.querySelectorAll(".navbar-breadcrumbs li");
-        if (breadcrumbs.length > 2) {
-            breadcrumbs.forEach((breadcrumb, index) => {
-                 if (index !== 0 && index !== breadcrumbs.length - 1){
-                    breadcrumb.remove();
-                 }
-            });
-        }
-        console.log("done");
-        console.log(breadcrumbs);
-    }
+    // // لو إحنا في workspace
+    // if (route[0] === "dashboard-view") {
+    //     let breadcrumbs = document.querySelectorAll(".navbar-breadcrumbs li");
+    //     if (breadcrumbs.length > 2) {
+    //         breadcrumbs.forEach((breadcrumb, index) => {
+    //              if (index !== 0 && index !== breadcrumbs.length - 1){
+    //                 breadcrumb.remove();
+    //              }
+    //         });
+    //     }
+    //     console.log("done");
+    //     console.log(breadcrumbs);
+    // }
 
     // $(document).ready(function() {
     //     let breadcrumbs = document.querySelectorAll(".navbar-breadcrumbs li");

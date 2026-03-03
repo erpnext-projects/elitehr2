@@ -4,7 +4,7 @@
    {
     "column_name": "Open",
     "indicator": "Gray",
-    "order": "[]",
+    "order": "[\"TASK-00002\"]",
     "status": "Active"
    },
    {
@@ -22,17 +22,17 @@
    {
     "column_name": "Completed",
     "indicator": "Orange",
-    "order": "[]",
+    "order": "[\"TASK-00001\"]",
     "status": "Active"
    }
   ],
   "docstatus": 0,
   "doctype": "Kanban Board",
   "field_name": "status",
-  "fields": "[\"subject\", \"due_date\", \"priority\"]",
+  "fields": "[\"due_date\", \"priority\"]",
   "filters": null,
   "kanban_board_name": "Tasks View",
-  "modified": "2026-02-13 17:21:22.874122",
+  "modified": "2026-02-23 10:22:58.583396",
   "name": "Tasks View",
   "private": 0,
   "reference_doctype": "Elitehr Tasks",

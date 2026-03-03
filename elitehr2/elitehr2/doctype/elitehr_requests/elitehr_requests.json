@@ -1,13 +1,77 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "RWQUEST-.#####",
  "creation": "2026-02-14 15:00:46.425749",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
   "section_break_qp8p",
   "amended_from",
-  "type"
+  "section_break_oazo",
+  "column_break_jiau",
+  "employee",
+  "type",
+  "column_break_bnkj",
+  "employee_name",
+  "request_type_name",
+  "column_break_cyyv",
+  "department",
+  "request_type_code",
+  "section_break_ajpe",
+  "subject",
+  "column_break_toye",
+  "priority",
+  "section_break_yoof",
+  "start_date",
+  "column_break_cizj",
+  "end_date",
+  "section_break_ilmd",
+  "budget",
+  "section_break_zuiz",
+  "reason_for_resignation",
+  "column_break_mjiv",
+  "last_suggested_working_day",
+  "section_break_rfqy",
+  "current_job_title",
+  "column_break_ccjk",
+  "proposed_job_title",
+  "section_break_ullj",
+  "course_name",
+  "estimated_cost",
+  "column_break_rchu",
+  "provider_name",
+  "section_break_vtbs",
+  "modification_type",
+  "original_attendance_time",
+  "column_break_lboq",
+  "modification_date",
+  "required_attendance_time",
+  "section_break_btlm",
+  "type_of_document_required",
+  "section_break_bkqg",
+  "type_of_overtime_work",
+  "from_time",
+  "column_break_ktho",
+  "date_of_overtime_work",
+  "to_time",
+  "section_break_nnzc",
+  "expense_category",
+  "column_break_omlo",
+  "expense_date",
+  "section_break_sdaz",
+  "from_department",
+  "from_branch",
+  "proposed_transfer_date",
+  "column_break_eina",
+  "to_department",
+  "to_branch",
+  "section_break_whxw",
+  "details",
+  "section_break_ozra",
+  "attachments",
+  "section_break_thlq",
+  "required_approval_levels"
  ],
  "fields": [
   {
@@ -25,22 +89,365 @@
    "search_index": 1
   },
   {
+   "columns": 1,
    "fieldname": "type",
-   "fieldtype": "Select",
+   "fieldtype": "Link",
    "in_list_view": 1,
    "label": "\u0646\u0648\u0639 \u0627\u0644\u0637\u0644\u0628",
-   "options": "\u0625\u062c\u0627\u0632\u0629 \u0633\u0646\u0648\u064a\u0629\n\u0625\u062c\u0627\u0632\u0629 \u0637\u0627\u0631\u0626\u0629\n\u0625\u062c\u0627\u0632\u0629 \u0645\u0631\u0636\u064a\u0629\n\u0627\u0633\u062a\u0642\u0627\u0644\u0629\n\u062a\u062f\u0631\u064a\u0628\n\u062a\u0631\u0641\u064a\u0629\n\u062a\u0639\u062f\u064a\u0644 \u062d\u0636\u0648\u0631\n\u0633\u0644\u0641\u0629 \u0631\u0627\u062a\u0628\n\u0637\u0644\u0628 \u0645\u0633\u062a\u0646\u062f\n\u0639\u0645\u0644 \u0625\u0636\u0627\u0641\u064a\n\u0645\u0635\u0631\u0648\u0641\u0627\u062a \u0633\u0641\u0631",
+   "link_filters": "[[\"Elitehr Requests Types\",\"docstatus\",\"=\",\"1\"]]",
+   "options": "Elitehr Requests Types",
    "reqd": 1
+  },
+  {
+   "fieldname": "section_break_oazo",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_jiau",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_bnkj",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "subject",
+   "fieldtype": "Data",
+   "label": "Subject",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_cyyv",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_ajpe",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_toye",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_whxw",
+   "fieldtype": "Section Break"
+  },
+  {
+   "default": "Low",
+   "fieldname": "priority",
+   "fieldtype": "Select",
+   "label": "Priority",
+   "options": "High\nMedium\nLow",
+   "translatable": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "required_approval_levels",
+   "fieldtype": "Int",
+   "label": "Required approval levels",
+   "non_negative": 1
+  },
+  {
+   "fieldname": "section_break_thlq",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "details",
+   "fieldtype": "Small Text",
+   "label": "Details"
+  },
+  {
+   "fieldname": "section_break_yoof",
+   "fieldtype": "Section Break"
+  },
+  {
+   "depends_on": "eval: [\n        \"LEAVE_ANNUAL\",\n        \"LEAVE_EMERGENCY\",\n        \"LEAVE_SICK\",\n        \"TRAINING\"\n    ].includes(doc.request_type_code);",
+   "fieldname": "start_date",
+   "fieldtype": "Date",
+   "label": "Start Date"
+  },
+  {
+   "fieldname": "column_break_cizj",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval: [\n        \"LEAVE_ANNUAL\",\n        \"LEAVE_EMERGENCY\",\n        \"LEAVE_SICK\",\n        \"TRAINING\"\n    ].includes(doc.request_type_code);",
+   "fieldname": "end_date",
+   "fieldtype": "Date",
+   "label": "End Date"
+  },
+  {
+   "fetch_from": "type.code",
+   "fieldname": "request_type_code",
+   "fieldtype": "Data",
+   "label": "Code",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_ozra",
+   "fieldtype": "Section Break"
+  },
+  {
+   "depends_on": "eval: [\n        \"LEAVE_SICK\",\n        \"RESIGNATION\",\n        \"EXPENSE_TRAVEL\",\n        \"EXPENSE_PURCHASE\"\n    ].includes(doc.request_type_code);",
+   "fieldname": "attachments",
+   "fieldtype": "Table",
+   "label": "Attachments",
+   "options": "Elitehr Attachments"
+  },
+  {
+   "fieldname": "section_break_ilmd",
+   "fieldtype": "Section Break"
+  },
+  {
+   "depends_on": "eval: [\n        \"ADVANCE_SALARY\",\n        \"EXPENSE_TRAVEL\",\n        \"EXPENSE_PURCHASE\"\n    ].includes(doc.request_type_code);",
+   "fieldname": "budget",
+   "fieldtype": "Float",
+   "label": "Budget",
+   "non_negative": 1,
+   "precision": "2"
+  },
+  {
+   "fieldname": "section_break_zuiz",
+   "fieldtype": "Section Break"
+  },
+  {
+   "depends_on": "eval: [\n        \"RESIGNATION\"\n    ].includes(doc.request_type_code);",
+   "fieldname": "reason_for_resignation",
+   "fieldtype": "Data",
+   "label": "Reason for resignation",
+   "mandatory_depends_on": "eval: [\n        \"ADVANCE_SALARY \u0636 \u0636 \u0636\",\n    ].includes(doc.request_type_code);"
+  },
+  {
+   "fieldname": "column_break_mjiv",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval: [\n        \"RESIGNATION\"\n    ].includes(doc.request_type_code);",
+   "fieldname": "last_suggested_working_day",
+   "fieldtype": "Date",
+   "label": "Last suggested working day"
+  },
+  {
+   "fieldname": "section_break_rfqy",
+   "fieldtype": "Section Break"
+  },
+  {
+   "depends_on": "eval: [\n        \"PROMOTION\"\n    ].includes(doc.request_type_code);",
+   "fieldname": "current_job_title",
+   "fieldtype": "Data",
+   "label": "Current job title"
+  },
+  {
+   "fieldname": "column_break_ccjk",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval: [\n        \"PROMOTION\"\n    ].includes(doc.request_type_code);",
+   "fieldname": "proposed_job_title",
+   "fieldtype": "Data",
+   "label": "Proposed job title"
+  },
+  {
+   "fieldname": "section_break_ullj",
+   "fieldtype": "Section Break"
+  },
+  {
+   "depends_on": "eval: doc.request_type_code == \"TRAINING\"",
+   "fieldname": "course_name",
+   "fieldtype": "Data",
+   "label": "Course name"
+  },
+  {
+   "depends_on": "eval: doc.request_type_code == \"TRAINING\"",
+   "fieldname": "estimated_cost",
+   "fieldtype": "Float",
+   "label": "Estimated cost",
+   "non_negative": 1,
+   "precision": "2"
+  },
+  {
+   "depends_on": "eval: doc.request_type_code == \"TRAINING\"",
+   "fieldname": "provider_name",
+   "fieldtype": "Data",
+   "label": "Provider Name"
+  },
+  {
+   "fieldname": "column_break_rchu",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_vtbs",
+   "fieldtype": "Section Break"
+  },
+  {
+   "depends_on": "eval: doc.request_type_code == \"ATTENDANCE_EDIT\"",
+   "fieldname": "modification_type",
+   "fieldtype": "Select",
+   "label": "Modification type",
+   "options": "\u062a\u0639\u062f\u064a\u0644 \u0648\u0642\u062a \u0627\u0644\u062d\u0636\u0648\u0631\n\u062a\u0639\u062f\u064a\u0644 \u0648\u0642\u062a \u0627\u0644\u0627\u0646\u0635\u0631\u0627\u0641\n\u062a\u0639\u062f\u064a\u0644 \u0627\u0644\u062d\u0636\u0648\u0631 \u0648\u0627\u0644\u0627\u0646\u0635\u0631\u0627\u0641\n\u0646\u0633\u064a\u0627\u0646 \u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u062d\u0636\u0648\u0631"
+  },
+  {
+   "fieldname": "column_break_lboq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval: doc.request_type_code == \"ATTENDANCE_EDIT\"",
+   "fieldname": "modification_date",
+   "fieldtype": "Date",
+   "label": "Modification date"
+  },
+  {
+   "depends_on": "eval: doc.request_type_code == \"ATTENDANCE_EDIT\"",
+   "fieldname": "original_attendance_time",
+   "fieldtype": "Time",
+   "label": "Original attendance time"
+  },
+  {
+   "depends_on": "eval: doc.request_type_code == \"ATTENDANCE_EDIT\"",
+   "fieldname": "required_attendance_time",
+   "fieldtype": "Time",
+   "label": "Required attendance time"
+  },
+  {
+   "fetch_from": "type.arabic_type_name",
+   "fieldname": "request_type_name",
+   "fieldtype": "Data",
+   "label": "Request Type Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_btlm",
+   "fieldtype": "Section Break"
+  },
+  {
+   "depends_on": "eval: doc.request_type_code == \"DOCUMENT\"",
+   "fieldname": "type_of_document_required",
+   "fieldtype": "Select",
+   "label": "Type of document required",
+   "options": "\u0634\u0647\u0627\u062f\u0629 \u0631\u0627\u062a\u0628\n\u062e\u0637\u0627\u0628 \u062a\u0639\u0631\u064a\u0641 \u0628\u0627\u0644\u0639\u0645\u0644\n\u0634\u0647\u0627\u062f\u0629 \u062e\u0628\u0631\u0629\n\u062e\u0637\u0627\u0628 \u0639\u062f\u0645 \u0645\u0645\u0627\u0646\u0639\u0629\n\u062e\u0637\u0627\u0628 \u062a\u062d\u0648\u064a\u0644 \u0631\u0627\u062a\u0628\n\u062e\u0637\u0627\u0628 \u0644\u0644\u0628\u0646\u0643\n\u062e\u0637\u0627\u0628 \u0644\u0644\u0633\u0641\u0627\u0631\u0629\n\u062e\u0637\u0627\u0628 \u062a\u0623\u0634\u064a\u0631\u0629\n\u0645\u0633\u062a\u0646\u062f \u0622\u062e\u0631"
+  },
+  {
+   "fieldname": "section_break_bkqg",
+   "fieldtype": "Section Break"
+  },
+  {
+   "depends_on": "eval: doc.request_type_code == \"OVERTIME\"",
+   "fieldname": "type_of_overtime_work",
+   "fieldtype": "Select",
+   "label": "Type of overtime work",
+   "options": "\u0639\u0645\u0644 \u0627\u0636\u0627\u0641\u064a \u0639\u0627\u062f\u064a\n\u0639\u0645\u0644 \u0641\u064a \u064a\u0648\u0645 \u0627\u062c\u0627\u0632\u0629\n\u0639\u0645\u0644 \u0641\u064a \u064a\u0648\u0645 \u0639\u0637\u0644\u0629\n\u0639\u0645\u0644 \u0644\u064a\u0644\u064a"
+  },
+  {
+   "depends_on": "eval: doc.request_type_code == \"OVERTIME\"",
+   "fieldname": "from_time",
+   "fieldtype": "Time",
+   "label": "From time"
+  },
+  {
+   "fieldname": "column_break_ktho",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval: doc.request_type_code == \"OVERTIME\"",
+   "fieldname": "date_of_overtime_work",
+   "fieldtype": "Date",
+   "label": "Date of overtime work"
+  },
+  {
+   "depends_on": "eval: doc.request_type_code == \"OVERTIME\"",
+   "fieldname": "to_time",
+   "fieldtype": "Time",
+   "label": "To time"
+  },
+  {
+   "fieldname": "section_break_nnzc",
+   "fieldtype": "Section Break"
+  },
+  {
+   "depends_on": "eval: [\n        \"EXPENSE_TRAVEL\",\n        \"EXPENSE_PURCHASE\"\n    ].includes(doc.request_type_code);",
+   "fieldname": "expense_category",
+   "fieldtype": "Select",
+   "label": "Expense category",
+   "options": "\u0645\u0648\u0627\u0635\u0644\u0627\u062a\n\u0625\u0642\u0627\u0645\u0629 \u0648\u0633\u0643\u0646\n\u0648\u062c\u0628\u0627\u062a \u0637\u0639\u0627\u0645\n\u0645\u0633\u062a\u0644\u0632\u0645\u0627\u062a \u0645\u0643\u062a\u0628\u064a\u0629\n\u0645\u0639\u062f\u0627\u062a \u0648\u0623\u062c\u0647\u0632\u0629\n\u0627\u062a\u0635\u0627\u0644\u0627\u062a\n\u0623\u062e\u0631\u064a"
+  },
+  {
+   "fieldname": "column_break_omlo",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval: [\n        \"EXPENSE_TRAVEL\",\n        \"EXPENSE_PURCHASE\"\n    ].includes(doc.request_type_code);",
+   "fieldname": "expense_date",
+   "fieldtype": "Date",
+   "label": "Expense date"
+  },
+  {
+   "fieldname": "section_break_sdaz",
+   "fieldtype": "Section Break"
+  },
+  {
+   "depends_on": "eval: doc.request_type_code == \"TRANSFER\"",
+   "fieldname": "from_department",
+   "fieldtype": "Data",
+   "label": "From department"
+  },
+  {
+   "depends_on": "eval: doc.request_type_code == \"TRANSFER\"",
+   "fieldname": "from_branch",
+   "fieldtype": "Data",
+   "label": "From branch"
+  },
+  {
+   "depends_on": "eval: doc.request_type_code == \"TRANSFER\"",
+   "fieldname": "proposed_transfer_date",
+   "fieldtype": "Date",
+   "label": "Proposed transfer date"
+  },
+  {
+   "fieldname": "column_break_eina",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval: doc.request_type_code == \"TRANSFER\"",
+   "fieldname": "to_department",
+   "fieldtype": "Data",
+   "label": "To department"
+  },
+  {
+   "depends_on": "eval: doc.request_type_code == \"TRANSFER\"",
+   "fieldname": "to_branch",
+   "fieldtype": "Data",
+   "label": "To branch"
+  },
+  {
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "label": "Employee",
+   "options": "Elitehr Employee"
+  },
+  {
+   "fetch_from": "employee.employee_name",
+   "fieldname": "employee_name",
+   "fieldtype": "Data",
+   "label": "Employee Name",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "employee.department_name",
+   "fieldname": "department",
+   "fieldtype": "Data",
+   "label": "Department",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-02-14 19:09:15.321884",
+ "modified": "2026-03-03 10:48:49.419457",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Requests",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {
@@ -60,5 +467,6 @@
  "rows_threshold_for_grid_search": 20,
  "sort_field": "creation",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "track_changes": 1
 }

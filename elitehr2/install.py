@@ -112,6 +112,7 @@ def create_admin_user():
             "Elitehr Fingerprint Sites",
             "Elitehr Security Settings",
             "Elitehr Requests",
+            "Elitehr Requests Types"
         ]
         for r in roles:
             allow_role_read_doctype(role_name,r)

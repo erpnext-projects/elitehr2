@@ -1,6 +1,6 @@
 {
  "actions": [],
- "autoname": "format: {naming_series} {employee_id} - {#####}",
+ "autoname": "naming_series.#####",
  "creation": "2026-02-04 08:50:17.031749",
  "default_view": "List",
  "doctype": "DocType",
@@ -16,7 +16,9 @@
   "status",
   "\u0627\u0644\u0628\u064a\u0627\u0646\u0627\u062a_\u0627\u0644\u0648\u0638\u064a\u0641\u064a\u0629_tab",
   "department",
+  "department_name",
   "branche",
+  "branch_name",
   "date_of_appointment",
   "column_break_efhq",
   "type_of_contract",
@@ -209,17 +211,31 @@
    "fieldname": "table_leaves",
    "fieldtype": "Table",
    "options": "Elitehr Employee Leaves Child Table"
+  },
+  {
+   "fetch_from": "branche.branch_name",
+   "fieldname": "branch_name",
+   "fieldtype": "Data",
+   "label": "Branch Name",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "department.department_name",
+   "fieldname": "department_name",
+   "fieldtype": "Data",
+   "label": "Department Name",
+   "options": "Elitehr Departments",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
- "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-02-15 10:35:51.906977",
+ "modified": "2026-03-03 10:46:35.258203",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Employee",
- "naming_rule": "Expression (old style)",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {
@@ -255,5 +271,6 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
- "title_field": "employee_name"
+ "title_field": "employee_name",
+ "track_changes": 1
 }

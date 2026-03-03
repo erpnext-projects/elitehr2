@@ -45,6 +45,7 @@
     --sidebar-hover-color: #3240524D !important;
     --sidebar-active-color: #3240524D !important;
     --font-stack: "Cairo", "Amiri", "Actor", sans-serif !important;
+    --text-base:16px;
 }
 
 /* #26314900 */
@@ -67,4 +68,73 @@
     cursor: default;        /* يشيل شكل اليد */
     color: inherit;         /* يخلي الشكل طبيعي */
     text-decoration: none;  /* يشيل underline */
+}
+
+/* org-strucre */
+.tree-head{
+    font-size: 20px;
+    font-weight: bold;
+}
+.tree-body{
+    font-size: 18px;
+}
+.tree-badge{
+    color:#1f77b4;
+    margin-right:8px;
+}
+#org-tree .jstree-node {
+    margin-top: 20px;
+}
+
+
+
+.custom-page{
+    margin: 20px;
+}
+.cardContainers{
+    display:flex; 
+    gap:15px;
+    margin:20px 0px;
+}
+.cardContainers .card{
+    flex:1; 
+    padding:12px; 
+    border:1px solid #ddd
+}
+.custom-page .card-title{
+    font-size: 18px;
+}
+.cardContainers .card-value{
+    font-weight: bold !important;
+    font-size: 22px;
+}
+.requests-table * {
+	text-align: start !important;
+}
+.custom-page .icon {
+	width: 32px;
+	height: 32px;
+	color: #0284C5;
+}
+
+
+.dt-row-header .dt-header .dt-cell{
+    font-size: 18px !important;
+}
+
+
+.color1{
+    color: #e67e22;
+}
+.color2{
+    color: #2277e6;
+}
+.color3{
+    color: #2ecc71;
+}
+.color4{
+    color: red
+}
+.color5{
+    color: green
 }

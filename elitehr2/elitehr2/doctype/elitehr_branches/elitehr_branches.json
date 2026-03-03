@@ -1,13 +1,14 @@
 {
  "actions": [],
- "autoname": "format: BR - {#####}",
+ "autoname": "format: BRANCH-{#####}",
  "creation": "2026-02-04 09:11:19.496526",
  "default_view": "List",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
   "branch_name",
-  "address"
+  "address",
+  "order"
  ],
  "fields": [
   {
@@ -24,18 +25,23 @@
    "fieldname": "address",
    "fieldtype": "Data",
    "label": "\u0627\u0644\u0639\u0646\u0648\u0627\u0646"
+  },
+  {
+   "fieldname": "order",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Order"
   }
  ],
  "force_re_route_to_default_view": 1,
  "grid_page_length": 50,
- "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-02-04 10:19:20.818483",
+ "modified": "2026-03-02 13:31:48.987605",
  "modified_by": "Administrator",
- "module": "EliteHr2",
+ "module": "Elitehr2",
  "name": "Elitehr Branches",
- "naming_rule": "Expression",
+ "naming_rule": "Expression (old style)",
  "owner": "Administrator",
  "permissions": [
   {
@@ -68,7 +74,8 @@
  "rows_threshold_for_grid_search": 20,
  "search_fields": "branch_name",
  "show_preview_popup": 1,
- "sort_field": "modified",
- "sort_order": "DESC",
- "states": []
+ "sort_field": "order",
+ "sort_order": "ASC",
+ "states": [],
+ "track_changes": 1
 }
