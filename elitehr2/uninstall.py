@@ -12,14 +12,6 @@ def after_uninstall():
     delete_hr_role()
 
 
-def before_uninstall():
-    """For safety call the same cleanup ahead of the actual uninstall.
-
-    Frappe will raise if this hook has been configured but not defined, so
-    we provide a simple wrapper that delegates to :func:`after_uninstall`.
-    """
-    after_uninstall()
-
 
 def delete_admin_user():
     email = "hradmin@company.local"
