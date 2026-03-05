@@ -136,7 +136,7 @@ def allow_only_specific_module(email, allowed_module_name):
 
     user.set("block_modules", [])
     for module in all_modules:
-        if module != allowed_module_name:
+        if module not in [allowed_module_name,"Core"]:
             user.append("block_modules", {
                 "module": module
             })
