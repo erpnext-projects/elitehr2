@@ -11,6 +11,8 @@
   "site_name",
   "column_break_plxe",
   "city",
+  "section_break_yycm",
+  "ss",
   "section_break_aeqp",
   "branch",
   "column_break_iijz",
@@ -84,6 +86,16 @@
    "fieldname": "branch_name",
    "fieldtype": "Data",
    "label": "Branch Name"
+  },
+  {
+   "fieldname": "section_break_yycm",
+   "fieldtype": "Section Break"
+  },
+  {
+   "default": "<div style=\"margin-top:10px\">\n            <label style=\"font-weight:600\">\u0646\u0637\u0627\u0642 \u0627\u0644\u0628\u0635\u0645\u0629 \u0627\u0644\u0645\u0633\u0645\u0648\u062d</label>\n\n            <div style=\"display:flex; align-items:center; gap:15px; margin-top:10px\">\n                \n                <input type=\"range\" \n                    min=\"50\" \n                    max=\"1000\" \n                    step=\"10\" \n                    value=\"${value}\"\n                    id=\"radiusRange\"\n                    style=\"flex:1\"\n                />\n\n                <div id=\"radiusValue\" \n                    style=\"background:#2c3e50; color:#fff; padding:5px 12px; border-radius:20px;\">\n                    ${value} \u0645\u062a\u0631\n                </div>\n            </div>\n        </div>",
+   "fieldname": "ss",
+   "fieldtype": "HTML",
+   "label": "ss"
   }
  ],
  "force_re_route_to_default_view": 1,
@@ -91,7 +103,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-03-03 11:25:31.273677",
+ "modified": "2026-03-03 17:01:06.446549",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Fingerprint Sites",
