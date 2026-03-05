@@ -97,7 +97,7 @@ after_install = "elitehr2.install.after_install"
 # Uninstallation
 # ------------
 
-before_uninstall = "elitehr2.uninstall.before_uninstall"
+# before_uninstall = "elitehr2.uninstall.before_uninstall"
 after_uninstall = "elitehr2.uninstall.after_uninstall"
 
 # Integration Setup
