@@ -3,6 +3,9 @@
 
 frappe.ui.form.on("Elitehr Employee", {
 	refresh(frm) {
+
+        setupFilterToFingerPrintSites(frm);
+
         let leaves_ids = frm.doc.table_leaves.map(l => l.leave);
         
         frm.add_custom_button(__("اضافة اجازة"), function() {
@@ -51,3 +54,14 @@ frappe.ui.form.on("Elitehr Employee", {
        
 	},
 });
+
+
+function setupFilterToFingerPrintSites(frm){
+    frm.fields_dict.fingerprint_sites.get_query = function (doc) {
+        return {
+            filters: {
+            active: ["=", "1"],
+            },
+        }
+    }   
+}

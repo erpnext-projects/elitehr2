@@ -35,7 +35,7 @@ frappe.pages['org-structure'].on_page_load = function(wrapper) {
 									<span class="tree-badge color2">(الفرع)</span>
 									`,
                                 icon: "fa fa-building-o",
-								children: branch.fingerSites.map(f=>{ 
+								children: branch.fingerSites.map(f=>{ 									
 									return{
 										id: f.name,
 										text: `
@@ -43,6 +43,18 @@ frappe.pages['org-structure'].on_page_load = function(wrapper) {
 											<span class="tree-badge color3">(موقع البصمة)</span>
 											`,
 										icon: "fa fa-map-marker",
+										state: { opened: true },
+										children: f.employees.map(emp=>{
+											return {
+												id: emp.id,
+												text: `
+													<span class="tree-body">${emp.employee_name}</span>
+													<span class="tree-badge color5">(موظف)</span>
+												`,
+												icon: "fa fa-user",
+												
+											}
+										})
 									} 
 								}),
 								state: { opened: true },

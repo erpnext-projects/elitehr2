@@ -46,6 +46,9 @@
     --sidebar-active-color: #3240524D !important;
     --font-stack: "Cairo", "Amiri", "Actor", sans-serif !important;
     --text-base:16px;
+
+    /* Form Design */
+    --input-padding: 18px;
 }
 
 /* #26314900 */
@@ -121,6 +124,25 @@
 .dt-row-header .dt-header .dt-cell{
     font-size: 18px !important;
 }
+
+
+/* Form Design */
+.frappe-control[data-fieldtype=Select] .control-input select,
+.frappe-control[data-fieldtype=Select].form-group select     {
+    padding: 18px !important;
+}
+/* input.form-control{
+	padding: 25px 8px !important;
+} */
+/* .control-value {
+	padding: 15px 8px !important;
+}
+ */
+
+
+
+
+
 
 
 .color1{

@@ -155,7 +155,18 @@ Company Branches, فروع الشركة
 Branch Name, اسم الفرع
 Order, الترتيب
 Department Name, اسم القسم/الادارة
-Address, الوصف
+Address,العنوان
 Comments, التعليقات
 Activity, سجل التعديلات
 Branch, الفرع
+Site activation,تفعيل الموقع
+City, المدينة
+Site Name, اسم الموقع 
+Location coordinates, إحداثيات الموقع
+Find my current location, تحديد موقعي الحالي
+Latitude, خط العرض (Latitude)
+Longitude, خط الطول (Longitude)
+Allowed range ,نطاق البصمة المسموح
+Allowed Attendance Radius, نطاق البصمة المسموح
+Employees can check-in if they are within {0} meters from this location, سيتمكن الموظفون من تسجيل البصمة إذا كانوا ضمن {0} متر من هذا الموقع
+meter, متر
