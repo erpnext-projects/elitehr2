@@ -11,15 +11,23 @@
   "site_name",
   "column_break_plxe",
   "city",
-  "section_break_yycm",
-  "ss",
   "section_break_aeqp",
   "branch",
   "column_break_iijz",
   "branch_name",
   "section_break_yzdi",
   "address",
-  "description"
+  "description",
+  "section_break_wfri",
+  "find_my_current_location",
+  "section_break_ivhl",
+  "latitude",
+  "allowed_range_slider",
+  "column_break_yyoc",
+  "longitude",
+  "allowed_range",
+  "section_break_fuus",
+  "active"
  ],
  "fields": [
   {
@@ -88,22 +96,63 @@
    "label": "Branch Name"
   },
   {
-   "fieldname": "section_break_yycm",
+   "default": "0",
+   "fieldname": "active",
+   "fieldtype": "Check",
+   "label": "Site activation"
+  },
+  {
+   "fieldname": "section_break_wfri",
+   "fieldtype": "Section Break",
+   "label": "Location coordinates"
+  },
+  {
+   "fieldname": "find_my_current_location",
+   "fieldtype": "Button",
+   "label": "Find my current location"
+  },
+  {
+   "fieldname": "latitude",
+   "fieldtype": "Float",
+   "label": "Latitude",
+   "reqd": 1
+  },
+  {
+   "fieldname": "longitude",
+   "fieldtype": "Float",
+   "label": "Longitude",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_ivhl",
    "fieldtype": "Section Break"
   },
   {
-   "default": "<div style=\"margin-top:10px\">\n            <label style=\"font-weight:600\">\u0646\u0637\u0627\u0642 \u0627\u0644\u0628\u0635\u0645\u0629 \u0627\u0644\u0645\u0633\u0645\u0648\u062d</label>\n\n            <div style=\"display:flex; align-items:center; gap:15px; margin-top:10px\">\n                \n                <input type=\"range\" \n                    min=\"50\" \n                    max=\"1000\" \n                    step=\"10\" \n                    value=\"${value}\"\n                    id=\"radiusRange\"\n                    style=\"flex:1\"\n                />\n\n                <div id=\"radiusValue\" \n                    style=\"background:#2c3e50; color:#fff; padding:5px 12px; border-radius:20px;\">\n                    ${value} \u0645\u062a\u0631\n                </div>\n            </div>\n        </div>",
-   "fieldname": "ss",
+   "fieldname": "column_break_yyoc",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_fuus",
+   "fieldtype": "Section Break"
+  },
+  {
+   "default": "10",
+   "fieldname": "allowed_range",
+   "fieldtype": "Read Only",
+   "label": "Allowed range ",
+   "non_negative": 1
+  },
+  {
+   "fieldname": "allowed_range_slider",
    "fieldtype": "HTML",
-   "label": "ss"
+   "label": "Allowed range slider"
   }
  ],
  "force_re_route_to_default_view": 1,
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
- "is_submittable": 1,
  "links": [],
- "modified": "2026-03-03 17:01:06.446549",
+ "modified": "2026-03-08 10:41:31.763024",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Fingerprint Sites",
@@ -120,7 +169,6 @@
    "report": 1,
    "role": "System Manager",
    "share": 1,
-   "submit": 1,
    "write": 1
   },
   {
@@ -138,8 +186,9 @@
  ],
  "row_format": "Dynamic",
  "rows_threshold_for_grid_search": 20,
+ "show_title_field_in_link": 1,
  "sort_field": "creation",
  "sort_order": "DESC",
  "states": [],
- "track_changes": 1
+ "title_field": "site_name"
 }
