@@ -5,9 +5,6 @@ frappe.ui.form.on("Elitehr Fingerprint Sites", {
 	refresh(frm) {
         render_radius_slider(frm);
 	},
-    allowed_range_slider(){
-        alert("asd")
-    }
 });
 
 

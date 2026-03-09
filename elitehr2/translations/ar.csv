@@ -29,6 +29,8 @@ Hours Expected, الساعات المقدرة
 "Elitehr Shift Schedule","جدول عمل"
 "Elitehr Attendance Correction Request","طلب تصحيح بصمة"
 "Elitehr Leaves","الإجازات"
+"Leaves","الإجازات"
+"Leaves Requests", طلبات الاجازات
 "Elitehr Supply Contract","عقد توريد"
 "Elitehr Resignations","الاستقالات"
 "Resignations","الاستقالات"
@@ -37,6 +39,7 @@ Hours Expected, الساعات المقدرة
 Organization Structure, الهيكل التنظيمي
 "Eliteht Employee Contracts","عقود الموظفين"
 "Elitehr Leave Policies","سياسات الأجازات",
+"Leave Policies","سياسات الأجازات",
 "Elitehr Short Leave Requests","اذن"
 "Elitehr Leave Policies Rules","قواعد حساب السياسات"
 "Elitehr Projects","مشروع"

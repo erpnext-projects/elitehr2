@@ -1,6 +1,5 @@
 {
  "actions": [],
- "allow_copy": 1,
  "autoname": "autoincrement",
  "creation": "2026-02-09 17:42:41.443474",
  "default_view": "List",
@@ -126,12 +125,11 @@
  ],
  "force_re_route_to_default_view": 1,
  "grid_page_length": 50,
- "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-02-10 17:28:12.296543",
+ "modified": "2026-03-08 13:26:29.121708",
  "modified_by": "Administrator",
- "module": "EliteHr2",
+ "module": "Elitehr2",
  "name": "Elitehr Leave Policies",
  "naming_rule": "Autoincrement",
  "owner": "Administrator",
@@ -167,5 +165,6 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
- "title_field": "ar_name"
+ "title_field": "ar_name",
+ "track_changes": 1
 }

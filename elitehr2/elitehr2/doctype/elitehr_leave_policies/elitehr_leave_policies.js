@@ -7,7 +7,7 @@ frappe.ui.form.on("Elitehr Leave Policies", {
             frm.add_custom_button(__("تطبيق السياسة"), function() {
                 frappe.confirm('تأكيد تطبيق السياسة ؟', () => {
                     frappe.call({
-                        method: "elitehr.elitehr.doctype.elitehr_leave_policies.elitehr_leave_policies.apply_policy",
+                        method: "elitehr2.elitehr2.doctype.elitehr_leave_policies.elitehr_leave_policies.apply_policy",
                         args: {
                             policy_name: frm.doc.name
                         },

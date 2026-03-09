@@ -67,6 +67,41 @@
   {
    "child": 0,
    "collapsible": 1,
+   "icon": "calendar",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Leaves",
+   "link_type": "DocType",
+   "show_arrow": 0,
+   "type": "Section Break"
+  },
+  {
+   "child": 1,
+   "collapsible": 1,
+   "icon": "calendar-plus",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Leaves Requests",
+   "link_to": "Elitehr Leaves",
+   "link_type": "DocType",
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
+   "child": 1,
+   "collapsible": 1,
+   "icon": "calendar-cog",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Leave Policies",
+   "link_to": "Elitehr Leave Policies",
+   "link_type": "DocType",
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
+   "child": 0,
+   "collapsible": 1,
    "icon": "projects",
    "indent": 1,
    "keep_closed": 0,
@@ -206,7 +241,7 @@
    "type": "Link"
   }
  ],
- "modified": "2026-03-03 11:19:41.705347",
+ "modified": "2026-03-08 13:23:38.160997",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Hr Pro",

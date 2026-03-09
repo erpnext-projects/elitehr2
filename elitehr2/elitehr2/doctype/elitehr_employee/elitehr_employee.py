@@ -28,6 +28,13 @@ class ElitehrEmployee(Document):
 			})
 		frappe.msgprint('تم اضافة الاجازات', alert=True)
 
+	def validate(self):
+		seen = set()
+		for leave in self.table_leaves:  
+			if leave.leave_name in seen:
+				frappe.throw(f"تم إضافة هذه الإجازة مسبقًا: {leave.leave_name}")
+			seen.add(leave.leave_name)
+
 	
 
 def leaveUsed(employee, leave, daysAllowed=0):
