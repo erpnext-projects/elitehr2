@@ -233,7 +233,8 @@
    "fieldname": "fingerprint_sites",
    "fieldtype": "Table MultiSelect",
    "label": "Fingerprint Sites",
-   "options": "Elitehr Employee Fingerprint Sites"
+   "options": "Elitehr Employee Fingerprint Sites",
+   "reqd": 1
   },
   {
    "fieldname": "manager",
@@ -245,7 +246,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-10 09:25:06.856493",
+ "modified": "2026-03-10 23:29:40.415211",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Employee",
