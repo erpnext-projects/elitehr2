@@ -12,6 +12,26 @@ frappe.pages['org-structure'].on_page_load = function(wrapper) {
 	const tree_container = $('<div id="org-tree" style="padding:20px"></div>')
             .appendTo(page.main);
 
+
+	function buildEmployeeTree(employees,site_id) {
+		return employees.map(emp => {
+			let isManager = emp.children && emp.children.length;
+			console.log(isManager);
+			
+			return {
+				id: site_id + "_" + emp.id,
+				text: `
+					<span class="tree-body">${emp.employee_name}</span>
+					<span class="tree-badge color5">(${isManager ? "مدير" : "موظف"})</span>
+				`,
+				icon: "fa fa-user",
+				children: emp.children && emp.children.length
+					? buildEmployeeTree(emp.children,site_id)
+					: []
+			};
+		});
+	}
+
 	// Fetch organization structure data from the server
 	frappe.call({
 		method: 'elitehr2.elitehr2.page.org_structure.org_structure.get_company_tree_data',
@@ -44,17 +64,18 @@ frappe.pages['org-structure'].on_page_load = function(wrapper) {
 											`,
 										icon: "fa fa-map-marker",
 										state: { opened: true },
-										children: f.employees.map(emp=>{
-											return {
-												id: emp.id,
-												text: `
-													<span class="tree-body">${emp.employee_name}</span>
-													<span class="tree-badge color5">(موظف)</span>
-												`,
-												icon: "fa fa-user",
+										children: buildEmployeeTree(f.employees,f.site_id)
+										// children: f.employees.map(emp=>{
+										// 	return {
+										// 		id: emp.id,
+										// 		text: `
+										// 			<span class="tree-body">${emp.employee_name}</span>
+										// 			<span class="tree-badge color5">(موظف)</span>
+										// 		`,
+										// 		icon: "fa fa-user",
 												
-											}
-										})
+										// 	}
+										// })
 									} 
 								}),
 								state: { opened: true },

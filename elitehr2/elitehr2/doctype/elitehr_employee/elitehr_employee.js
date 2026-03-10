@@ -8,6 +8,14 @@ frappe.ui.form.on("Elitehr Employee", {
         // make leaves unique
         // let leaves_ids = frm.map(l => l.leave);
         
+        frm.set_query("manager", function (doc, cdt, cdn) {
+            return {
+                "filters": {
+                    "name": ["not in",doc.name]
+                },
+            };
+        });
+
         frm.set_query("leave", "table_leaves", function (doc, cdt, cdn) {
             let existing_leaves = doc.table_leaves.map(l => l.leave).filter(l => l);
             console.log(existing_leaves);
@@ -28,7 +36,8 @@ function setupFilterToFingerPrintSites(frm){
     frm.fields_dict.fingerprint_sites.get_query = function (doc) {
         return {
             filters: {
-            active: ["=", "1"],
+                active: ["=", "1"],
+                branch: doc.branche
             },
         }
     }   

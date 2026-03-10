@@ -129,7 +129,8 @@
 /* Form Design */
 .frappe-control[data-fieldtype=Select] .control-input select,
 .frappe-control[data-fieldtype=Select].form-group select     {
-    padding: 18px !important;
+    padding: 8px !important;
+    height: auto;
 }
 /* input.form-control{
 	padding: 25px 8px !important;
@@ -141,8 +142,19 @@
 
 
 
-
-
+.datatable *{
+    text-align: center;
+}
+.datatable .dt-row-header, .datatable .dt-cell, .datatable .dt-row-filter, .datatable .dt-row{
+    width: auto !important;
+    height: auto !important;
+}
+.datatable .dt-cell{
+    padding: 5px 10px;
+}
+.datatable .dt-scrollable{
+    height: 50px !important;
+}
 
 
 .color1{

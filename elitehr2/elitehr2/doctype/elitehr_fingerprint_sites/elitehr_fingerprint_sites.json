@@ -9,6 +9,7 @@
   "section_break_v0kc",
   "amended_from",
   "site_name",
+  "manager",
   "column_break_plxe",
   "city",
   "section_break_aeqp",
@@ -152,13 +153,19 @@
    "fieldname": "map_html",
    "fieldtype": "HTML",
    "label": "Location Map"
+  },
+  {
+   "fieldname": "manager",
+   "fieldtype": "Link",
+   "label": "Manager",
+   "options": "Elitehr Employee"
   }
  ],
  "force_re_route_to_default_view": 1,
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-09 17:40:24.906124",
+ "modified": "2026-03-10 21:51:33.443996",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Fingerprint Sites",

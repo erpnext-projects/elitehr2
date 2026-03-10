@@ -12,12 +12,37 @@ def execute(filters=None):
 
 def get_columns():
     return [
-        "Employee:Link/Elitehr Employee:150",
-        "Employee Name:Data:180",
-        "Leave Type:Data:150",
-        "Allowed Days:Float:120",
-        "Used Days:Float:120",
-        "Percentage %:Percent:120",
+        {
+            "fieldname": "employee",
+            "label": frappe._("Employee"),
+            "fieldtype": "Link",
+            "options": "Elitehr Employee",
+        },
+        {
+            "fieldname": "employee_name",
+            "label": frappe._("Employee Name"),
+            "fieldtype": "Data",
+        },
+        {
+            "fieldname": "leave_type",
+            "label": frappe._("Leave Type"),
+            "fieldtype": "Data",
+        },
+        {
+            "fieldname": "allowed_days",
+            "label": frappe._("Allowed Days"),
+            "fieldtype": "Float",
+        },
+        {
+            "fieldname": "used_days",
+            "label": frappe._("Used Days"),
+            "fieldtype": "Float",
+        },
+        {
+            "fieldname": "percentage",
+            "label": frappe._("Percentage %"),
+            "fieldtype": "Percent",
+        },
     ]
 
 

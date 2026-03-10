@@ -8,6 +8,7 @@
  "field_order": [
   "section_break_qp8p",
   "amended_from",
+  "status",
   "section_break_oazo",
   "column_break_jiau",
   "employee",
@@ -71,7 +72,9 @@
   "section_break_ozra",
   "attachments",
   "section_break_thlq",
-  "required_approval_levels"
+  "required_approval_levels",
+  "tab_2_tab",
+  "levels"
  ],
  "fields": [
   {
@@ -92,7 +95,6 @@
    "columns": 1,
    "fieldname": "type",
    "fieldtype": "Link",
-   "in_list_view": 1,
    "label": "\u0646\u0648\u0639 \u0627\u0644\u0637\u0644\u0628",
    "link_filters": "[[\"Elitehr Requests Types\",\"docstatus\",\"=\",\"1\"]]",
    "options": "Elitehr Requests Types",
@@ -312,6 +314,7 @@
    "fetch_from": "type.arabic_type_name",
    "fieldname": "request_type_name",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Request Type Name",
    "read_only": 1
   },
@@ -386,15 +389,19 @@
   },
   {
    "depends_on": "eval: doc.request_type_code == \"TRANSFER\"",
+   "fetch_from": "employee.department_name",
    "fieldname": "from_department",
    "fieldtype": "Data",
-   "label": "From department"
+   "label": "From department",
+   "read_only": 1
   },
   {
    "depends_on": "eval: doc.request_type_code == \"TRANSFER\"",
+   "fetch_from": "employee.branch_name",
    "fieldname": "from_branch",
    "fieldtype": "Data",
-   "label": "From branch"
+   "label": "From branch",
+   "read_only": 1
   },
   {
    "depends_on": "eval: doc.request_type_code == \"TRANSFER\"",
@@ -409,14 +416,16 @@
   {
    "depends_on": "eval: doc.request_type_code == \"TRANSFER\"",
    "fieldname": "to_department",
-   "fieldtype": "Data",
-   "label": "To department"
+   "fieldtype": "Link",
+   "label": "To department",
+   "options": "Elitehr Fingerprint Sites"
   },
   {
    "depends_on": "eval: doc.request_type_code == \"TRANSFER\"",
    "fieldname": "to_branch",
-   "fieldtype": "Data",
-   "label": "To branch"
+   "fieldtype": "Link",
+   "label": "To branch",
+   "options": "Elitehr Branches"
   },
   {
    "fieldname": "employee",
@@ -428,6 +437,7 @@
    "fetch_from": "employee.employee_name",
    "fieldname": "employee_name",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Employee Name",
    "read_only": 1
   },
@@ -437,13 +447,31 @@
    "fieldtype": "Data",
    "label": "Department",
    "read_only": 1
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "New\nUpdated\nClosed"
+  },
+  {
+   "fieldname": "tab_2_tab",
+   "fieldtype": "Tab Break",
+   "label": "levels of approval"
+  },
+  {
+   "fieldname": "levels",
+   "fieldtype": "Table",
+   "label": "Levels",
+   "options": "Elitehr Request Approvals",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
- "is_submittable": 1,
  "links": [],
- "modified": "2026-03-03 10:48:49.419457",
+ "modified": "2026-03-10 21:40:56.861388",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Requests",

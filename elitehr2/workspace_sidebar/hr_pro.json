@@ -100,6 +100,30 @@
    "type": "Link"
   },
   {
+   "child": 1,
+   "collapsible": 1,
+   "icon": "settings",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Leave Policies Rules",
+   "link_to": "Elitehr Leave Policies Rules",
+   "link_type": "DocType",
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
+   "child": 1,
+   "collapsible": 1,
+   "icon": "file-user",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Employee Leaves balances",
+   "link_to": "Employee Leaves balances",
+   "link_type": "Report",
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
    "child": 0,
    "collapsible": 1,
    "icon": "projects",
@@ -194,6 +218,18 @@
    "type": "Link"
   },
   {
+   "child": 1,
+   "collapsible": 1,
+   "icon": "settings",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Approval Workflow",
+   "link_to": "Elitehr Approval Workflow",
+   "link_type": "DocType",
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
    "child": 0,
    "collapsible": 1,
    "icon": "setting-gear",
@@ -241,7 +277,7 @@
    "type": "Link"
   }
  ],
- "modified": "2026-03-08 13:23:38.160997",
+ "modified": "2026-03-10 21:39:14.103591",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Hr Pro",

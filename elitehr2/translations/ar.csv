@@ -173,3 +173,28 @@ Allowed range ,نطاق البصمة المسموح
 Allowed Attendance Radius, نطاق البصمة المسموح
 Employees can check-in if they are within {0} meters from this location, سيتمكن الموظفون من تسجيل البصمة إذا كانوا ضمن {0} متر من هذا الموقع
 meter, متر
+Manager, المدير
+Employee Leaves balances, أرصدة الموظفين
+Elitehr Leave Policies Rules, قواعد حساب الاجازات
+Leave Policies Rules, قواعد الحساب 
+Employee, الموظف
+Employee Name, اسم الموظف
+Leave Type, نوع الاجازة
+Allowed Days, الايام المسموح بها
+Used Days, المستخدم منها
+Percentage %, النسبة المئوية
+Elitehr Approval Workflow, سلاسل الموافقات
+Approval Workflow, سلاسل الموافقات
+Minimum levels, الحد الأدنى للمستويات
+Maximum levels, الحد الأقصى للمستويات
+Less than automatic approval, موافقة تلقائية أقل من
+Maximum amount, الحد الأقصى للمبلغ 
+Active, تفعيل
+Levels, المستويات
+Approved type, نوع المعتمد
+Approved,  المعتمد
+Direct Supervisor, المدير المباشر
+Department Manager, مدير القسم
+Specific Employee, موظف محدد
+levels of approval, مستويات الموافقة
+Responsible, المسؤول

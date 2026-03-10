@@ -1,6 +1,6 @@
 {
  "actions": [],
- "autoname": "autoincrement",
+ "autoname": "LEAVE_POLICY.#####",
  "creation": "2026-02-09 17:42:41.443474",
  "default_view": "List",
  "doctype": "DocType",
@@ -127,11 +127,11 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-08 13:26:29.121708",
+ "modified": "2026-03-10 10:59:57.506511",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Leave Policies",
- "naming_rule": "Autoincrement",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {

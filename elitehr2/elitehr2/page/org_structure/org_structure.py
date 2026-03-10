@@ -20,19 +20,41 @@ def get_company_tree_data():
                 fields=["parent", "site_name"], 
                 filters={"site_name": site.name}
             )
-            employees = []
+            # employees = []
+            # for e in employee_links:
+            #     emp_doc = frappe.get_doc("Elitehr Employee", e.parent)
+            #     employees.append({
+            #         "id": emp_doc.name,
+            #         "employee_name": emp_doc.employee_name
+            #     })
+
+            emp_map = {}
             for e in employee_links:
                 emp_doc = frappe.get_doc("Elitehr Employee", e.parent)
-                employees.append({
+
+                emp_map[emp_doc.name] = {
                     "id": emp_doc.name,
-                    "employee_name": emp_doc.employee_name
-                })
-            # frappe.log("employees")
-            # frappe.log(employees)
+                    "employee_name": emp_doc.employee_name,
+                    "manager": emp_doc.manager,
+                    "children": []
+                }
+
+            # بناء الشجرة
+            employees_tree = []
+            for emp_id, emp in emp_map.items():
+                manager_id = emp["manager"]
+
+                if manager_id and manager_id in emp_map:
+                    emp_map[manager_id]["children"].append(emp)
+                else:
+                    employees_tree.append(emp)
+            frappe.log("employees_tree")
+            frappe.log(employees_tree)
+
             fingerSitesList.append({
                 "site_name": site.site_name,
                 "site_id": site.name,
-                "employees": employees
+                "employees": employees_tree
             })
 
             
@@ -46,5 +68,5 @@ def get_company_tree_data():
         # frappe.log(fingerSites)
         # frappe.log("employees")
         # frappe.log(employees)
-    # frappe.log(hierarchy)
+    frappe.log(hierarchy)
     return hierarchy
