@@ -11,7 +11,7 @@
   "responsible",
   "approver",
   "status",
-  "date"
+  "action_date"
  ],
  "fields": [
   {
@@ -35,11 +35,6 @@
    "label": "Status"
   },
   {
-   "fieldname": "date",
-   "fieldtype": "Date",
-   "label": "Date"
-  },
-  {
    "fieldname": "section_break_thrm",
    "fieldtype": "Section Break",
    "read_only": 1
@@ -50,13 +45,18 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Responsible"
+  },
+  {
+   "fieldname": "action_date",
+   "fieldtype": "Date",
+   "label": "Date"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-03-10 21:43:15.116794",
+ "modified": "2026-03-11 11:04:35.821924",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Request Approvals",

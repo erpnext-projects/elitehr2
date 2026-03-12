@@ -449,11 +449,13 @@
    "read_only": 1
   },
   {
+   "default": "New",
    "fieldname": "status",
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Status",
-   "options": "New\nUpdated\nClosed"
+   "options": "New\nRejected\nApprove\nUnder Liquidation\nDisbursement of Dues\nCompleted",
+   "read_only": 1
   },
   {
    "fieldname": "tab_2_tab",
@@ -471,7 +473,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-10 21:40:56.861388",
+ "modified": "2026-03-11 13:52:40.936686",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Requests",
