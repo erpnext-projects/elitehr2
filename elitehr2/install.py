@@ -19,7 +19,7 @@ def after_install():
     # disallow_user_create_workspace()
     create_hr_role()
     create_admin_user()
-    
+
 
     # frappe.db.set_default("desktop:setup_complete", 1)
     # frappe.db.set_value("System Settings", None, "setup_complete", 1)
@@ -111,7 +111,8 @@ def create_admin_user():
             "Elitehr Security Settings",
             "Elitehr Requests",
             "Elitehr Requests Types",
-            "Elitehr Approval Workflow"
+            "Elitehr Approval Workflow",
+            "User"
         ]
         for r in roles:
             allow_role_read_doctype(role_name,r)
