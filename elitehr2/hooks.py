@@ -255,4 +255,8 @@ after_uninstall = "elitehr2.uninstall.after_uninstall"
 # ------------
 # List of apps whose translatable strings should be excluded from this app's translations.
 # ignore_translatable_strings_from = []
-fixtures = ["Navbar Settings","Custom HTML Block","Kanban Board","System Settings","Elitehr Requests Types"]
+fixtures = [
+    "Navbar Settings","Custom HTML Block","Kanban Board","System Settings","Elitehr Requests Types",
+        {"doctype": "Custom Field", "filters": [["module", "=", "Elitehr2"]]},
+        {"doctype": "Client Script", "filters": [["module", "=", "Elitehr2"]]},
+    ]
