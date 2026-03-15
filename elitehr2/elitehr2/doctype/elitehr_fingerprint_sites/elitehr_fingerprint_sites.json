@@ -29,6 +29,9 @@
   "longitude",
   "allowed_range",
   "section_break_fuus",
+  "who_can_fingerprint_from_this_site",
+  "employees",
+  "department",
   "active"
  ],
  "fields": [
@@ -159,13 +162,34 @@
    "fieldtype": "Link",
    "label": "Manager",
    "options": "Elitehr Employee"
+  },
+  {
+   "fieldname": "who_can_fingerprint_from_this_site",
+   "fieldtype": "Select",
+   "label": "Who can fingerprint from this site?",
+   "options": "All employees\nEveryone except specific employees\nSpecific employees only\nSpecific departments only",
+   "translatable": 1
+  },
+  {
+   "depends_on": "eval: doc.who_can_fingerprint_from_this_site == \"Everyone except specific employees\" || doc.who_can_fingerprint_from_this_site == \"Specific employees only\"",
+   "fieldname": "employees",
+   "fieldtype": "Table MultiSelect",
+   "label": "Employees",
+   "options": "Elitehr Fingerprint Sites Employees"
+  },
+  {
+   "depends_on": "eval: doc.who_can_fingerprint_from_this_site == \"Specific departments only\"",
+   "fieldname": "department",
+   "fieldtype": "Table MultiSelect",
+   "label": "Department",
+   "options": "Elitehr Fingerprint Sites Departments"
   }
  ],
  "force_re_route_to_default_view": 1,
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-10 21:51:33.443996",
+ "modified": "2026-03-15 11:43:09.837680",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Fingerprint Sites",
