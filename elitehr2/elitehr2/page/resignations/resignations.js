@@ -32,12 +32,13 @@ frappe.pages['resignations'].on_page_load = function(wrapper) {
             args: { request_type: "RESIGNATION" },
             callback: function(r) {
                 const requests = r.message || [];
-
+                console.log(requests);
+                
                 const total = requests.length;
-                const newCount = requests.filter(r => r.docstatus === 0 ).length;
-                const completed = requests.filter(r => r.docstatus === 1 ).length;
-                const underReview = total - newCount - completed;
-
+                const newCount = requests.filter(r => r.status === "New" ).length;
+                const underLiquidation = requests.filter(r => r.status === "Under Liquidation").length;
+                const completed = requests.filter(r => r.status === "Completed" ).length;
+                
                 // Cards
                 cardRow.html(`
                     <div class="card">
@@ -46,7 +47,7 @@ frappe.pages['resignations'].on_page_load = function(wrapper) {
                     </div>
                     <div class="card">
                         <div class="card-title">قيد التصفية</div>
-                        <div class="card-value color1">${underReview}</div>
+                        <div class="card-value color1">${underLiquidation}</div>
                     </div>
                     <div class="card">
                         <div class="card-title">مكتملة</div>
