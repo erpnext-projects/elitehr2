@@ -60,12 +60,15 @@
   "expense_category",
   "column_break_omlo",
   "expense_date",
+  "section_break_pwsk",
+  "proposed_transfer_date",
   "section_break_sdaz",
   "from_department",
-  "from_branch",
-  "proposed_transfer_date",
   "column_break_eina",
   "to_department",
+  "section_break_njgo",
+  "from_branch",
+  "column_break_ykwa",
   "to_branch",
   "section_break_whxw",
   "details",
@@ -468,12 +471,24 @@
    "label": "Levels",
    "options": "Elitehr Request Approvals",
    "read_only": 1
+  },
+  {
+   "fieldname": "section_break_njgo",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_ykwa",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_pwsk",
+   "fieldtype": "Section Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-11 13:52:40.936686",
+ "modified": "2026-03-16 15:56:43.733180",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Requests",
