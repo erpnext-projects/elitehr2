@@ -19,32 +19,24 @@ $( document ).ajaxSuccess(function(){
             });
         }
     }
+
+
+    
+
 });
 
 frappe.router.on('change', () => {
-
-    // let route = frappe.get_route();
-    // console.log(route);
-    
-    // // لو إحنا في workspace
-    // if (route[0] === "dashboard-view") {
-    //     let breadcrumbs = document.querySelectorAll(".navbar-breadcrumbs li");
-    //     if (breadcrumbs.length > 2) {
-    //         breadcrumbs.forEach((breadcrumb, index) => {
-    //              if (index !== 0 && index !== breadcrumbs.length - 1){
-    //                 breadcrumb.remove();
-    //              }
-    //         });
-    //     }
-    //     console.log("done");
-    //     console.log(breadcrumbs);
-    // }
-
-    // $(document).ready(function() {
-    //     let breadcrumbs = document.querySelectorAll(".navbar-breadcrumbs li");
-    //     console.log(breadcrumbs);
-    // });
-
+    let route = frappe.get_route();
+    console.log(route);
+    if (frappe.get_route()[0] === "List" && frappe.get_route()[1] === "User") {
+        // let urlParams = new URLSearchParams(window.location.search);
+        // console.log(urlParams);
+        // if (urlParams.get('sidebar') !== 'Hr Pro') {
+        //     urlParams.set('sidebar', 'Hr Pro');
+        //     let newUrl = window.location.pathname + '?' + urlParams.toString() + window.location.hash;
+        //     window.location.replace(newUrl);
+        // }
+    }
 });
 
 // frappe.ui.form.on('Dashboard', {
@@ -58,13 +50,19 @@ frappe.router.on('change', () => {
 // });
 
 
-// $(document).ready(function() {
+$(document).ready(function() {
 //     alert("done")
 //     d = document.querySelector('div[item-name="لوحة التحكم"]')
 //     if(d.querySelector(".drop-icon:not(.hidden) use[href='#es-line-down']")){
 //         d.querySelector(".drop-icon:not(.hidden)").click()
 //     }
-// })
+// Report Style (like: Employee Leaves balances)
+    let start = 0;
+    document.querySelectorAll(".datatable .dt-scrollable .dt-row").forEach(e => {
+            e.style.top = start + "px";
+            start += 52;
+    }) 
+})
 
 
 // frappe.after_ajax(() => {
@@ -91,3 +89,7 @@ frappe.router.on('change', () => {
 
 //     }, 1000);
 // });
+
+
+
+

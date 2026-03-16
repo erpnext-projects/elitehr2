@@ -153,8 +153,18 @@
     padding: 5px 10px;
 }
 .datatable .dt-scrollable{
-    height: 50px !important;
+    height: 70vh !important;
 }
+.datatable .dt-scrollable .dt-row{
+    position: relative !important;
+    top: 0 !important;
+}
+.dt-cell__content.dt-cell__content--col-2{
+    text-wrap: auto;
+}
+
+
+
 
 
 .color1{

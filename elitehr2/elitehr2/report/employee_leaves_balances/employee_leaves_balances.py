@@ -37,11 +37,12 @@ def get_columns():
             "fieldname": "used_days",
             "label": frappe._("Used Days"),
             "fieldtype": "Float",
-        },
+        },  
         {
             "fieldname": "percentage",
             "label": frappe._("Percentage %"),
             "fieldtype": "Percent",
+            "precision": 1
         },
     ]
 
@@ -66,7 +67,7 @@ def get_data(filters):
                 FROM `tabElitehr Leaves`
                 WHERE employee=%s
                 AND type=%s
-                AND status='مكتمل'
+                AND docstatus=1
             """, (emp.name, l.leave))[0][0] or 0
 
             percentage = (used_days / int(l.days)) * 100 if l.days else 0
@@ -77,7 +78,7 @@ def get_data(filters):
                 l.leave_name or l.leave,
                 l.days,
                 used_days,
-                round(percentage, 2)
+                round(percentage, 1)
             ])
 
     return data

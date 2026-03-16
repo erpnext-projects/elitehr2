@@ -16,4 +16,43 @@ frappe.query_reports["Employee Leaves balances"] = {
             options: "Elitehr Employee"
         }
 	],
+	formatter: function(value, row, column, data, default_formatter) {
+
+        value = default_formatter(value, row, column, data);
+
+        if (column.fieldname == "percentage" && data) {
+
+            let percent = data.percentage || 0;
+
+            let color = "#28a745";
+
+            if (percent > 70) {
+                color = "#dc3545";
+            } else if (percent > 40) {
+                color = "#ffc107";
+            }
+
+            value = `
+                <div style="width:150px;">
+                    <div style="
+                        background:#e9ecef;
+                        border-radius:6px;
+                        height:20px;
+                        overflow:hidden;
+                    ">
+                        <div style="
+                            width:${percent}%;
+                            background:${color};
+                            height:20px;
+                        "></div>
+                    </div>
+                    <div style="font-size:11px;margin-top:2px;text-align:center">
+                        ${percent}%
+                    </div>	
+                </div>
+            `;
+        }
+
+        return value;
+    }
 };
