@@ -15,7 +15,8 @@
   "status",
   "section_break_btfr",
   "reason",
-  "notes"
+  "notes",
+  "amended_from"
  ],
  "fields": [
   {
@@ -80,13 +81,24 @@
   {
    "fieldname": "section_break_btfr",
    "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Elitehr Leaves",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
   }
  ],
  "force_re_route_to_default_view": 1,
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
+ "is_submittable": 1,
  "links": [],
- "modified": "2026-03-08 13:25:48.026022",
+ "modified": "2026-03-16 11:59:05.248160",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Leaves",
