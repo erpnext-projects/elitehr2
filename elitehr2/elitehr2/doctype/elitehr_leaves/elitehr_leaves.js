@@ -8,6 +8,30 @@ frappe.ui.form.on("Elitehr Leaves", {
     _date: function(frm) {
         calculate_days(frm);
     },
+    employee: function(frm) {
+        frm.set_value("type", null);
+        if (frm.doc.employee) {
+            frappe.call({
+                method: "frappe.client.get",
+                args: {
+                    doctype: "Elitehr Employee",
+                    name: frm.doc.employee,
+                },
+                callback(r) {
+                    if (r.message) {
+                        let leaves = r.message.table_leaves.map(l => l.leave);
+                        frm.set_query("type", function () {
+                            return {
+                                filters: {
+                                    name: ["in", leaves]
+                                }
+                            };
+                        });
+                    }
+                }
+            });
+        }
+    },
 	refresh(frm) {
         calculate_days(frm);
 	},
