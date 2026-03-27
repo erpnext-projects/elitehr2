@@ -21,8 +21,6 @@ Hours Expected, الساعات المقدرة
 "Elitehr Attachments","مرفقات"
 "Elitehr Deduction Levels","مستويات الخصم"
 "Elitehr Deduction Rules","قواعد الخصومات"
-"Elitehr Late And Early Exit Rules","قواعد التأخير والانصراف المبكر"
-"Elitehr Attendance Rules","قواعد الحضور"
 "Elitehr Shift Assign Tool","تعيين وردية"
 "Elitehr Shift Schedule Assign Tool","تعيين جدول الورديات"
 "Elitehr Shifts","وردية"
@@ -226,3 +224,27 @@ Everyone except specific employees, الجميع ما عدا موظفين محد
 Specific employees only, موظفين محددين فقط
 Specific departments only, أقسام محدد فقط
 Employee Leave Balance, رصيد اجازات الموظف
+Attendance and departure, الحضور والانصراف
+Attendance Log, سجل الحضور
+Shifts, الورديات
+Shift, الوردية
+Shift Assign Tool, تعيينات الورديات
+Shift Schedule Assign Tool, تعيينات الورديات
+Default, افتراضي
+Shift Schedule, جداول العمل
+Shift Schedule Assign Tool, تعيينات جداول العمل
+Appointment for, التعيين لـ
+Shift Name, اسم الوردية
+Attendance and Discount Policies, سياسات الحضور والخصومات
+Elitehr Late And Early Exit Rules, القواعد
+Late And Early Exit Rules, القواعد
+Deduction Rules, الخصومات
+Elitehr Deduction Rules, الخصومات
+Elitehr Attendance Rules, البصمة
+Attendance Rules, البصمة
+From, من 
+To, الي
+Fingerprint correction requests, طلبات تصحيح البصمة
+Work permits, الأذونات
+Missions, المأموريات
+Overtime, العمل الاضافي

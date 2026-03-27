@@ -1,0 +1,19 @@
+{
+ "content": null,
+ "creation": "2026-03-27 16:35:13.197118",
+ "docstatus": 0,
+ "doctype": "Page",
+ "idx": 0,
+ "modified": "2026-03-27 16:40:25.493366",
+ "modified_by": "Administrator",
+ "module": "Elitehr2",
+ "name": "attendance-log",
+ "owner": "Administrator",
+ "page_name": "attendance-log",
+ "roles": [],
+ "script": null,
+ "standard": "Yes",
+ "style": null,
+ "system_page": 1,
+ "title": "Attendance Log"
+}
