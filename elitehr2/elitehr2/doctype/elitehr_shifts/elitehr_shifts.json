@@ -1,17 +1,17 @@
 {
  "actions": [],
  "allow_copy": 1,
- "autoname": "autoincrement",
+ "autoname": "Shift-.#####",
  "creation": "2026-02-07 22:00:15.844706",
  "default_view": "List",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
   "shift_name",
-  "type",
+  "en_name",
   "start_time",
   "column_break_lyks",
-  "en_name",
+  "type",
   "color",
   "end_time",
   "section_break_lmth",
@@ -52,35 +52,40 @@
   {
    "fieldname": "start_time",
    "fieldtype": "Time",
+   "in_list_view": 1,
    "label": "\u0648\u0642\u062a \u0627\u0644\u0628\u062f\u0627\u064a\u0629",
    "reqd": 1
   },
   {
    "fieldname": "end_time",
    "fieldtype": "Time",
+   "in_list_view": 1,
    "label": "\u0648\u0642\u062a \u0627\u0644\u0646\u0647\u0627\u064a\u0629 ",
    "reqd": 1
   },
   {
    "fieldname": "grace_period",
-   "fieldtype": "Duration",
+   "fieldtype": "Int",
    "hide_days": 1,
    "hide_seconds": 1,
-   "label": "\u0641\u062a\u0631\u0629 \u0627\u0644\u0633\u0645\u0627\u062d"
+   "label": "\u0641\u062a\u0631\u0629 \u0627\u0644\u0633\u0645\u0627\u062d (\u062f\u0642\u064a\u0642\u0629)",
+   "non_negative": 1
   },
   {
    "fieldname": "break",
-   "fieldtype": "Duration",
+   "fieldtype": "Int",
    "hide_days": 1,
    "hide_seconds": 1,
-   "label": "\u0627\u0644\u0627\u0633\u062a\u0631\u0627\u062d\u0629"
+   "label": "\u0627\u0644\u0627\u0633\u062a\u0631\u0627\u062d\u0629 (\u062f\u0642\u064a\u0642\u0629)",
+   "non_negative": 1
   },
   {
    "fieldname": "early_departure",
-   "fieldtype": "Duration",
+   "fieldtype": "Int",
    "hide_days": 1,
    "hide_seconds": 1,
-   "label": "\u0627\u0646\u0635\u0631\u0627\u0641 \u0645\u0628\u0643\u0631"
+   "label": "\u0627\u0646\u0635\u0631\u0627\u0641 \u0645\u0628\u0643\u0631 (\u062f\u0642\u064a\u0642\u0629)",
+   "non_negative": 1
   },
   {
    "fieldname": "column_break_lyks",
@@ -117,14 +122,13 @@
  ],
  "force_re_route_to_default_view": 1,
  "grid_page_length": 50,
- "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-02-09 14:35:43.089009",
+ "modified": "2026-03-27 17:43:35.547991",
  "modified_by": "Administrator",
- "module": "EliteHr2",
+ "module": "Elitehr2",
  "name": "Elitehr Shifts",
- "naming_rule": "Autoincrement",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {
@@ -157,5 +161,7 @@
  "rows_threshold_for_grid_search": 20,
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "title_field": "shift_name",
+ "track_changes": 1
 }

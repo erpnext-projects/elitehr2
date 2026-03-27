@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_copy": 1,
- "autoname": "autoincrement",
+ "autoname": "DEDUCTION_RULES-.#####",
  "creation": "2026-02-09 13:33:10.746801",
  "default_view": "List",
  "doctype": "DocType",
@@ -52,11 +52,12 @@
   },
   {
    "fieldname": "allowed_time",
-   "fieldtype": "Duration",
+   "fieldtype": "Int",
    "hide_days": 1,
    "hide_seconds": 1,
    "in_list_view": 1,
-   "label": "\u0641\u062a\u0631\u0629 \u0627\u0644\u0633\u0645\u0627\u062d",
+   "label": "\u0641\u062a\u0631\u0629 \u0627\u0644\u0633\u0645\u0627\u062d (\u062f\u0642\u064a\u0642\u0629)",
+   "non_negative": 1,
    "reqd": 1
   },
   {
@@ -90,14 +91,13 @@
  ],
  "force_re_route_to_default_view": 1,
  "grid_page_length": 50,
- "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-02-09 14:35:38.700926",
+ "modified": "2026-03-27 20:54:38.645363",
  "modified_by": "Administrator",
- "module": "EliteHr2",
+ "module": "Elitehr2",
  "name": "Elitehr Deduction Rules",
- "naming_rule": "Autoincrement",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {
@@ -130,5 +130,7 @@
  "rows_threshold_for_grid_search": 20,
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "title_field": "rule_name",
+ "track_changes": 1
 }

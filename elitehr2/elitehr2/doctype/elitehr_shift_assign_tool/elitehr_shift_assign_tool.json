@@ -10,12 +10,15 @@
   "shift",
   "column_break_njoj",
   "shift_name",
-  "section_break_ooal",
-  "employees",
   "section_break_hkyi",
   "start_date",
   "column_break_wncm",
-  "end_date"
+  "end_date",
+  "section_break_ooal",
+  "appointment_for",
+  "column_break_agyi",
+  "employees",
+  "department"
  ],
  "fields": [
   {
@@ -43,11 +46,11 @@
    "fieldtype": "Section Break"
   },
   {
+   "depends_on": "eval: doc.appointment_for == \"Employee\"",
    "fieldname": "employees",
    "fieldtype": "Table MultiSelect",
    "label": "\u0627\u0644\u0645\u0648\u0638\u0641\u064a\u0646",
-   "options": "Elitehr Child Table Employee",
-   "reqd": 1
+   "options": "Elitehr Child Table Employee"
   },
   {
    "fieldname": "section_break_hkyi",
@@ -68,6 +71,23 @@
    "fieldtype": "Date",
    "label": "\u062a\u0627\u0631\u064a\u062e \u0627\u0644\u0646\u0647\u0627\u064a\u0629 ",
    "reqd": 1
+  },
+  {
+   "fieldname": "appointment_for",
+   "fieldtype": "Select",
+   "label": "Appointment for",
+   "options": "Employee\nDepartment"
+  },
+  {
+   "depends_on": "eval: doc.appointment_for == \"Department\"",
+   "fieldname": "department",
+   "fieldtype": "Link",
+   "label": "Department",
+   "options": "Elitehr Fingerprint Sites"
+  },
+  {
+   "fieldname": "column_break_agyi",
+   "fieldtype": "Column Break"
   }
  ],
  "force_re_route_to_default_view": 1,
@@ -75,9 +95,9 @@
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-02-09 14:35:41.308544",
+ "modified": "2026-03-27 18:47:36.624439",
  "modified_by": "Administrator",
- "module": "EliteHr2",
+ "module": "Elitehr2",
  "name": "Elitehr Shift Assign Tool",
  "naming_rule": "Autoincrement",
  "owner": "Administrator",

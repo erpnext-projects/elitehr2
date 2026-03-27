@@ -6,20 +6,12 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "after",
+  "from",
+  "to",
   "action",
   "descriptopn"
  ],
  "fields": [
-  {
-   "fieldname": "after",
-   "fieldtype": "Duration",
-   "hide_days": 1,
-   "hide_seconds": 1,
-   "in_list_view": 1,
-   "label": "\u0628\u0639\u062f",
-   "reqd": 1
-  },
   {
    "fieldname": "action",
    "fieldtype": "Select",
@@ -34,13 +26,33 @@
    "in_list_view": 1,
    "label": "\u0627\u0644\u0628\u064a\u0627\u0646",
    "non_negative": 1
+  },
+  {
+   "fieldname": "from",
+   "fieldtype": "Int",
+   "hide_days": 1,
+   "hide_seconds": 1,
+   "in_list_view": 1,
+   "label": "From",
+   "non_negative": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "to",
+   "fieldtype": "Int",
+   "hide_days": 1,
+   "hide_seconds": 1,
+   "in_list_view": 1,
+   "label": "To",
+   "non_negative": 1,
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-02-16 23:26:10.877354",
+ "modified": "2026-03-27 20:52:59.242540",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Deduction Levels",

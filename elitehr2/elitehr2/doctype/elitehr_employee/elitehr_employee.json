@@ -25,6 +25,10 @@
   "salary",
   "registration_date",
   "manager",
+  "section_break_osbg",
+  "shift",
+  "column_break_unzy",
+  "shift_name",
   "\u0627\u0644\u0628\u064a\u0627\u0646\u0627\u062a_\u0627\u0644\u0628\u0646\u0643\u064a\u0629_tab",
   "bank_name",
   "iban",
@@ -241,12 +245,33 @@
    "fieldtype": "Link",
    "label": "Manager",
    "options": "Elitehr Employee"
+  },
+  {
+   "fieldname": "shift",
+   "fieldtype": "Link",
+   "label": "Shift",
+   "options": "Elitehr Shifts"
+  },
+  {
+   "fieldname": "section_break_osbg",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_unzy",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "shift.shift_name",
+   "fieldname": "shift_name",
+   "fieldtype": "Read Only",
+   "in_list_view": 1,
+   "label": "Shift Name"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-10 23:29:40.415211",
+ "modified": "2026-03-27 18:37:52.554797",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Employee",
