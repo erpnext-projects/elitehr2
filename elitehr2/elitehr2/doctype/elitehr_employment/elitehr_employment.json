@@ -12,15 +12,16 @@
   "column_break_gdew",
   "department",
   "\u0627\u0644\u062a\u0627\u0631\u064a\u062e",
-  "status",
-  "amended_from"
+  "status"
  ],
  "fields": [
   {
    "fieldname": "department",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Department",
-   "options": "Elitehr Fingerprint Sites"
+   "options": "Elitehr Fingerprint Sites",
+   "reqd": 1
   },
   {
    "fieldname": "\u0627\u0644\u062a\u0627\u0631\u064a\u062e",
@@ -34,27 +35,17 @@
    "placeholder": "\u0627\u0644\u062e\u0628\u0631\u0629, \u0627\u0644\u0645\u0624\u0647\u0644\u0627\u062a, \u0627\u0644\u0645\u0647\u0627\u0631\u0627\u062a..."
   },
   {
-   "default": "Open",
+   "default": "New",
    "fieldname": "status",
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Status",
-   "options": "Open\nPending\nCompleted",
-   "reqd": 1
+   "options": "New\nFirst interview\nSecond interview\nApproval\nContract",
+   "translatable": 1
   },
   {
    "fieldname": "column_break_gdew",
    "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "amended_from",
-   "fieldtype": "Link",
-   "label": "Amended From",
-   "no_copy": 1,
-   "options": "Elitehr Employment",
-   "print_hide": 1,
-   "read_only": 1,
-   "search_index": 1
   },
   {
    "fieldname": "number_required",
@@ -73,9 +64,8 @@
  "force_re_route_to_default_view": 1,
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
- "is_submittable": 1,
  "links": [],
- "modified": "2026-03-11 21:46:17.262647",
+ "modified": "2026-03-30 14:02:18.530541",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Employment",
@@ -111,6 +101,27 @@
  "rows_threshold_for_grid_search": 20,
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": [],
+ "states": [
+  {
+   "color": "Gray",
+   "title": "New"
+  },
+  {
+   "color": "Cyan",
+   "title": "First interview"
+  },
+  {
+   "color": "Cyan",
+   "title": "Second interview"
+  },
+  {
+   "color": "Cyan",
+   "title": "Approval"
+  },
+  {
+   "color": "Blue",
+   "title": "Contract"
+  }
+ ],
  "track_changes": 1
 }
