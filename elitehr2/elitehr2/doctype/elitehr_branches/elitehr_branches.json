@@ -37,7 +37,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-02 13:31:48.987605",
+ "modified": "2026-03-30 13:46:00.816395",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Branches",
@@ -74,8 +74,10 @@
  "rows_threshold_for_grid_search": 20,
  "search_fields": "branch_name",
  "show_preview_popup": 1,
+ "show_title_field_in_link": 1,
  "sort_field": "order",
  "sort_order": "ASC",
  "states": [],
+ "title_field": "branch_name",
  "track_changes": 1
 }
