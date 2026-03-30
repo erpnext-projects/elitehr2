@@ -7,25 +7,30 @@ from frappe.model.document import Document
 
 class ElitehrFingerprintSites(Document):
     def before_save(self):
-        to = self.who_can_fingerprint_from_this_site
-        if to == "All employees":
-            employees = frappe.get_all("Elitehr Employee",pluck="name")
-            self.assignSite(employees)
-            
-        elif to == "Everyone except specific employees":
-            exceptEmployees = [emp.employee for emp in self.employees]
-            employees = frappe.get_all("Elitehr Employee",pluck="name",filters={"name": ["not in", exceptEmployees]})
-            self.assignSite(employees)
+        if self.is_new():
+            self.active = False
+            frappe.msgprint("تم إنشاء موقع بصمة جديد. يرجى تفعيله.", alert=True)
 
-        elif self.who_can_fingerprint_from_this_site == "Specific employees only":
-            expectEmployees = [emp.employee for emp in self.employees]
-            employees = frappe.get_all("Elitehr Employee",pluck="name",filters={"name": ["in", expectEmployees]})
-            self.assignSite(employees)
-        
-        elif self.who_can_fingerprint_from_this_site == "Specific departments only":
-            departments = [dep.department for dep in self.department]
-            employees = frappe.get_all("Elitehr Employee",pluck="name",filters={"department": ["in", departments]})
-            self.assignSite(employees)
+        if self.active:
+            to = self.who_can_fingerprint_from_this_site
+            if to == "All employees":
+                employees = frappe.get_all("Elitehr Employee",pluck="name")
+                self.assignSite(employees)
+                
+            elif to == "Everyone except specific employees":
+                exceptEmployees = [emp.employee for emp in self.employees]
+                employees = frappe.get_all("Elitehr Employee",pluck="name",filters={"name": ["not in", exceptEmployees]})
+                self.assignSite(employees)
+
+            elif self.who_can_fingerprint_from_this_site == "Specific employees only":
+                expectEmployees = [emp.employee for emp in self.employees]
+                employees = frappe.get_all("Elitehr Employee",pluck="name",filters={"name": ["in", expectEmployees]})
+                self.assignSite(employees)
+            
+            elif self.who_can_fingerprint_from_this_site == "Specific departments only":
+                departments = [dep.department for dep in self.department]
+                employees = frappe.get_all("Elitehr Employee",pluck="name",filters={"department": ["in", departments]})
+                self.assignSite(employees)
 
 
     def assignSite(self,employees):
