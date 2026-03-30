@@ -34,6 +34,13 @@ frappe.ui.form.on("Elitehr Employee", {
             });
 
         });
+
+        if (!frm.is_new()) {
+            frm.add_custom_button(__("Create Login Data"), function () {
+                createLoginData(frm);
+            });
+        }
+
        
 	},
     
@@ -52,49 +59,16 @@ function setupFilterToFingerPrintSites(frm){
 }
 
 
-function setupLeaves(frm) {
-    // let leaves_ids = frm.doc.table_leaves.map(l => l.leave);
-        
-    //     frm.add_custom_button(__("اضافة اجازة"), function() {
-
-    //         frappe.prompt([
-    //             {
-    //                 label: 'السياسة',
-    //                 fieldname: 'leave',
-    //                 fieldtype: 'Link',
-    //                 options: 'Elitehr Leave Policies',
-    //                 reqd: 1,
-    //                 filters: {
-    //                     'name': ['not in', leaves_ids]
-    //                 }
-    //             },
-    //             {
-    //                 fetch_from: "leave.ar_name",
-    //                 fieldname: "leave_name",
-    //                 fieldtype: "Data",
-    //                 in_list_view: 1,
-    //                 label: "اسم الاجازة",
-    //                 read_only: 1
-    //             },
-    //             {
-    //                 fetch_from: "leave.normal_days",
-    //                 fieldname: "days",
-    //                 fieldtype: "Data",
-    //                 in_list_view: 1,
-    //                 label: "عدد الايام",
-    //                 read_only: 1
-    //             },
-    //         ], (values) => {
-    //             console.log(values);
-    //             let child = frm.add_child("table_leaves");
-    //             child.leave = values.leave;
-    //             child.leave_name = values.leave_name;
-    //             child.days = values.days;
-    //             frm.refresh_field("table_leaves");
-
-    //             frappe.msgprint('تم اضافة الاجازة');
-    //         })
-
-
-    //     });
+function createLoginData(frm) {
+    frappe.call({
+		method: "elitehr2.elitehr2.doctype.elitehr_employee.elitehr_employee.createLoginData",
+        args: { name: frm.doc.name },
+		callback: function (r) {
+			if (r.message) {
+               frm.doc.login_data = r.message.login_data;
+               frm.doc.modified = r.message.modified;
+               frm.refresh_field('login_data');
+			}
+		}
+	});
 }

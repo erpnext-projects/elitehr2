@@ -10,6 +10,7 @@
   "naming_series",
   "employee_id",
   "employee_name",
+  "login_data",
   "column_break_zvvr",
   "email",
   "phone_number",
@@ -64,12 +65,12 @@
    "reqd": 1
   },
   {
-   "default": "\u0646\u0634\u0637",
+   "default": "Active",
    "fieldname": "status",
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "\u0627\u0644\u062d\u0627\u0644\u0629",
-   "options": "\u0646\u0634\u0637\n\u0645\u0624\u0631\u0634\u0641",
+   "options": "Active\n\u0645\u0624\u0631\u0634\u0641",
    "reqd": 1
   },
   {
@@ -266,12 +267,19 @@
    "fieldtype": "Read Only",
    "in_list_view": 1,
    "label": "Shift Name"
+  },
+  {
+   "fieldname": "login_data",
+   "fieldtype": "Link",
+   "label": "Login data",
+   "options": "User",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-27 18:37:52.554797",
+ "modified": "2026-03-30 11:12:35.985207",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Employee",
