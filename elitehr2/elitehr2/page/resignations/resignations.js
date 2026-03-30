@@ -5,6 +5,10 @@ frappe.pages['resignations'].on_page_load = function(wrapper) {
         single_column: true
     });
 
+    page.add_inner_button(__("تحديث"), function() {
+		loadRequests();
+	});
+
     // Outer wrapper with margin
     const wrapperContent = $('<div dir="rtl" class="custom-page"></div>').appendTo(page.main);
 
@@ -63,8 +67,37 @@ frappe.pages['resignations'].on_page_load = function(wrapper) {
             }
         });
     }
+    
 
     function renderTable(requests) {
+        if (!requests || requests.length === 0) {
+			tableContainer.html('<p>لا توجد طلبات لعرضها</p>');
+			return;
+		}
+
+        const columns = [
+                // { id: "name", name: "رقم الطلب",editable: false,dropdown:false,format: (value) => `<a href='/desk/elitehr-requests/${value}'>${value}</a>`},
+                { id: "employee_name", name: "الموظف"},
+                { id: "department", name: "القسم"},
+                { id: "empty", name: "الوظيفة"},
+                { id: "creation", name: "تاريخ الطلب", format: (value) => value ? value.split(' ')[0] : ''},
+                { id: "last_suggested_working_day", name: "اخر يوم"},
+                { id: "docstatus", name: "الحالة",
+                    format: (value)=> value == 1 ? `<span class='color3'><i class="fa fa-check-circle" aria-hidden="true"></i> معتمد</span>` : `<span class='color1'><i class="fa fa-clock-o" aria-hidden="true"></i> قيد الانتظار</span>` 
+                },
+                { id: "name", name: "الإجراءات",format: value => `<a href='/desk/elitehr-requests/${value}'><i class="fa fa-eye" aria-hidden="true"></i> عرض وتعديل</a>`}
+
+            ];
+
+        new CustomTable({
+			container: tableContainer,
+			columns: columns,
+			data: requests
+		})
+
+    }
+
+    function renderTable_old(requests) {
 		if (!requests || requests.length === 0) {
 			tableContainer.html('<p>لا توجد طلبات لعرضها</p>');
 			return;

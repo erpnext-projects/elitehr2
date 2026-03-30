@@ -182,3 +182,72 @@
 .color5{
     color: green
 }
+
+
+
+
+
+
+.custom-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 10px 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    margin-top: 15px;
+    overflow: hidden;
+}
+
+/* الجدول */
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    direction: rtl;
+    font-family: inherit;
+}
+
+/* الهيدر */
+.custom-table thead {
+    background: #f9fafb;
+}
+
+.custom-table th {
+    padding: 14px 16px;
+    text-align: right;
+    font-weight: bold;
+    color: #374151;
+    font-size: 16px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+/* الصفوف */
+.custom-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid #f1f1f1;
+    font-size: 16px;
+    color: #111827;
+}
+
+/* hover */
+.custom-table tbody tr:hover {
+    background: #f9fafb;
+    transition: 0.2s;
+}
+
+/* آخر صف */
+.custom-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+
+.filterDateContainer{
+    margin: 10px 0; 
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: auto;
+}
+
+.filterDateContainer #attendance-date {
+    height: fit-content !important;
+}
