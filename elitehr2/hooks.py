@@ -31,7 +31,10 @@ app_include_css = [
     "https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap",
     "/assets/elitehr2/css/elitehr.css"
     ]
-app_include_js = "/assets/elitehr2/js/elitehr.js"
+app_include_js = [
+    "/assets/elitehr2/js/elitehr.js",
+    "/assets/elitehr2/js/custom_table.js"
+]
 
 # include js, css files in header of web template
 # web_include_css = "/assets/elitehr2/css/elitehr2.css"
@@ -137,6 +140,12 @@ after_uninstall = "elitehr2.uninstall.after_uninstall"
 # Document Events
 # ---------------
 # Hook on document methods and events
+
+doc_events = {
+    "User": {
+        "before_save": "elitehr2.elitehr2.doctype.elitehr_employee.elitehr_employee.update_user_roles"
+    }
+}
 
 # doc_events = {
 # 	"*": {
