@@ -112,7 +112,8 @@ def create_admin_user():
             "Elitehr Requests",
             "Elitehr Requests Types",
             "Elitehr Approval Workflow",
-            "User"
+            "User",
+            "Elitehr Employee Checkin"
         ]
         for r in roles:
             allow_role_read_doctype(role_name,r)
