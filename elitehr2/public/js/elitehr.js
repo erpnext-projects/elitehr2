@@ -27,7 +27,7 @@ $( document ).ajaxSuccess(function(){
 
 frappe.router.on('change', () => {
     let route = frappe.get_route();
-    console.log(route);
+    // console.log(route);
     if (frappe.get_route()[0] === "List" && frappe.get_route()[1] === "User") {
         // let urlParams = new URLSearchParams(window.location.search);
         // console.log(urlParams);
