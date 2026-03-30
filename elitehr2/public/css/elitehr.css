@@ -46,25 +46,11 @@
     --sidebar-active-color: #3240524D !important;
     --font-stack: "Cairo", "Amiri", "Actor", sans-serif !important;
     --text-base:16px;
+    --text-sm:16px;
 
     /* Form Design */
     --input-padding: 18px;
 }
-
-/* #26314900 */
-/* .desk-sidebar-item.selected {
-    background: black !important;
-}
-.desk-sidebar-item.selected a {
-    color: white;
-}
-.desk-sidebar-item.selected svg{
-    stroke: white !important;
-}
-.desk-sidebar-item a {
-    font-size: 16px;
-} */
-
 
 .navbar-breadcrumbs a {
     pointer-events: none;   /* يمنع الضغط */
@@ -132,14 +118,23 @@
     padding: 8px !important;
     height: auto;
 }
-/* input.form-control{
-	padding: 25px 8px !important;
-} */
-/* .control-value {
-	padding: 15px 8px !important;
+select,input.form-control,.control-value.like-disabled-input{
+    min-height: 40px !important;
+	background-color: #ffffff !important;
+	border: 1px solid #d1d8dd !important;
+    border-bottom: 2px solid #d1d8dd !important;
+    border-radius: 4px !important;
+    padding: 6px 12px !important;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
 }
- */
-
+select:hover {
+    border-bottom-color: #999 !important;
+}
+.btn.btn-default{
+    min-height: 40px !important;
+}
 
 
 .datatable *{
@@ -188,6 +183,8 @@
 
 
 
+
+/* page design */
 .custom-card {
     background: #ffffff;
     border-radius: 16px;
