@@ -7,6 +7,11 @@ from frappe.model.document import Document
 import json
 
 class ElitehrEmployee(Document):
+    def before_save(self):
+        if not self.department and self.fingerprint_sites:
+            self.department = self.fingerprint_sites[0].site_name
+
+
     # used
     def onload(self):
         for l in self.table_leaves:
