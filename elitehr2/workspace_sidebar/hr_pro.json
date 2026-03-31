@@ -78,6 +78,18 @@
    "type": "Link"
   },
   {
+   "child": 1,
+   "collapsible": 1,
+   "icon": "repeat",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Transfers",
+   "link_to": "transfers",
+   "link_type": "Page",
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
    "child": 0,
    "collapsible": 1,
    "icon": "clock-3",
@@ -473,7 +485,7 @@
    "url": "/desk/user?sidebar=Hr Pro"
   }
  ],
- "modified": "2026-03-27 21:13:45.367619",
+ "modified": "2026-03-30 21:43:25.966188",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Hr Pro",
