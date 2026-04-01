@@ -9,9 +9,10 @@
   "section_break_thrm",
   "approved_type",
   "responsible",
-  "approver",
+  "approved_by",
   "status",
-  "action_date"
+  "action_date",
+  "responsible_id"
  ],
  "fields": [
   {
@@ -21,12 +22,6 @@
    "label": "Approved type",
    "options": "Direct Supervisor\nDepartment Manager\nSpecific Employee",
    "translatable": 1
-  },
-  {
-   "fieldname": "approver",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Approved"
   },
   {
    "fieldname": "status",
@@ -50,13 +45,26 @@
    "fieldname": "action_date",
    "fieldtype": "Date",
    "label": "Date"
+  },
+  {
+   "fieldname": "responsible_id",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Responsible Id",
+   "read_only": 1
+  },
+  {
+   "fieldname": "approved_by",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Approved"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-03-11 11:04:35.821924",
+ "modified": "2026-04-01 11:57:58.085000",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Request Approvals",
