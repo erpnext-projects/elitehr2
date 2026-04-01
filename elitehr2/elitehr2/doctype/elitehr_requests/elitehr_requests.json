@@ -457,7 +457,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Status",
-   "options": "New\nRejected\nApprove\nUnder Liquidation\nDisbursement of Dues\nCompleted",
+   "options": "New\nRejected\nApprove\nUnder Liquidation\nDisbursement of Dues\nCompleted\nRequest for review",
    "read_only": 1
   },
   {
@@ -488,7 +488,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-16 15:56:43.733180",
+ "modified": "2026-03-31 09:51:11.195934",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Requests",
