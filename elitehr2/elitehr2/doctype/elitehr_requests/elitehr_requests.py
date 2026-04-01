@@ -6,7 +6,17 @@ from frappe.model.document import Document
 import frappe
 
 class ElitehrRequests(Document):
+    def validate(self):
+        if self.status == "Completed":
+            frappe.throw("غير مسموح بتعديل الطلب بعد اكتماله")
+
     def before_save(self):
+        self.getRequestLevels()
+        self.checkAllLevelsApproved()
+
+
+
+    def getRequestLevels(self):
         # Check if all levels have been approved
         emptyLevelStatus = list(filter(lambda l: l.status is None, self.levels))
         # if all is empty
@@ -30,28 +40,38 @@ class ElitehrRequests(Document):
 
             directSupervisor = frappe.get_doc('Elitehr Employee', self.employee).manager
             
-            directSupervisorName = frappe.get_doc('Elitehr Employee', directSupervisor).employee_name
+            directSupervisor = frappe.get_doc('Elitehr Employee', directSupervisor)
 
             self.levels = []
             for level in workflow.levels:
                 approvedType = level.approved_type
                 responsible = None
+                responsibleId = None
                 
                 if approvedType == "Specific Employee":
                     responsible = frappe.get_doc('Elitehr Employee', level.employee).employee_name
+                    responsibleId = level.employee
                 elif approvedType == "Department Manager":
                     responsible = manager.employee_name
+                    responsibleId = manager.name
                 elif approvedType == "Direct Supervisor":
-                    responsible = directSupervisorName
+                    responsible = directSupervisor.employee_name
+                    responsibleId = directSupervisor.name
                 
                 # frappe.log(approvedType)
 
                 self.append('levels', {
                         'approved_type': approvedType,
-                        "responsible": responsible
+                        "responsible": responsible,
+                        "responsible_id": responsibleId
                 })
+                frappe.log(self.levels)
 
-
+    def checkAllLevelsApproved(self):
+        # Check if all levels have been approved
+        frappe.log(self.levels[0].status)
+        if self.levels and all(l.status is not None for l in self.levels):
+            self.status = "Completed"
 
 
 @frappe.whitelist()
@@ -65,16 +85,23 @@ def get_requests_list(request_type):
 
 
 @frappe.whitelist()
-def update_approval(docname, status):
+def update_approval(docname, status,level_name,approved_by):
     doc = frappe.get_doc("Elitehr Requests", docname)
-    frappe.log(doc.levels)
     for row in doc.levels:
-        frappe.log(f"row.status {row.status}")
-        # if row.approver == frappe.session.user and row.status == "Pending":
-        if row.status is None:
+        if row.name == level_name:
             row.status = status
             row.action_date = frappe.utils.now()
+            row.approved_by = approved_by
             doc.status = status
             doc.save() 
             frappe.db.commit()
             break
+
+@frappe.whitelist()
+def request_for_review(docname):
+    doc = frappe.get_doc("Elitehr Requests", docname)
+    for row in doc.levels:
+        row.status = None
+    doc.status = "Request for review"
+    doc.save() 
+    frappe.db.commit()
