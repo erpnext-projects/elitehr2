@@ -5,6 +5,7 @@ import frappe
 from frappe import _
 from frappe.model.document import Document
 import json
+from elitehr2.install import allow_only_specific_module 
 
 class ElitehrEmployee(Document):
     def before_save(self):
@@ -69,11 +70,19 @@ def createLoginData(name):
         "email": email,
         "first_name": emp.employee_name,
         "enabled": 1,
-        "custom_assign_role": "System Manager"
+        "custom_assign_role": "System Manager",
+        "new_password": "Welcome@123",
+        "language": "ar"
     })
+    
     user_doc.insert()
     emp.login_data = user_doc.name
     emp.save()
+    
+    # Allow Modules
+    allow_only_specific_module(email, "Elitehr2")
+    # allow_only_specific_module(email, "Core")
+
 
     frappe.msgprint(_("تم اضافة صلاحية System Manager"))
     frappe.msgprint(_("تم ارسالة رسالة لتغيير كلمة المرور"))
