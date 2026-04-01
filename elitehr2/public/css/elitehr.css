@@ -137,6 +137,15 @@ select:hover {
 }
 
 
+.page-head .row.page-head-content{
+    align-items: center;
+    margin: 4px 0;
+}
+.standard-actions {
+    align-items: center;
+}
+
+
 .datatable *{
     text-align: center;
 }
