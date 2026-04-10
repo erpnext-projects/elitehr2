@@ -31,20 +31,25 @@ frappe.query_reports["Employee Leaves balances"] = {
             } else if (percent > 40) {
                 color = "#ffc107";
             }
-
+                // <div class="progress" style="flex-grow:1">
+				// 	<div class="progress-bar" style="width:${percentage}">${percentage}</div>
+				// </div>
+                // <div style="
+                //         background:#e9ecef;
+                //         border-radius:6px;
+                //         height:20px;
+                //         overflow:hidden;
+                //     ">
+                //         <div style="
+                //             width:${percent}%;
+                //             background:${color};
+                //             height:20px;
+                //         "></div>
+                //     </div>
             value = `
                 <div style="width:150px;">
-                    <div style="
-                        background:#e9ecef;
-                        border-radius:6px;
-                        height:20px;
-                        overflow:hidden;
-                    ">
-                        <div style="
-                            width:${percent}%;
-                            background:${color};
-                            height:20px;
-                        "></div>
+                    <div class="progress" style="flex-grow:1">
+                        <div class="progress-bar" style="width:${percent}%">${percent} %</div>
                     </div>
                     <div style="font-size:11px;margin-top:2px;text-align:center">
                         ${percent}%

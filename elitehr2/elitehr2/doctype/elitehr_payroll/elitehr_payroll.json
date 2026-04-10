@@ -1,0 +1,185 @@
+{
+ "actions": [],
+ "autoname": "autoincrement",
+ "creation": "2026-04-04 22:58:58.299767",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "employee",
+  "employee_id",
+  "type_of_contract",
+  "column_break_pudi",
+  "employee_name",
+  "date_of_appointment",
+  "section_break_esrf",
+  "department",
+  "basic_salary",
+  "column_break_oxmh",
+  "department_name",
+  "net_salary",
+  "section_break_rqyw",
+  "allowances",
+  "total_allowances",
+  "deductions",
+  "total_deductions",
+  "salary_correction",
+  "section_break_cnhs",
+  "status"
+ ],
+ "fields": [
+  {
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "label": "Employee",
+   "options": "Elitehr Employee"
+  },
+  {
+   "fetch_from": "employee.employee_name",
+   "fieldname": "employee_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Employee Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_pudi",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "employee.department",
+   "fieldname": "department",
+   "fieldtype": "Data",
+   "label": "Department",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "employee.department_name",
+   "fieldname": "department_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Department Name",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "employee.salary",
+   "fieldname": "basic_salary",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Basic Salary",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_cnhs",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Under review\nApproved\nDisbursed\nRejected\nSalary Disbursement",
+   "translatable": 1
+  },
+  {
+   "fieldname": "section_break_rqyw",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "allowances",
+   "fieldtype": "Table",
+   "label": "Allowances",
+   "options": "Elitehr Employee Allowances",
+   "read_only": 1
+  },
+  {
+   "fieldname": "deductions",
+   "fieldtype": "Table",
+   "label": "Deductions",
+   "options": "Elitehr Employee Deductions",
+   "read_only": 1
+  },
+  {
+   "fieldname": "net_salary",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Net salary",
+   "non_negative": 1
+  },
+  {
+   "fieldname": "total_allowances",
+   "fieldtype": "Data",
+   "label": "Total Allowances",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_deductions",
+   "fieldtype": "Data",
+   "label": "Total Deductions",
+   "read_only": 1
+  },
+  {
+   "fieldname": "salary_correction",
+   "fieldtype": "Table",
+   "label": "Salary correction",
+   "options": "Elitehr Salary Corrections"
+  },
+  {
+   "fetch_from": "employee.employee_id",
+   "fieldname": "employee_id",
+   "fieldtype": "Data",
+   "label": "Employee Id",
+   "options": "Elitehr Employee",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "employee.date_of_appointment",
+   "fieldname": "date_of_appointment",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Date Of Appointment",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_esrf",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_oxmh",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "employee.type_of_contract",
+   "fieldname": "type_of_contract",
+   "fieldtype": "Data",
+   "label": "Type Of Contract",
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-04-09 11:50:40.084169",
+ "modified_by": "Administrator",
+ "module": "Elitehr2",
+ "name": "Elitehr Payroll",
+ "naming_rule": "Autoincrement",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

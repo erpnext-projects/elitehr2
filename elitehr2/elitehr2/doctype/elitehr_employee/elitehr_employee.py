@@ -6,6 +6,7 @@ from frappe import _
 from frappe.model.document import Document
 import json
 from elitehr2.install import allow_only_specific_module 
+from frappe.utils import get_first_day, get_last_day, add_months, flt, today
 
 class ElitehrEmployee(Document):
     def before_save(self):
@@ -132,3 +133,44 @@ def update_user_roles(doc, method=None):
 # 	frappe.log(list_leaves_ids)
 
     
+
+@frappe.whitelist()
+def get_employee_growth_stats():
+    # 1. تحديد التواريخ تلقائياً
+    current_date = today()
+    curr_start = get_first_day(current_date)
+    curr_end = get_last_day(current_date)
+
+    last_month_date = add_months(current_date, -1)
+    prev_start = get_first_day(last_month_date)
+    prev_end = get_last_day(last_month_date)
+
+    def get_employee_count_by_period(start, end):
+        payroll_list = frappe.get_list("Elitehr Employee", 
+            filters=[
+                {"date_of_appointment": ["between", [start, end]]},
+                {"status": "Active"}
+                ],
+            fields=["employee"] 
+        )
+        return len(payroll_list)
+
+    def get_total_active_employees():
+        return frappe.db.count("Elitehr Employee", filters={"status": "Active"})
+
+    current_count = get_employee_count_by_period(curr_start, curr_end)
+    previous_count = get_employee_count_by_period(prev_start, prev_end)
+
+    # 4. حساب الفرق (كم موظف زاد أو نقص)
+    diff_value = current_count - previous_count
+
+    # تنسيق النص ليظهر مثل: +12 أو -5
+    diff_text = f"{'+' if diff_value >= 0 else ''}{diff_value}"
+
+    return {
+        "total": get_total_active_employees(), # إجمالي الموظفين الكلي
+        "current_month_count": current_count,   # عدد الموظفين في مسير هذا الشهر
+        "diff_text": diff_text,                # الفرق الرقمي (+12 موظف)
+        "is_increase": diff_value >= 0,
+        "month_name": frappe.utils.get_datetime(current_date).strftime("%B")
+    }

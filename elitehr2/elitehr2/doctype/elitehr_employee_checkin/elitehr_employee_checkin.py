@@ -14,26 +14,62 @@ class ElitehrEmployeeCheckin(Document):
 
 
 @frappe.whitelist()
-def get_employee_checkin_list(date=None):
+def get_employee_checkin_list(date=None,employee=None):
+
+    has_date = True if date else False
 
     # 📅 لو مفيش تاريخ → النهارده
     if not date:
         date = frappe.utils.nowdate()
 
     frappe.log(f"date: ${date}")
+
+
     # 1. كل الموظفين
-    employees = frappe.get_all(
-        "Elitehr Employee",
-        fields=["name", "employee_name", "department_name","shift"]
-    )
+    if employee:
+        employees = frappe.get_all(
+            "Elitehr Employee",
+            filters={"name":employee},
+            fields=["name", "employee_name", "department_name","shift"]
+        )
+    else:
+        employees = frappe.get_all(
+            "Elitehr Employee",
+            fields=["name", "employee_name", "department_name","shift"]
+        )
+
+    shifts = frappe.get_all("Elitehr Shifts", fields=["name", "start_time", "end_time"])
+    shift_map = {s.name: s for s in shifts}
 
     # 2. كل الحضور (في يوم معين مثلاً)
-    checkins = frappe.get_all(
-        "Elitehr Employee Checkin",
-        filters={"date": date},
-        fields=["employee", "log_type", "time", "date"],
-        order_by="time asc"
-    )
+    if employee:
+        if not has_date:
+            # لو مفيش تاريخ -> هنجيب آخر 10 حركات بس (الأحدث)
+            checkins = frappe.get_all(
+                "Elitehr Employee Checkin",
+                filters={"employee": employee},
+                fields=["employee", "log_type", "time", "date"],
+                order_by="time desc",
+                limit_page_length=10
+            )    
+            checkins.reverse() # بنعكسهم عشان يبقوا من الأقدم للأحدث
+        else:
+            # لو فيه تاريخ للموظف -> هنجيب حركات اليوم ده بس
+            checkins = frappe.get_all(
+                "Elitehr Employee Checkin",
+                filters={"employee": employee, "date": date},
+                fields=["employee", "log_type", "time", "date"],
+                order_by="time asc"
+            )
+
+    else:
+        # لو مش باعت موظف -> هنجيب اليوم كله لكل الموظفين
+        checkins = frappe.get_all(
+            "Elitehr Employee Checkin",
+            filters={"date": date},
+            fields=["employee", "log_type", "time", "date"],
+            order_by="time asc"
+        )
 
     # نحولهم بشكل سهل
     # ونجيب اول دخول واخر خروج
@@ -52,13 +88,29 @@ def get_employee_checkin_list(date=None):
 
     final = []
 
-    # 3. نمشي على كل الموظفين
-    today = frappe.utils.nowdate()
+    # frappe.log("checkin_map")
+    # frappe.log(checkin_map)
 
-    for emp in employees:
-        key = f"{emp.name}_{today}"
+    # 3. سجل حضور واحد لكل موظف
+    # today = frappe.utils.nowdate()
+    rows_to_process = []
+    if employee and not has_date:
+        # لو بنجيب آخر 10 بصمات لموظف، هنمشي على التواريخ اللي جت في البصمات فعلاً
+        for key, record in checkin_map.items():
+            emp_id, current_date = key.split('_')
+            rows_to_process.append((emp_id, current_date, record))
+    else:
+        # لو بنجيب يوم معين، هنمشي على كل الموظفين في اليوم المحدد
+        for emp in employees:
+            key = f"{emp.name}_{date}"
+            record = checkin_map.get(key, {})
+            rows_to_process.append((emp.name, date, record))
 
-        record = checkin_map.get(key, {})
+    # 6. معالجة الحسابات (شاملة وموحدة لكل الحالات)
+    for emp_id, target_date, record in rows_to_process:
+        emp = next((e for e in employees if e.name == emp_id), None)
+        if not emp:
+            continue
 
         check_in = record.get("in")
         check_out = record.get("out")
@@ -92,10 +144,10 @@ def get_employee_checkin_list(date=None):
             frappe.throw(f"لم يتم تسجيل وردية للموظف {emp.employee_name}")
 
         late_minutes = 0
-        shift_data = frappe.db.get_value("Elitehr Shifts", emp.shift, ["start_time", "end_time"], as_dict=1)
+        shift_data = shift_map.get(emp.shift)
 
-        frappe.log(f"shift_data: {shift_data}")
-        if shift_data == None:
+        # frappe.log(f"shift_data: {shift_data}")
+        if not shift_data:
             frappe.throw(f"لا يوجد مواعيد للشيفت {emp.shift}")
 
         if check_in and shift_data.start_time:
@@ -119,7 +171,7 @@ def get_employee_checkin_list(date=None):
             "employee": emp.name,
             "employee_name": emp.employee_name,
             "department": emp.department_name,
-            "date": today,
+            "date": target_date,
             "check_in": check_in or "",
             "check_out": check_out or "",
             "status": status,
@@ -127,9 +179,7 @@ def get_employee_checkin_list(date=None):
             "late_minutes": late_minutes,
             "status_color": status_color
         })
-    # frappe.log(final)
-    
-    
+
     return final
 
 

@@ -186,6 +186,9 @@ select:hover {
 .color5{
     color: green
 }
+.color6{
+    color: #28a745;
+}
 
 
 
@@ -246,7 +249,7 @@ select:hover {
 
 
 
-.filterDateContainer{
+.myFiltersContainer{
     margin: 10px 0; 
     display: flex;
     align-items: center;
@@ -254,6 +257,125 @@ select:hover {
     height: auto;
 }
 
-.filterDateContainer #attendance-date {
+.filtersContainer #attendance-date {
     height: fit-content !important;
+}
+.table-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.total-row {
+    background-color: #f4f7f9; /* لون مميز */
+    border-top: 2px solid #d1d8dd; /* خط فاصل */
+}
+.total-row td {
+    font-weight: bold;
+    color: #171717;
+}
+
+
+
+
+/* حاوية كشف الراتب الرئيسية */
+.payslip-box {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    background: #fafafa;
+}
+
+/* رأس الكشف (الموظف والقسم) */
+.payslip-header {
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+/* حاوية التفاصيل لتوزيع الكروت */
+.payslip-details {
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+}
+
+/* الكروت الداخلية (المستحقات / الاستقطاعات) */
+.payslip-card {
+    flex: 1;
+    background: #fff;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.payslip-card h5 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+/* كارت المستحقات */
+.payslip-card.allowances {
+    border-right: 3px solid #28a745;
+}
+
+.payslip-card.allowances h5 {
+    color: #28a745;
+}
+
+/* كارت الاستقطاعات */
+.payslip-card.deductions {
+    border-right: 3px solid #dc3545;
+}
+
+.payslip-card.deductions h5 {
+    color: #dc3545;
+}
+
+/* صفوف البيانات داخل الكروت */
+.payslip-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+/* قسم صافي الراتب النهائي */
+.payslip-summary {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+    text-align: center;
+    font-size: 16px;
+}
+
+.summary-value {
+    color: #2b90ef;
+    font-weight: bold;
+    font-size: 18px;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+
+.badge{
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 16px;
+    background: #ffd1a8 !important;
+}
+
+
+.progress {
+    background:#e9ecef;
+    border-radius:6px;
+    height:20px;
+    overflow:hidden;
+}
+.progress-bar {
+    background:#28a745;
+    height:100%;
+    color:#fff;
+    text-align:center;
+    transition: width 0.3s;
 }

@@ -190,7 +190,7 @@ Maximum amount, الحد الأقصى للمبلغ
 Active, تفعيل
 Levels, المستويات
 Approved type, نوع المعتمد
-Approved,  المعتمد
+Approved,  معتمد
 Direct Supervisor, المدير المباشر
 Department Manager, مدير القسم
 Specific Employee, موظف محدد
@@ -275,3 +275,61 @@ Managing employee transfer requests between departments and branches, إدارة
 Request for review, طلب مراجعة
 Are you sure you want to request a review of the application?, هل أنت متأكد من رغبتك في طلب مراجعة الطلب؟
 Edit Request Status, تعديل حالة الطلب
+Payroll, كشوف الرواتب
+Payroll List, قائمة الرواتب
+Elite Payroll, الرواتب 
+Salaries, الرواتب
+Basic Salary, الراتب الاساسي
+Date Of Appointment, تاريخ التعيين
+Employee Id, الرقم الوظيفي
+Managing and calculating employee and seasonal worker salaries, إدارة وحساب رواتب الموظفين والعمالة الموسمية
+Payroll Calculation, حساب الرواتب
+Final Settlements, المخالصات النهائية
+Update, تحديث
+Total Salaries, إجمالي الرواتب
+Permanent Employees, الموظفون الدائمون
+Seasonal Employees, العمالة الموسمية
+Total Deductions, إجمالي الخصومات
+Percentage, نسبة مئوية
+Constant number, رقم ثابت
+Under review, قيد المراجعة
+Disbursed, تم الصرف
+Deductions, الاستقطاعات
+Total Deductions, اجمالي الاستقطاعات
+Allowances, البدلات
+Total Allowances, اجمالي البدلات
+Name, الاسم
+Type, النوع
+Net salary, صافي الراتب
+Amount, القيمة
+Salary correction, تصحيح راتب
+Addition (+), اضافة (+)
+Deduction (-), خصم (-)
+Classification, التصنيف
+Loading..., جاري التحميل...
+Addition Type, نوع الاضافة
+Deduction Type, نوع الخصم
+Overtime, ساعات أضافية
+Bonus, مكافأة
+Commission, عمولة
+Previous Differences, فروقات سابقة
+Allowance Adjustment, تعديل بدل
+Other Additions, إضافة أخري
+Absence deduction, خصم غياب
+Lateness deduction, خصم تأخير
+Advance, سلفة
+Loan installment, قسط قرض
+Administrative penalty, جزاء اداري
+Insurance adjustment, تعديل تأمينات 
+Other deduction, خصم أخر
+Salary Disbursement, صرف الراتب
+Reject, رفض
+Change Payroll Status, تغيير حالة الراتب
+
+
+
+
+
+
+
+

@@ -4,7 +4,7 @@ let selectedDate = frappe.datetime.get_today();
 const wrapperContent = $('<div dir="rtl" class="custom-page"></div>');
 let cardRow = $('<div class="cardContainers"></div>');
 let tableContainer = $('<div class="requests-table" dir="rtl"></div>');
-let filterDate = $(`<div class="filterDateContainer"></div>`);
+let filterDate = $(`<div class="myFiltersContainer"></div>`);
 
 frappe.pages['attendance-log'].on_page_load = function (wrapper) {
 	var page = frappe.ui.make_app_page({
@@ -52,7 +52,7 @@ frappe.pages['attendance-log'].on_page_load = function (wrapper) {
 	page.add_inner_button(__("جهاز تسجيل الحضور"), function () {
 		showAttendanceModal(cardRow,tableContainer);
 	});
-	page.add_inner_button(__("تحديث"), function () {
+	page.add_inner_button(__("Update"), function () {
 		loadStatistics(selectedDate);
 	});
 
