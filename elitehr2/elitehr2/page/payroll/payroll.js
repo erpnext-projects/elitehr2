@@ -12,21 +12,26 @@ let employeeField;
 let departmentField;
 let selectedFromDate;
 let selectedEndDate;
-let requestsData = [];
+let dataFromServer = {"data":[],"active_employee":0};
+let currency = "";
+let employee_is_active = 0;
 
-frappe.pages['payroll'].on_page_load = function (wrapper) {
+frappe.pages['payroll'].on_page_load = async function (wrapper) {
 	var page = frappe.ui.make_app_page({
 		parent: wrapper,
 		title: 'Payroll',
 		single_column: true
 	});
 
+	currency = await frappe.db.get_single_value("Elitehr Company", "currency")
+			
+
 	wrapperContent.appendTo(page.main);
 	// Containers
 	$(`<h2><svg class="icon text-ink-gray-7 current-color icon-sm" stroke="currentColor" style="" aria-hidden="true"><use class="" href="#icon-wallet"></use></svg>${__("Payroll")}</h2>`).appendTo(wrapperContent);
 	$(`<span>${__("Managing and calculating employee and seasonal worker salaries")}</span><br>`).appendTo(wrapperContent);
-	cardRow.appendTo(wrapperContent);
 	filtersContainer.appendTo(wrapperContent);
+	cardRow.appendTo(wrapperContent);
 
 	tabsContainer.appendTo(wrapperContent);
 	tabsContainer.html(`
@@ -69,23 +74,26 @@ frappe.pages['payroll'].on_page_load = function (wrapper) {
 	// tab CollectiveDisclosure Content
 	// collectiveDisclosureContainer.appendTo(tabsContainer.find('#CollectiveDisclosure'));
 
-	loadStatistics();
 	renderFormFields();
 	renderPageButtons(page);
 
 }
 
 
-function loadStatistics() {
-
+function loadStatistics(dataFromServer) {
+	
+	let requests = dataFromServer.data;
+	
+	let totalSalaries = requests.reduce((sum, r) => sum + (parseFloat(r.net_salary) || 0), 0);
+	let totalDeductions = requests.reduce((sum, r) => sum + (parseFloat(r.total_deductions) || 0), 0);
 	cardRow.html(`
 		<div class="card">
 			<div class="card-title">${__("Total Salaries")}</div>
-			<div id="totalSalaries" class="card-value">0</div>
+			<div id="totalSalaries" class="card-value">${totalSalaries} ${__(currency)}</div>
 		</div>
 		<div class="card">
 			<div class="card-title">${__("Permanent Employees")}</div>
-			<div id="permanentEmployees" class="card-value ">0</div>
+			<div id="permanentEmployees" class="card-value ">${dataFromServer.active_employee}</div>
 		</div>
 		<div class="card">
 			<div class="card-title">${__("Seasonal Employees")}</div>
@@ -93,45 +101,45 @@ function loadStatistics() {
 		</div>
 		<div class="card">
 			<div class="card-title">${__("Total Deductions")}</div>
-			<div id="totalDeductions" class="card-value">0</div>
+			<div id="totalDeductions" class="card-value">${totalDeductions} ${__(currency)}</div>
 		</div>
 	`);
 
 	
 	// load salaries statistics
-	frappe.call({
-		method: "elitehr2.elitehr2.doctype.elitehr_payroll.elitehr_payroll.get_monthly_comparison_stats",
-		args: { field: "net_salary" },
-		callback: function (r) {
-			const stats = r.message || {};
-			let totalSalariesContainer = cardRow.find("#totalSalaries")
-			totalSalariesContainer.text(stats.total || 0);
-			totalSalariesContainer.after(`<div class="color5 card-diff ${stats.diff_percent >= 0 ? 'positive' : 'negative'}">${stats.diff_text} عن الشهر الماضي</div>`);			
-		}
-	});
+	// frappe.call({
+	// 	method: "elitehr2.elitehr2.doctype.elitehr_payroll.elitehr_payroll.get_monthly_comparison_stats",
+	// 	args: { field: "net_salary" },
+	// 	callback: function (r) {
+	// 		const stats = r.message || {};
+	// 		let totalSalariesContainer = cardRow.find("#totalSalaries")
+	// 		totalSalariesContainer.text(`${stats.total || 0}  ${__(currency)}`);
+	// 		// totalSalariesContainer.after(`<div class="color5 card-diff ${stats.diff_percent >= 0 ? 'positive' : 'negative'}">${stats.diff_text} عن الشهر الماضي</div>`);			
+	// 	}
+	// });
 	
-	frappe.call({
-		method: "elitehr2.elitehr2.doctype.elitehr_employee.elitehr_employee.get_employee_growth_stats",
-		callback: function (r) {
-			const stats = r.message || {};
-			console.log(stats);
+	// frappe.call({
+	// 	method: "elitehr2.elitehr2.doctype.elitehr_employee.elitehr_employee.get_employee_growth_stats",
+	// 	callback: function (r) {
+	// 		const stats = r.message || {};
+	// 		console.log(stats);
 			
-			let permanentEmployeesContainer = cardRow.find("#permanentEmployees")
-			permanentEmployeesContainer.text(stats.total || 0);
-			permanentEmployeesContainer.after(`<div class="color5 card-diff ${stats.diff_percent >= 0 ? 'positive' : 'negative'}">${stats.diff_text} عن الشهر الماضي</div>`);			
-		}
-	});
+	// 		let permanentEmployeesContainer = cardRow.find("#permanentEmployees")
+	// 		permanentEmployeesContainer.text(`${stats.total || 0} ${__(currency)}`);
+	// 		// permanentEmployeesContainer.after(`<div class="color5 card-diff ${stats.diff_percent >= 0 ? 'positive' : 'negative'}">${stats.diff_text} عن الشهر الماضي</div>`);			
+	// 	}
+	// });
 
-	frappe.call({
-		method: "elitehr2.elitehr2.doctype.elitehr_payroll.elitehr_payroll.get_monthly_comparison_stats",
-		args: { field: "total_deductions" },
-		callback: function (r) {
-			const stats = r.message || {};
-			let totalDeductionsContainer = cardRow.find("#totalDeductions")
-			totalDeductionsContainer.text(stats.total || 0);
-			totalDeductionsContainer.after(`<div class="color5 card-diff ${stats.diff_percent >= 0 ? 'positive' : 'negative'}">${stats.diff_text} عن الشهر الماضي</div>`);			
-		}
-	});
+	// frappe.call({
+	// 	method: "elitehr2.elitehr2.doctype.elitehr_payroll.elitehr_payroll.get_monthly_comparison_stats",
+	// 	args: { field: "total_deductions" },
+	// 	callback: function (r) {
+	// 		const stats = r.message || {};
+	// 		let totalDeductionsContainer = cardRow.find("#totalDeductions")
+	// 		totalDeductionsContainer.text(`${stats.total || 0} ${__(currency)}`);
+	// 		// totalDeductionsContainer.after(`<div class="color5 card-diff ${stats.diff_percent >= 0 ? 'positive' : 'negative'}">${stats.diff_text} عن الشهر الماضي</div>`);			
+	// 	}
+	// });
 
 
 }
@@ -144,10 +152,11 @@ function checkRequestsHasData(requests,containerData) {
 	return true;
 }
 
-function loadRegularSalariesData(requests) {
+function loadRegularSalariesData(dataFromServer) {
 
 		// openPayslipModal(requests[0]);
 		
+		let requests = dataFromServer.data;
 
 		tableContainer.empty();
 		if (checkRequestsHasData(requests,tableContainer) === false) {
@@ -159,6 +168,7 @@ function loadRegularSalariesData(requests) {
 		let totalSalaries = requests.reduce((sum, r) => sum + (parseFloat(r.net_salary) || 0), 0);
 		tableHeader.html(`<h3> كشف رواتب الموظفين الدائمين </h3><h3 class="color5 totalNumber"> الإجمالي: ${totalSalaries} </h3>`);
 
+		// filters
 		if (employeeField.get_value()) {
 			requests = requests.filter(r => r.employee == employeeField.get_value());
 		}
@@ -170,11 +180,12 @@ function loadRegularSalariesData(requests) {
 
 		const columns = [
 			{ id: "employee_name", name: "الموظف",count:true,textBefore: "الإجمالي (", textAfter: " موظف)" },
+			{ id: "job_title", name: "المسمي الوظيفي"},
 			{ id: "department_name", name: "القسم" },
-			{ id: "basic_salary", name: "الراتب الاساسي",sum:true},
-			{ id: "total_allowances", name: "البدلات",sum: true },
-			{ id: "total_deductions", name: "الخصومات" ,sum: true},
-			{ id: "net_salary", name: "صافي الراتب" ,sum: true},
+			{ id: "basic_salary", name: "الراتب الاساسي",sum:true, format: value => `${value} ${__(currency)}`},
+			{ id: "total_allowances", name: "البدلات",sum: true , format: value => `${value} ${__(currency)}`},
+			{ id: "total_deductions", name: "الخصومات" ,sum: true, format: value => `${value} ${__(currency)}`},
+			{ id: "net_salary", name: "صافي الراتب" ,sum: true, format: value => `${value} ${__(currency)}`},
 			{ id: "status", name: "الحالة", format: (value) => `<span class="${value=='Salary Disbursement'?'color3':'color1'}">${__(value)}</span>` },
 			{ id: "actions", name: "الإجراءات", format: (value,row) => `<a href='#' class="btn" data-name='${row.name}'><i class="fa fa-eye" aria-hidden="true"></i> عرض</a>` }
 
@@ -195,12 +206,23 @@ function loadRegularSalariesData(requests) {
 		tableContainer.find('tbody tr').css('cursor', 'pointer');
 }
 
-function renderBySectionData(requests) {
+function renderBySectionData(dataFromServer) {
+
+	let requests = dataFromServer.data
 	let container = tabsContainer.find('#BySection');
 
 	container.empty();
 	if (checkRequestsHasData(requests,container) === false) {
 		return;
+	}
+
+	// filters
+	if (employeeField.get_value()) {
+		requests = requests.filter(r => r.employee == employeeField.get_value());
+	}
+
+	if (departmentField.get_value()) {
+		requests = requests.filter(r => r.department == departmentField.get_value());
 	}
 	
 	// group by department
@@ -226,13 +248,15 @@ function renderBySectionData(requests) {
 		section.find("h3").append(`<span class="color5" style="font-size: 16px;"> - إجمالي الرواتب: ${totalSalaries} </span>`);
 		let sectionContent = section.find(".section-content");
 
+		
 
 		const columns = [
 			{ id: "employee_name", name: "الموظف" },
-			{ id: "basic_salary", name: "الراتب الاساسي"},
-			{ id: "total_allowances", name: "البدلات" },
-			{ id: "total_deductions", name: "الخصومات" },
-			{ id: "net_salary", name: "صافي الراتب" },
+			{ id: "job_title", name: "المسمي الوظيفي"},
+			{ id: "basic_salary", name: "الراتب الاساسي", format: value => `${value} ${__(currency)}`},
+			{ id: "total_allowances", name: "البدلات" , format: value => `${value} ${__(currency)}`},
+			{ id: "total_deductions", name: "الخصومات" , format: value => `${value} ${__(currency)}`},
+			{ id: "net_salary", name: "صافي الراتب" , format: value => `${value} ${__(currency)}`},
 			{ id: "status", name: "الحالة", format: (value) => __(value) },
 		];
 
@@ -247,7 +271,11 @@ function renderBySectionData(requests) {
 
 }
 
-function renderCollectiveDisclosure(requests) {
+function renderCollectiveDisclosure(dataFromServer) {
+
+	// console.log("renderCollectiveDisclosure",requests);
+	let requests = dataFromServer.data;
+	
 	let container = tabsContainer.find('#CollectiveDisclosure');
 	
 	container.empty();
@@ -277,7 +305,7 @@ function renderCollectiveDisclosure(requests) {
 				<div class="progress" style="flex-grow:1">
 					<div class="progress-bar" style="width:${percentage}">${percentage}</div>
 				</div>
-				<span class="color5" style="min-width: 50px;"> ${totalSalaries}</span>
+				<span class="color5" style="min-width: 50px;"> ${totalSalaries} ${__(currency)}</span>
 			</div>`
 		).appendTo(container);
 	}
@@ -287,7 +315,7 @@ function renderCollectiveDisclosure(requests) {
 		<hr>
 		<div class="flex justify-between"> 
 			<h3>الإجمالي الكلي</h3>
-			<h4 class="color5">${totalSectionSalaries}</h4>
+			<h4 class="color5">${totalSectionSalaries} ${__(currency)}</h4>
 		</div>	
 	`).appendTo(container);
 }
@@ -462,22 +490,22 @@ function openPayslipModal(row) {
 					<div class="d-flex justify-between">
 						<div class="align-center flex-column w-50">
 							<span>ساعات العمل</span>
-							<span>0 ساعة</span>
+							<span id="total_working_hours">${__("Loading...")}</span>
 						</div>
 						<div class="align-center flex-column w-50">
 							<span>أيام العمل الفعلية </span>
-							<span>0 يوم</span>
+							<span id="present-days">${__("Loading...")}</span>
 						</div>
 					</div>
 					<br>
 					<div class="d-flex justify-between">
 						<div class="align-center flex-column w-50">
 							<span>أيام الغياب </span>
-							<span>0 يوم</span>
+							<span id="absent_days">${__("Loading...")}</span>
 						</div>
 						<div class="align-center flex-column w-50">
 							<span>أيام التأخير</span>
-							<span>0 يوم</span>
+							<span id="late_days">${__("Loading...")}</span>
 						</div>
 					</div>
 				</div>
@@ -514,43 +542,43 @@ function openPayslipModal(row) {
 	`;
 
     d.fields_dict.payslip_details.$wrapper.html(payslipHTML);
-	frappe.call({
-		method: "elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin.get_employee_checkin_list",
-		args: { employee: row.employee },
-		callback: function (r) {
-			if (r.message) {
-				console.log("data from chekin",r.message);
-				const data = r.message;
+	// frappe.call({
+	// 	method: "elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin.get_employee_attendance",
+	// 	args: { employee: row.employee,date: ddate },
+	// 	callback: function (r) {
+	// 		if (r.message) {
+	// 			console.log("data from chekin",r.message);
+	// 			const data = r.message;
 				
-				const attendanceTableHTML = `
-					<table class="attendance-table  table text-center">
-						<thead>
-							<tr>
-								<th>التاريخ</th>
-								<th>دخول</th>
-								<th>خروج</th>
-								<th>الحالة</th>
-							</tr>
-						</thead>
-						<tbody>
-							${data.map(d => `
-								<tr>
-									<td>${d.date}</td>
-									<td>${d.check_in || "غير مسجل"}</td>
-									<td>${d.check_out || "غير مسجل"}</td>
-									<td class="${d.status_color}">${d.status}</td>
-								</tr>
-							`).join("")}
-						</tbody>
-					</table>
-				`;
-				d.fields_dict.payslip_details.$wrapper.find(".last-attendance").html(attendanceTableHTML);
-				let cont = d.fields_dict.payslip_details.$wrapper.find(".last-attendance")
-				console.log(cont);
+	// 			const attendanceTableHTML = `
+	// 				<table class="attendance-table  table text-center">
+	// 					<thead>
+	// 						<tr>
+	// 							<th>التاريخ</th>
+	// 							<th>دخول</th>
+	// 							<th>خروج</th>
+	// 							<th>الحالة</th>
+	// 						</tr>
+	// 					</thead>
+	// 					<tbody>
+	// 						${data.map(d => `
+	// 							<tr>
+	// 								<td>${d.date}</td>
+	// 								<td>${d.check_in || "غير مسجل"}</td>
+	// 								<td>${d.check_out || "غير مسجل"}</td>
+	// 								<td class="${d.status_color}">${d.status}</td>
+	// 							</tr>
+	// 						`).join("")}
+	// 					</tbody>
+	// 				</table>
+	// 			`;
+	// 			d.fields_dict.payslip_details.$wrapper.find(".last-attendance").html(attendanceTableHTML);
+	// 			let cont = d.fields_dict.payslip_details.$wrapper.find(".last-attendance")
+	// 			console.log(cont);
 				
-			}
-		}
-	});
+	// 		}
+	// 	}
+	// });
 
 	if (row.status != "Salary Disbursement") {
 		d.set_primary_action(__("Change Payroll Status"), function() {
@@ -593,18 +621,67 @@ function openPayslipModal(row) {
 			d.hide();
 		});
 	}
-	// 	d.add_custom_action(__("Reject"), function() {
-			
-	// 	});
-		
 	
-	// }
+	
+	frappe.call({
+		method: "elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin.get_employee_monthly_attendance",
+		args: { employee: row.employee },
+		callback: function (r) {
+			if (r.message) {
+				const data = r.message
+				console.log("data",data);
+				let $wrapper = d.fields_dict.payslip_details.$wrapper;
+				
+				const summary = r.message.reduce((s, item) => {
+					if (item.status_code !== "Absent") s.present_days++;
+					if (item.status_code === "Late") s.late_days++;
+					if (item.status_code === "Absent") s.absent_days++;
+					s.working_seconds+= item.working_seconds
+					return s;
+				}, {
+					present_days: 0,
+					working_seconds: 0,
+					late_days: 0,
+					absent_days: 0,
+				});
+				
+				let hours = Math.floor(summary.working_seconds / 3600);
+            	let minutes = Math.floor((summary.working_seconds % 3600) / 60);
+				let working_hours = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
 
-	// if (row.status == "Submit") {
-	// 	d.add_custom_action(__("Salary Disbursement"),function() {
-			
-	// 	})
-	// }
+				$wrapper.find("#present-days").text(`${summary['present_days']} يوم`);
+				$wrapper.find("#total_working_hours").text(`${working_hours} ساعة`);
+				$wrapper.find("#late_days").text(`${summary['late_days'] || 0} يوم`);
+				$wrapper.find("#absent_days").text(`${summary['absent_days'] || 0} يوم`);
+
+
+				// attendace
+				const attendanceTableHTML = `
+					<table class="attendance-table  table text-center">
+						<thead>
+							<tr>
+								<th>التاريخ</th>
+								<th>دخول</th>
+								<th>خروج</th>
+								<th>الحالة</th>
+							</tr>
+						</thead>
+						<tbody>
+							${data.map(d => `
+								<tr>
+									<td>${d.date}</td>
+									<td>${d.check_in || "غير مسجل"}</td>
+									<td>${d.check_out || "غير مسجل"}</td>
+									<td class="${d.status_color}">${d.status}</td>
+								</tr>
+							`).join("")}
+						</tbody>
+					</table>
+				`;
+				d.fields_dict.payslip_details.$wrapper.find(".last-attendance").html(attendanceTableHTML);
+				
+			}
+	}});
 
 }
 
@@ -669,20 +746,22 @@ function renderFormFields() {
 }
 
 function onFieldsUpdate() {
-	if (selectedFromDate == fromDateField.get_value() && selectedEndDate == toDateField.get_value() && requestsData.length > 0) {
+	if (selectedFromDate == fromDateField.get_value() && selectedEndDate == toDateField.get_value() && dataFromServer.data.length > 0) {
 		// console.log("Using cached data");
-		loadRegularSalariesData(requestsData);
-		renderBySectionData(requestsData);
-		renderCollectiveDisclosure(requestsData);
+		loadStatistics(dataFromServer)
+		loadRegularSalariesData(dataFromServer);
+		renderBySectionData(dataFromServer);
+		renderCollectiveDisclosure(dataFromServer);
 		
 	}else if (fromDateField.get_value() && toDateField.get_value()) {
-		fetchRequestsData(fromDateField.get_value(), toDateField.get_value(), function(requests) {
+		fetchRequestsData(fromDateField.get_value(), toDateField.get_value(), function(dataFromServer) {
 			selectedFromDate = fromDateField.get_value();
 			selectedEndDate = toDateField.get_value();
-			requestsData = requests;
-			loadRegularSalariesData(requests);
-			renderBySectionData(requests);
-			renderCollectiveDisclosure(requests);
+			dataFromServer = dataFromServer;
+			loadStatistics(dataFromServer)
+			loadRegularSalariesData(dataFromServer);
+			renderBySectionData(dataFromServer);
+			renderCollectiveDisclosure(dataFromServer);
 		});
 	}
 	
@@ -693,8 +772,8 @@ function fetchRequestsData(fromDate, toDate,onComplete) {
 		method: "elitehr2.elitehr2.doctype.elitehr_payroll.elitehr_payroll.payrloll",
 		args: { fromDate: fromDate, toDate: toDate },
 		callback: function (r) {
-			let requests = r.message || [];
-			onComplete(requests);
+			let dataFromServer = r.message || [];
+			onComplete(dataFromServer);			
 		}
 	});
 }
@@ -704,7 +783,29 @@ function renderPageButtons(page) {
 		alert("جاري التطوير...");
 	});
 	page.add_inner_button(__("Payroll Calculation"), function () {
-		payrollCalculation();
+		const today = frappe.datetime.get_today();
+		const currentYear = new Date().getFullYear();
+		frappe.prompt(
+			{
+				label: 'اختر التاريخ',
+				fieldname: 'date',
+				fieldtype: 'Date',
+				min: `${currentYear}-01-01`,
+				max: today,
+				reqd: 1,
+				default: today
+			},
+			({ date }) => {
+				// this is check and more in server side
+				const today = frappe.datetime.get_today();
+				if (date > today) {
+					frappe.msgprint(__('التاريخ لا يمكن أن يكون في المستقبل'));
+					return;
+				}
+				
+				payrollCalculation(date);
+			}
+		);
 	});
 	page.add_inner_button(__("Update"), function () {
 		updatePageData()
@@ -713,15 +814,14 @@ function renderPageButtons(page) {
 
 
 function updatePageData() {
-	loadStatistics();
-	requestsData = [];
+	requestsData = {};
 	onFieldsUpdate();
 }
 
-function payrollCalculation() {
+function payrollCalculation(date) {
 	frappe.call({
 		method: "elitehr2.elitehr2.doctype.elitehr_payroll.elitehr_payroll.calculate_payroll_for_all_employees",
-		args: {},
+		args: {date:date},
 		callback: function (r) {
 			if (r.message) {
 				frappe.show_alert({ message: __('تم حساب الرواتب بنجاح') });
@@ -732,7 +832,3 @@ function payrollCalculation() {
 	});
 }
 
-
-function openSalaryCorrectionDialog(row) {
-
-}
