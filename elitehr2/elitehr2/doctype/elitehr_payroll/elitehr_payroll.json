@@ -11,6 +11,7 @@
   "column_break_pudi",
   "employee_name",
   "date_of_appointment",
+  "job_title",
   "section_break_esrf",
   "department",
   "basic_salary",
@@ -24,7 +25,12 @@
   "total_deductions",
   "salary_correction",
   "section_break_cnhs",
-  "status"
+  "date",
+  "column_break_ftwg",
+  "status",
+  "section_break_jsnw",
+  "attendance_table",
+  "processing_requests"
  ],
  "fields": [
   {
@@ -152,12 +158,48 @@
    "fieldtype": "Data",
    "label": "Type Of Contract",
    "read_only": 1
+  },
+  {
+   "fetch_from": "employee.job_title",
+   "fieldname": "job_title",
+   "fieldtype": "Data",
+   "label": "Job title",
+   "read_only": 1
+  },
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date",
+   "reqd": 1,
+   "set_only_once": 1
+  },
+  {
+   "fieldname": "column_break_ftwg",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_jsnw",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "attendance_table",
+   "fieldtype": "Table",
+   "label": "Attendance Table Log",
+   "options": "Elitehr Payroll Attendance",
+   "read_only": 1
+  },
+  {
+   "fieldname": "processing_requests",
+   "fieldtype": "Table",
+   "label": "Processing requests",
+   "options": "Elitehr Payroll Processing requests",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-04-09 11:50:40.084169",
+ "modified": "2026-04-14 10:32:23.020849",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Payroll",
@@ -181,5 +223,6 @@
  "rows_threshold_for_grid_search": 20,
  "sort_field": "creation",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "track_changes": 1
 }

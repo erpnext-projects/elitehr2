@@ -2,11 +2,13 @@
 # For license information, please see license.txt
 
 import frappe
+from frappe import _
 from frappe.model.document import Document
-from frappe.utils import get_first_day, get_last_day, add_months, flt, today
-# import get_employee_checkin_list
-from elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin import get_employee_checkin_list
-# elitehr2/elitehr2/doctype/elitehr_employee_checkin/elitehr_employee_checkin.py
+from frappe.utils import get_first_day, get_last_day, add_months, flt, today,add_days, format_datetime
+from elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin import get_employee_attendance,get_employee_monthly_attendance
+import calendar
+
+
 class ElitehrPayroll(Document):
     def before_save(self):
         employee = frappe.get_doc("Elitehr Employee", self.employee)
@@ -58,16 +60,56 @@ class ElitehrPayroll(Document):
         # Net Salary
         self.net_salary = (employee.salary + self.total_allowances) - (self.total_deductions)
 
+        # Attendance
+        attendance = get_employee_monthly_attendance(self.employee, self.date)
+        self.set("attendance_table", [])
+        for day in attendance:
+            self.append("attendance_table", {
+                "date": day.get("date"),
+                "check_in": day.get("check_in"),
+                "check_out": day.get("check_out"),
+                "status": day.get("status"),
+                "status_code": day.get("status_code"),
+                "status_color": day.get("status_color"),
+                "working_hours": day.get("working_hours"),
+                "working_seconds": day.get("working_seconds"),
+                "late_minutes": day.get("late_minutes", 0)
+            })
+
+        # Requests
+        # employee , creation , ATTENDANCE_EDIT
+        # modification_type modification_date original_attendance_time required_attendance_time
+        self.set("processing_requests", [])
+        requests = frappe.get_all(
+            "Elitehr Requests",
+            fields=["*"],
+            filters={
+                "employee": self.employee,
+                "request_type_code": "ATTENDANCE_EDIT"
+            }
+            )
+        for r in requests:
+            frappe.log(r) # name creation modification_type check in check out
+            self.append("processing_requests", {
+                "request": r.name,
+                "request_name": r.request_type_name,
+                "date_of_application": format_datetime(r.creation),
+                "modification_type": r.modification_type,
+                "modification_date": r.modification_date,
+                "check_in": r.check_in,
+                "check_out": r.check_out,
+                "status": r.status,
+            })
 
 
-
+    
 @frappe.whitelist()
 def payrloll(fromDate, toDate):
     result = frappe.get_list(
         "Elitehr Payroll",
         fields=["*"],
         filters=[
-            {"creation": ("between", [fromDate, toDate])}
+            {"date": ("between", [fromDate, toDate])}
         ]
     )
 
@@ -88,7 +130,12 @@ def payrloll(fromDate, toDate):
             fields=["*"]
         )
 
-    return result
+    active_employees = frappe.db.count("Elitehr Employee")
+
+    return {
+        "data": result,
+        "active_employee": active_employees
+    }
 
 
 
@@ -135,7 +182,16 @@ def get_monthly_comparison_stats(field = "net_salary"):
     
 
 @frappe.whitelist()
-def calculate_payroll_for_all_employees():
+def calculate_payroll_for_all_employees(date):
+    start_of_month = get_first_day(date)
+    end_of_month = get_last_day(date)
+
+    if date > today():
+        frappe.throw("لا يمكن اختيار تاريخ في المستقبل")
+    
+    if date != end_of_month:
+        frappe.throw("لا يمكن تقفيل الشهر قبل نهايته")
+
     active_employees = frappe.get_all("Elitehr Employee", filters={"status": "Active"}, fields=["name", "employee_name", "salary"])
     total_reviewed = len(active_employees)
 
@@ -146,15 +202,13 @@ def calculate_payroll_for_all_employees():
     
     already_has_payroll_count = 0
     successfully_processed_count = 0
-    current_date = today()
-    start_of_month = get_first_day(current_date)
-    end_of_month = get_last_day(current_date)
+    
 
     for emp in active_employees:
         # check if payroll already exists for this employee for the current month
         existing_payroll = frappe.db.exists("Elitehr Payroll", {
             "employee": emp.name,
-            "creation": ["between", [start_of_month, end_of_month]]
+            "date": ["between", [start_of_month, end_of_month]]
         })
 
         if existing_payroll:
@@ -162,6 +216,7 @@ def calculate_payroll_for_all_employees():
         else:
             payroll_doc = frappe.new_doc("Elitehr Payroll")
             payroll_doc.employee = emp.name
+            payroll_doc.date = date
             payroll_doc.save()
             successfully_processed_count += 1
     
@@ -177,32 +232,6 @@ def calculate_payroll_for_all_employees():
     frappe.msgprint(msg,title="نتائج احتساب الرواتب")
     return True
 
-    # payroll_doc = frappe.new_doc("Elitehr Payroll")
-    # payroll_doc.employee = emp.name
-    # payroll_doc.save()
-    # payroll_doc.submit()
-
-
-@frappe.whitelist()
-def attendance_and_departure_summary(employee):
-    frappe.log(employee)
-
-    # get shift details and workking dayes
-    employee_doc = frappe.get_doc("Elitehr Employee", employee)
-    employee_shift = frappe.get_doc("Elitehr Shifts", employee_doc.shift)
-    shift_schedule = frappe.get_doc("Elitehr Shift Schedule", employee_shift.shift_schedule)
-
-    frappe.log(employee_doc.shift)
-    frappe.log(employee_shift)
-    frappe.log(shift_schedule)
-
-    current_date = today()
-    start_of_month = get_first_day(current_date)
-    end_of_month = get_last_day(current_date)
-
-
-    res = get_employee_checkin_list(employee=employee, date=current_date)
-    frappe.log(res)
 
 
 @frappe.whitelist()
