@@ -88,7 +88,8 @@
 .cardContainers .card{
     flex:1; 
     padding:12px; 
-    border:1px solid #ddd
+    border:1px solid #ddd;
+    min-width: fit-content;
 }
 .custom-page .card-title{
     font-size: 18px;
@@ -188,6 +189,9 @@ select:hover {
 }
 .color6{
     color: #28a745;
+}
+.color7{
+    color: #24A871;
 }
 
 
@@ -378,4 +382,68 @@ select:hover {
     color:#fff;
     text-align:center;
     transition: width 0.3s;
+}
+
+
+
+
+.dashboard-container {
+    width: 100%;
+}
+
+/* الجزء اللي تحت */
+.bottom-section {
+    display: flex;
+    gap: 20px;
+}
+
+/* chart */
+.chart-box {
+    flex: 1;
+    padding: 20px;
+}
+
+/* actions */
+.actions-box {
+    flex: 1;
+    padding: 20px;
+}
+
+/* grid بتاع الأزرار */
+.actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+
+.actions-grid a{
+    background:#94A3B880
+}
+.actions-grid a:hover{
+    background:#b7c2d380
+}
+.actions-grid .icon-bg{
+    width: 48px; height: 48px;
+}
+.actions-grid img{
+    width:24px;height:24px;
+    margin: auto;
+}
+
+.actions-and-charts .actions-box{
+    width: 70%;
+    min-width: 70%;
+}
+.actions-and-charts .chart-box{
+    width: 30%;
+}
+
+/* #00a896 */
+/* #31c48d */
+
+#attendanceLegend {
+	display: grid !important;
+	grid-template-columns: repeat(2,1fr);
 }
