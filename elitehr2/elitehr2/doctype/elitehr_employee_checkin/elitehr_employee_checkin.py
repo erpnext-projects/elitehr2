@@ -345,7 +345,14 @@ def get_employee_attendance(employee, date):
     }
 
 @frappe.whitelist()
-def set_attendance(logType,employee, date):
+def set_attendance(logType,employee, date = today()):
+    date = today()
+    working_days = get_employee_working_days_and_time(employee)
+    currentDay =   getdate(date).strftime("%A")
+    
+    if currentDay not in working_days:
+        frappe.throw(_("No attendance outside working days"))
+
     if logType not in ["Check In","Check Out"]:
         frappe.throw("Attendance Log Type Not Valid.")
     current_time = now_datetime()
