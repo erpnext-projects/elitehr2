@@ -1,0 +1,88 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-04-14 10:24:58.924692",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "request",
+  "request_name",
+  "date_of_application",
+  "modification_type",
+  "modification_date",
+  "check_in",
+  "check_out",
+  "status"
+ ],
+ "fields": [
+  {
+   "fieldname": "request",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Request",
+   "options": "Elitehr Requests",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "request.request_type_name",
+   "fieldname": "request_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Request Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "modification_type",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Modification type"
+  },
+  {
+   "fieldname": "check_in",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Check In"
+  },
+  {
+   "fieldname": "check_out",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Check Out"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Status",
+   "translatable": 1
+  },
+  {
+   "fieldname": "modification_date",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Modification date"
+  },
+  {
+   "fieldname": "date_of_application",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Date of application"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-04-14 11:13:24.466526",
+ "modified_by": "Administrator",
+ "module": "Elitehr2",
+ "name": "Elitehr Payroll Processing requests",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}
