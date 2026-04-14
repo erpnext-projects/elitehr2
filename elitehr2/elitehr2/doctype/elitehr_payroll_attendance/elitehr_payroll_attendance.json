@@ -1,0 +1,95 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-04-14 10:02:55.458694",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_lzgy",
+  "date",
+  "check_in",
+  "check_out",
+  "status",
+  "status_code",
+  "working_hours",
+  "working_seconds",
+  "late_minutes",
+  "status_color"
+ ],
+ "fields": [
+  {
+   "fieldname": "date",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Date"
+  },
+  {
+   "fieldname": "check_in",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Check In"
+  },
+  {
+   "fieldname": "check_out",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Check Out"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Status"
+  },
+  {
+   "fieldname": "status_code",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Status Code"
+  },
+  {
+   "fieldname": "working_hours",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Working Hours"
+  },
+  {
+   "fieldname": "working_seconds",
+   "fieldtype": "Data",
+   "label": "Working Seconds"
+  },
+  {
+   "fieldname": "late_minutes",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Late Minutes"
+  },
+  {
+   "fieldname": "status_color",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Status Color"
+  },
+  {
+   "fieldname": "section_break_lzgy",
+   "fieldtype": "Section Break",
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-04-14 10:17:17.099924",
+ "modified_by": "Administrator",
+ "module": "Elitehr2",
+ "name": "Elitehr Payroll Attendance",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}
