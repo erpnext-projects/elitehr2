@@ -44,10 +44,10 @@
   "provider_name",
   "section_break_vtbs",
   "modification_type",
-  "original_attendance_time",
+  "check_in",
   "column_break_lboq",
   "modification_date",
-  "required_attendance_time",
+  "check_out",
   "section_break_btlm",
   "type_of_document_required",
   "section_break_bkqg",
@@ -302,18 +302,6 @@
    "label": "Modification date"
   },
   {
-   "depends_on": "eval: doc.request_type_code == \"ATTENDANCE_EDIT\"",
-   "fieldname": "original_attendance_time",
-   "fieldtype": "Time",
-   "label": "Original attendance time"
-  },
-  {
-   "depends_on": "eval: doc.request_type_code == \"ATTENDANCE_EDIT\"",
-   "fieldname": "required_attendance_time",
-   "fieldtype": "Time",
-   "label": "Required attendance time"
-  },
-  {
    "fetch_from": "type.arabic_type_name",
    "fieldname": "request_type_name",
    "fieldtype": "Data",
@@ -483,12 +471,24 @@
   {
    "fieldname": "section_break_pwsk",
    "fieldtype": "Section Break"
+  },
+  {
+   "depends_on": "eval: doc.request_type_code == \"ATTENDANCE_EDIT\"",
+   "fieldname": "check_in",
+   "fieldtype": "Time",
+   "label": "Check In"
+  },
+  {
+   "depends_on": "eval: doc.request_type_code == \"ATTENDANCE_EDIT\"",
+   "fieldname": "check_out",
+   "fieldtype": "Time",
+   "label": "Check Out"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-31 09:51:11.195934",
+ "modified": "2026-04-14 10:49:43.710797",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Requests",
