@@ -6,15 +6,17 @@ from frappe import _
 from frappe.model.document import Document
 from collections import defaultdict
 from datetime import datetime, time
-from frappe.utils import get_datetime, time_diff_in_seconds, format_datetime, now_datetime, nowtime, getdate
+from frappe.utils import get_datetime, time_diff_in_seconds, format_datetime, now_datetime, nowtime, get_first_day, get_last_day, add_months, flt, today,add_days,getdate
 
 class ElitehrEmployeeCheckin(Document):
     pass
 
 
 
+
+
 @frappe.whitelist()
-def get_employee_checkin_list(date=None,employee=None):
+def get_employee_checkin_list_old(date=None,employee=None):
 
     has_date = True if date else False
 
@@ -117,10 +119,12 @@ def get_employee_checkin_list(date=None,employee=None):
 
          # ⏱️ مدة العمل
         working_hours = ""
+        working_seconds = 0
         if check_in and check_out:
             # 1. احسب إجمالي الثواني بين الانصراف والحضور
             total_seconds = time_diff_in_seconds(check_out, check_in)
             if total_seconds > 0:
+                working_seconds = total_seconds
                 # 2. الساعات هي قسمة الثواني على 3600
                 hours = int(total_seconds // 3600)
                 # 3. الدقائق هي باقي قسمة الثواني على 3600 مقسومة على 60
@@ -132,9 +136,11 @@ def get_employee_checkin_list(date=None,employee=None):
 
         # حالة
         if not check_in:
+            statusCode = "Absent"
             status = _("Absent")
             status_color = "color4"
         else:
+            statusCode = "Present"
             status = _("Present")
             status_color = "color3"
 
@@ -154,6 +160,7 @@ def get_employee_checkin_list(date=None,employee=None):
             late_diff = time_diff_in_seconds(check_in,  shift_data.start_time)
             if late_diff > 0:
                 late_minutes = int(late_diff // 60)
+                statusCode = "Late"
                 status = _("Late ({0}) minutes").format(late_minutes)
                 status_color = "color1"
         
@@ -164,6 +171,7 @@ def get_employee_checkin_list(date=None,employee=None):
             early_diff = time_diff_in_seconds(shift_data.end_time, check_out)
             if early_diff > 0:
                 early_minutes = int(early_diff // 60)
+                statusCode = "Early Out"
                 status = _("Early Out ({0}) minutes").format(early_minutes)
                 status_color = "color1"
 
@@ -175,7 +183,9 @@ def get_employee_checkin_list(date=None,employee=None):
             "check_in": check_in or "",
             "check_out": check_out or "",
             "status": status,
+            "status_code": statusCode,
             "working_hours": working_hours,
+            "working_seconds": working_seconds,
             "late_minutes": late_minutes,
             "status_color": status_color
         })
@@ -183,6 +193,156 @@ def get_employee_checkin_list(date=None,employee=None):
     return final
 
 
+def get_employee_working_days_and_time(employee):
+    employee_doc = frappe.get_doc("Elitehr Employee", employee)
+
+    # get shift details and workking dayes
+    if not employee_doc.shift:
+        frappe.throw(_("Shift not found for employee {0}").format(employee_doc.employee_name)) 
+
+    employee_shift = frappe.get_doc("Elitehr Shifts", employee_doc.shift)
+
+    if not employee_shift.shift_schedule:
+        frappe.throw(_("Shift schedule not found for employee {0}").format(employee_doc.employee_name)) 
+    
+    shift_schedule = frappe.get_doc("Elitehr Shift Schedule", employee_shift.shift_schedule)
+    
+
+    working_days = {}
+    for d in shift_schedule.days:
+        working_days[d.day] = {
+            "from_time": d.get("from"),
+            "to_time": d.get("to"),
+            "break": d.get("break")
+        }
+    return working_days
+
+
+
+@frappe.whitelist()
+def get_all_employees_attendance(date):
+    employees = frappe.get_all(
+            "Elitehr Employee",
+            fields=["name", "employee_name", "department_name","shift"]
+        )
+    result = []
+    for emp in employees:
+        result.append(get_employee_attendance(emp.name,date))
+    return result
+
+
+@frappe.whitelist()
+def get_employee_monthly_attendance(employee, date = today()):
+    
+    working_days = get_employee_working_days_and_time(employee)
+
+    
+    first_date_of_month = get_first_day(date)
+    last_date_of_month = get_last_day(date)
+
+    target_date = first_date_of_month
+    result = []
+    while target_date <= last_date_of_month:
+        weekday = target_date.strftime("%A")  # Saturday, Sunday...
+        if weekday not in working_days:
+            target_date = add_days(target_date, 1)
+            continue
+
+        day_result = get_employee_attendance(date=target_date, employee=employee)
+        if day_result:
+            result.append(day_result)
+        target_date = add_days(target_date, 1)
+        
+    return result
+
+
+@frappe.whitelist()
+def get_employee_attendance(employee, date):
+
+    if not employee or not date:
+        frappe.throw("لازم تحدد الموظف والتاريخ")
+
+    # ✅ بيانات الموظف
+    emp = frappe.get_doc("Elitehr Employee", employee)
+
+    working_days_and_time = get_employee_working_days_and_time(employee)
+
+    # ✅ بصمات اليوم
+    checkins = frappe.get_all(
+        "Elitehr Employee Checkin",
+        filters={
+            "employee": employee,
+            "date": date
+        },
+        fields=["log_type", "time"],
+        order_by="time asc"
+    )
+
+    check_in = None
+    check_out = None
+
+    for c in checkins:
+        if c.log_type == "Check In" and not check_in:
+            check_in = c.time
+        elif c.log_type == "Check Out":
+            check_out = c.time
+
+    # Working Hours
+    working_seconds = 0
+    working_hours = ""
+
+    if check_in and check_out:
+        total_seconds = time_diff_in_seconds(check_out, check_in)
+        if total_seconds > 0:
+            working_seconds = total_seconds
+            hours = int(total_seconds // 3600)
+            minutes = int((total_seconds % 3600) // 60)
+            working_hours = f"{hours:02d}:{minutes:02d}"
+
+    # Status
+    statusCode = "Absent"
+    status = _("Absent")
+    status_color = "color4"
+    late_minutes = 0
+
+    if check_in:
+        statusCode = "Present"
+        status = _("Present")
+        status_color = "color3"
+
+    # Late
+    currentDay =   getdate(date).strftime("%A")
+    currentDayTime = working_days_and_time.get(currentDay)
+    if check_in and currentDayTime['from_time']:
+        late_diff = time_diff_in_seconds(check_in, currentDayTime['from_time'])
+        if late_diff > 0:
+            late_minutes = int(late_diff // 60)
+            statusCode = "Late"
+            status = _("Late ({0}) minutes").format(late_minutes)
+            status_color = "color1"
+
+    # Early Out
+    if check_out and currentDayTime['to_time']:
+        early_diff = time_diff_in_seconds(currentDayTime['to_time'], check_out)
+        if early_diff > 0:
+            early_minutes = int(early_diff // 60)
+            statusCode = "Early Out"
+            status = _("Early Out ({0}) minutes").format(early_minutes)
+            status_color = "color1"
+
+    return {
+        "employee": emp.name,
+        "employee_name": emp.employee_name,
+        "date": date,
+        "check_in": check_in or "",
+        "check_out": check_out or "",
+        "status": status,
+        "status_code": statusCode,
+        "working_hours": working_hours,
+        "working_seconds": working_seconds,
+        "late_minutes": late_minutes,
+        "status_color": status_color
+    }
 
 @frappe.whitelist()
 def set_attendance(logType,employee, date):
