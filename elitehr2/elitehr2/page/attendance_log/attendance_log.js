@@ -80,7 +80,7 @@ function manualAttendanceRegistration() {
 function loadStatistics(selectedDate) {
 	// const cardRow = $(".cardContainers")
 	frappe.call({
-		method: "elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin.get_employee_checkin_list",
+		method: "elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin.get_all_employees_attendance",
 		args: { date: selectedDate },
 		callback: function (r) {
 			const requests = r.message || [];
