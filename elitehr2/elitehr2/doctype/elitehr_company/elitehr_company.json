@@ -10,6 +10,7 @@
   "section_break_dbha",
   "email",
   "country",
+  "currency",
   "column_break_dazn",
   "company_name",
   "phone_number"
@@ -55,13 +56,20 @@
   {
    "fieldname": "section_break_dbha",
    "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "currency",
+   "fieldtype": "Select",
+   "label": "Currency",
+   "options": "EGP\nSAR",
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-03-03 11:16:51.204307",
+ "modified": "2026-04-12 11:41:10.213361",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Company",
