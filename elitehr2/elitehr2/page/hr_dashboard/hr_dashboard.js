@@ -106,7 +106,7 @@ function renderUI(wrapper) {
 							${quickAction("إضافة موظف","#3B82F6","/assets/elitehr2/icons/add_emp.png","/desk/elitehr-employee/new-elitehr-employee")}
 							${quickAction("تسجيل حضور","#14B8A6","/assets/elitehr2/icons/doc_check.png","/desk/attendance-log")}
 							${quickAction("طلب إجازة","#A855F7","/assets/elitehr2/icons/calendar.png","/desk/elitehr-requests/new-elitehr-requests")}
-							${quickAction("إعداد الرواتب","#10B981","/assets/elitehr2/icons/wallet.png","/desk/payroll")}
+							${quickAction("إعداد الرواتب","#10B981","/assets/elitehr2/icons/wallet.svg","/desk/payroll")}
 							${quickAction("تصدير تقرير","#F97316","/assets/elitehr2/icons/download.png","/desk/reports")}
 							${quickAction("عرض التقارير","#EC4899","/assets/elitehr2/icons/doc.png","/desk/reports")}
 						</div>
