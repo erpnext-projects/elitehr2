@@ -5,8 +5,9 @@ import frappe
 from frappe import _
 from frappe.model.document import Document
 from collections import defaultdict
-from datetime import datetime, time
+from datetime import datetime, timedelta
 from frappe.utils import get_datetime, time_diff_in_seconds, format_datetime, now_datetime, nowtime, get_first_day, get_last_day, add_months, flt, today,add_days,getdate
+import calendar
 
 class ElitehrEmployeeCheckin(Document):
     pass
@@ -218,45 +219,89 @@ def get_employee_working_days_and_time(employee):
     return working_days
 
 
-
 @frappe.whitelist()
-def get_all_employees_attendance(date):
+def get_year_monthes_employees():
+    year = datetime.today().year
     employees = frappe.get_all(
             "Elitehr Employee",
             fields=["name", "employee_name", "department_name","shift"]
         )
+
+    months = {}
+    current_month = datetime.today().month
+    
+    for m in range(1, current_month + 1):
+        present = 0
+        late = 0
+        absent = 0
+        # build a date inside that month (safe)
+        sample_date = f"{year}-{m:02d}-01"
+        for emp in employees:
+            data = get_employee_attendance_handler(emp.name,get_first_day(sample_date),get_last_day(sample_date))
+            if not data:
+                continue
+            for row in data:
+                status = row.get("status_code")
+                if status == "Absent":
+                    absent+=1
+                elif status == "Present":
+                    present += 1
+                elif status == "Late":
+                    late += 1
+        months[m] = {
+            "month": m,
+            "present": present,
+            "late": late,
+            "absent": absent
+        }
+    # frappe.log(months)
+    return [months[m] for m in months]
+
+
+# الدالة الاساسية
+@frappe.whitelist()
+def get_employee_attendance_handler(employee=None,from_date=None,to_date=None):
+    
+    if from_date is None:
+        from_date = today()
+
+    if to_date is None:
+        to_date = from_date
+
+    targetEmployees = []
+    if employee is None:
+        employees = frappe.get_all(
+            "Elitehr Employee",
+            fields=["name", "employee_name", "department_name","shift"]
+        )
+    else:
+        employees = frappe.get_all(
+            "Elitehr Employee",
+            filters={"name":employee},
+            fields=["name", "employee_name", "department_name","shift"]
+        )
+
+
     result = []
     for emp in employees:
-        result.append(get_employee_attendance(emp.name,date))
+        working_days = get_employee_working_days_and_time(emp)
+        indexDate = from_date
+        while indexDate <= to_date:
+            weekday = getdate(indexDate).strftime("%A")  # Saturday, Sunday...
+            if weekday not in working_days:
+                indexDate = add_days(indexDate, 1)
+                continue
+
+            day_result = get_employee_attendance(date=indexDate, employee=emp.name)
+            if day_result:
+                day_result["department"] = emp.department_name
+                result.append(day_result)
+            indexDate = add_days(indexDate, 1)    
+    
+    # frappe.log(f"get_employee_attendance_handler/ results: {result}")
     return result
 
 
-@frappe.whitelist()
-def get_employee_monthly_attendance(employee, date = today()):
-    
-    working_days = get_employee_working_days_and_time(employee)
-
-    
-    first_date_of_month = get_first_day(date)
-    last_date_of_month = get_last_day(date)
-
-    target_date = first_date_of_month
-    result = []
-    while target_date <= last_date_of_month:
-        weekday = target_date.strftime("%A")  # Saturday, Sunday...
-        if weekday not in working_days:
-            target_date = add_days(target_date, 1)
-            continue
-
-        day_result = get_employee_attendance(date=target_date, employee=employee)
-        if day_result:
-            result.append(day_result)
-        target_date = add_days(target_date, 1)
-        
-    return result
-
-
-@frappe.whitelist()
 def get_employee_attendance(employee, date):
 
     if not employee or not date:
@@ -367,8 +412,6 @@ def set_attendance(logType,employee, date = today()):
     new_log.insert()
     frappe.db.commit()
     return True
-
-
 
 @frappe.whitelist()
 def set_attendance_by_employee_id(employee_id):
