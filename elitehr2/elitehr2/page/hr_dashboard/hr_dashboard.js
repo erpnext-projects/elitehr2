@@ -322,8 +322,8 @@ function getEmployees() {
 
 function getAttendance() {
     return frappe.call({
-        method: "elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin.get_all_employees_attendance",
-        args: { date: frappe.datetime.get_today() }
+        method: "elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin.get_employee_attendance_handler",
+        args: { from_date: frappe.datetime.get_today() }
     });
 }
 

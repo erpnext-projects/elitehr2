@@ -5,7 +5,7 @@ import frappe
 from frappe import _
 from frappe.model.document import Document
 from frappe.utils import get_first_day, get_last_day, add_months, flt, today,add_days, format_datetime
-from elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin import get_employee_attendance,get_employee_monthly_attendance
+from elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin import get_employee_attendance_handler 
 import calendar
 
 
@@ -61,7 +61,7 @@ class ElitehrPayroll(Document):
         self.net_salary = (employee.salary + self.total_allowances) - (self.total_deductions)
 
         # Attendance
-        attendance = get_employee_monthly_attendance(self.employee, self.date)
+        attendance = get_employee_attendance_handler(employee= self.employee,from_date= get_first_day(self.date),to_date=get_last_day(self.date))
         self.set("attendance_table", [])
         for day in attendance:
             self.append("attendance_table", {
@@ -126,6 +126,11 @@ def payrloll(fromDate, toDate):
         )
         row["salary_correction"] = frappe.get_all(
             "Elitehr Salary Corrections",
+            filters={"parent": row.name},
+            fields=["*"]
+        )
+        row["attedndace"] = frappe.get_all(
+            "Elitehr Payroll Attendance",
             filters={"parent": row.name},
             fields=["*"]
         )

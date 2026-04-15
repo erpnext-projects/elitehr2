@@ -542,43 +542,6 @@ function openPayslipModal(row) {
 	`;
 
     d.fields_dict.payslip_details.$wrapper.html(payslipHTML);
-	// frappe.call({
-	// 	method: "elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin.get_employee_attendance",
-	// 	args: { employee: row.employee,date: ddate },
-	// 	callback: function (r) {
-	// 		if (r.message) {
-	// 			console.log("data from chekin",r.message);
-	// 			const data = r.message;
-				
-	// 			const attendanceTableHTML = `
-	// 				<table class="attendance-table  table text-center">
-	// 					<thead>
-	// 						<tr>
-	// 							<th>التاريخ</th>
-	// 							<th>دخول</th>
-	// 							<th>خروج</th>
-	// 							<th>الحالة</th>
-	// 						</tr>
-	// 					</thead>
-	// 					<tbody>
-	// 						${data.map(d => `
-	// 							<tr>
-	// 								<td>${d.date}</td>
-	// 								<td>${d.check_in || "غير مسجل"}</td>
-	// 								<td>${d.check_out || "غير مسجل"}</td>
-	// 								<td class="${d.status_color}">${d.status}</td>
-	// 							</tr>
-	// 						`).join("")}
-	// 					</tbody>
-	// 				</table>
-	// 			`;
-	// 			d.fields_dict.payslip_details.$wrapper.find(".last-attendance").html(attendanceTableHTML);
-	// 			let cont = d.fields_dict.payslip_details.$wrapper.find(".last-attendance")
-	// 			console.log(cont);
-				
-	// 		}
-	// 	}
-	// });
 
 	if (row.status != "Salary Disbursement") {
 		d.set_primary_action(__("Change Payroll Status"), function() {
@@ -622,66 +585,51 @@ function openPayslipModal(row) {
 		});
 	}
 	
+	console.log("row");
+	console.log(row);
+	// Attendace
+	let $wrapper = d.fields_dict.payslip_details.$wrapper;
 	
-	frappe.call({
-		method: "elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin.get_employee_monthly_attendance",
-		args: { employee: row.employee },
-		callback: function (r) {
-			if (r.message) {
-				const data = r.message
-				console.log("data",data);
-				let $wrapper = d.fields_dict.payslip_details.$wrapper;
-				
-				const summary = r.message.reduce((s, item) => {
-					if (item.status_code !== "Absent") s.present_days++;
-					if (item.status_code === "Late") s.late_days++;
-					if (item.status_code === "Absent") s.absent_days++;
-					s.working_seconds+= item.working_seconds
-					return s;
-				}, {
-					present_days: 0,
-					working_seconds: 0,
-					late_days: 0,
-					absent_days: 0,
-				});
-				
-				let hours = Math.floor(summary.working_seconds / 3600);
-            	let minutes = Math.floor((summary.working_seconds % 3600) / 60);
-				let working_hours = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+	// working_seconds
+	let totalSeconds = row.attedndace.reduce((acc, d) => {		
+		return acc + (d.working_seconds || 0);
+	}, 0);
+	let hours = Math.floor(totalSeconds / 3600);
+	let minutes = Math.floor((totalSeconds % 3600) / 60);
+	let working_hours = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
 
-				$wrapper.find("#present-days").text(`${summary['present_days']} يوم`);
-				$wrapper.find("#total_working_hours").text(`${working_hours} ساعة`);
-				$wrapper.find("#late_days").text(`${summary['late_days'] || 0} يوم`);
-				$wrapper.find("#absent_days").text(`${summary['absent_days'] || 0} يوم`);
+	$wrapper.find("#present-days").text(`${row.attedndace.filter(a => a.status_code in ["Present","Late"]).length} يوم`);
+	$wrapper.find("#total_working_hours").text(`${working_hours} ساعة`);
+	$wrapper.find("#late_days").text(`${row.attedndace.filter(a => a.status_code == "Late").length} يوم`);
+	$wrapper.find("#absent_days").text(`${row.attedndace.filter(a => a.status_code == "Absent").length} يوم`);
 
 
-				// attendace
-				const attendanceTableHTML = `
-					<table class="attendance-table  table text-center">
-						<thead>
-							<tr>
-								<th>التاريخ</th>
-								<th>دخول</th>
-								<th>خروج</th>
-								<th>الحالة</th>
-							</tr>
-						</thead>
-						<tbody>
-							${data.map(d => `
-								<tr>
-									<td>${d.date}</td>
-									<td>${d.check_in || "غير مسجل"}</td>
-									<td>${d.check_out || "غير مسجل"}</td>
-									<td class="${d.status_color}">${d.status}</td>
-								</tr>
-							`).join("")}
-						</tbody>
-					</table>
-				`;
-				d.fields_dict.payslip_details.$wrapper.find(".last-attendance").html(attendanceTableHTML);
-				
-			}
-	}});
+	// attendace
+	const attendanceTableHTML = `
+		<table class="attendance-table  table text-center">
+			<thead>
+				<tr>
+					<th>التاريخ</th>
+					<th>دخول</th>
+					<th>خروج</th>
+					<th>الحالة</th>
+				</tr>
+			</thead>
+			<tbody>
+				${row.attedndace.map(d => `
+					<tr>
+						<td>${d.date}</td>
+						<td>${d.check_in || "غير مسجل"}</td>
+						<td>${d.check_out || "غير مسجل"}</td>
+						<td class="${d.status_color}">${d.status}</td>
+					</tr>
+				`).join("")}
+			</tbody>
+		</table>
+	`;
+	d.fields_dict.payslip_details.$wrapper.find(".last-attendance").html(attendanceTableHTML);
+	
+
 
 }
 
