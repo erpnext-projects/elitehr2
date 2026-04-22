@@ -1,0 +1,122 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:worker_number",
+ "creation": "2026-04-19 10:36:59.588826",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "worker_number",
+  "idresidence_number",
+  "nationality",
+  "job_title",
+  "status",
+  "column_break_rzii",
+  "full_name",
+  "phone_number",
+  "the_contract",
+  "daily_wage",
+  "section_break_wakq",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "worker_number",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Worker Number",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "idresidence_number",
+   "fieldtype": "Data",
+   "label": "ID/Residence number"
+  },
+  {
+   "fieldname": "nationality",
+   "fieldtype": "Select",
+   "label": "Nationality",
+   "options": "Saudi\nEgyptian\nSudanese\nYemeni\nPakistani\nIndian\nBangladeshi\nFilipino\nNepalese\nIndonesian\nSri Lankan\nOther",
+   "translatable": 1
+  },
+  {
+   "fieldname": "job_title",
+   "fieldtype": "Data",
+   "label": "Job Title"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Active\nInactive\nExpired",
+   "translatable": 1
+  },
+  {
+   "fieldname": "column_break_rzii",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "full_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Full Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "phone_number",
+   "fieldtype": "Data",
+   "label": "Phone Number"
+  },
+  {
+   "fieldname": "daily_wage",
+   "fieldtype": "Int",
+   "label": "Daily wage"
+  },
+  {
+   "fieldname": "section_break_wakq",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "the_contract",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "The Contract",
+   "options": "Elitehr Supply Contract",
+   "reqd": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-04-19 11:15:26.732157",
+ "modified_by": "Administrator",
+ "module": "Elitehr2",
+ "name": "Elitehr Supply Contract Workers",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

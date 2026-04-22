@@ -1,0 +1,168 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-04-20 23:16:20.280313",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "the_contract",
+  "from",
+  "to",
+  "deduction_percentage",
+  "column_break_nlek",
+  "status",
+  "notes",
+  "section_break_pjcv",
+  "workers",
+  "total_seconds",
+  "column_break_erny",
+  "hours",
+  "column_break_vjsf",
+  "total",
+  "column_break_ihur",
+  "net",
+  "column_break_jrma",
+  "total_deductions",
+  "section_break_uymu",
+  "table"
+ ],
+ "fields": [
+  {
+   "fieldname": "from",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "From"
+  },
+  {
+   "fieldname": "deduction_percentage",
+   "fieldtype": "Int",
+   "label": "Deduction Percentage (%)",
+   "non_negative": 1
+  },
+  {
+   "fieldname": "column_break_nlek",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "to",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "To"
+  },
+  {
+   "fieldname": "section_break_pjcv",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "workers",
+   "fieldtype": "Data",
+   "label": "Workers",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_erny",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "hours",
+   "fieldtype": "Data",
+   "label": "Working Hours",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_vjsf",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "total",
+   "fieldtype": "Data",
+   "label": "Total",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_ihur",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "net",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Net",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_uymu",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "table",
+   "fieldtype": "HTML",
+   "label": "Table"
+  },
+  {
+   "fieldname": "total_seconds",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Total Seconds",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_jrma",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "total_deductions",
+   "fieldtype": "Data",
+   "label": "Total Deductions",
+   "read_only": 1
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Under review\nApproved",
+   "reqd": 1
+  },
+  {
+   "fieldname": "the_contract",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "The Contract",
+   "options": "Elitehr Supply Contract",
+   "reqd": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-04-21 09:04:05.787376",
+ "modified_by": "Administrator",
+ "module": "Elitehr2",
+ "name": "Elitehr Supply Contract Payroll",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -1,6 +1,6 @@
 {
  "actions": [],
- "autoname": "autoincrement",
+ "autoname": "field:contract_id",
  "creation": "2026-02-07 20:39:05.614089",
  "default_view": "List",
  "doctype": "DocType",
@@ -22,13 +22,16 @@
   "section_break_pova",
   "status",
   "attach",
-  "notes"
+  "notes",
+  "section_break_kfad",
+  "tabs_html"
  ],
  "fields": [
   {
    "fieldname": "contract_id",
    "fieldtype": "Data",
-   "label": "\u0631\u0642\u0645 \u0627\u0644\u0639\u0642\u062f"
+   "label": "\u0631\u0642\u0645 \u0627\u0644\u0639\u0642\u062f",
+   "unique": 1
   },
   {
    "fieldname": "phone",
@@ -103,7 +106,8 @@
    "fieldname": "status",
    "fieldtype": "Select",
    "label": "Status",
-   "options": "\u0646\u0634\u0637\n\u0645\u0639\u0644\u0642\n\u0645\u0643\u062a\u0645\u0644\n\u0645\u0644\u063a\u064a"
+   "options": "Active\nPending\nCompleted\nCancelled",
+   "translatable": 1
   },
   {
    "fieldname": "attach",
@@ -113,18 +117,27 @@
   {
    "fieldname": "notes",
    "fieldtype": "Small Text",
-   "label": "\u0645\u0644\u0627\u062d\u0638\u0627\u062a"
+   "label": "Notes"
+  },
+  {
+   "fieldname": "section_break_kfad",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "tabs_html",
+   "fieldtype": "HTML",
+   "label": "Tabs Html"
   }
  ],
  "force_re_route_to_default_view": 1,
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-02-09 14:35:46.265250",
+ "modified": "2026-04-20 23:15:07.832516",
  "modified_by": "Administrator",
- "module": "EliteHr2",
+ "module": "Elitehr2",
  "name": "Elitehr Supply Contract",
- "naming_rule": "Autoincrement",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {
@@ -152,7 +165,6 @@
    "write": 1
   }
  ],
- "quick_entry": 1,
  "row_format": "Dynamic",
  "rows_threshold_for_grid_search": 20,
  "show_title_field_in_link": 1,
