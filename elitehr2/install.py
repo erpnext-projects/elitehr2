@@ -90,7 +90,6 @@ def create_admin_user():
             "Elitehr Shifts Days",
             "Elitehr Attendance Correction Request",
             "Elitehr Leaves",
-            "Elitehr Supply Contract",
             "Elitehr Employment",
             "Eliteht Employee Contracts",
             "Elitehr Leave Policies",
@@ -114,7 +113,11 @@ def create_admin_user():
             "Elitehr Approval Workflow",
             "User",
             "Elitehr Employee Checkin",
-            "Elitehr Payroll"
+            "Elitehr Payroll",
+            "Elitehr Supply Contract",
+            "Elitehr Supply Contract Workers",
+            "Elitehr Workers Check_in_out",
+            "Elitehr Supply Contract Payroll"
         ]
         for r in roles:
             allow_role_read_doctype(role_name,r)
