@@ -272,13 +272,13 @@ def get_employee_attendance_handler(employee=None,from_date=None,to_date=None):
     if employee is None:
         employees = frappe.get_all(
             "Elitehr Employee",
-            fields=["name", "employee_name", "department_name","shift"]
+            fields=["name", "employee_name", "department","department_name","shift"]
         )
     else:
         employees = frappe.get_all(
             "Elitehr Employee",
             filters={"name":employee},
-            fields=["name", "employee_name", "department_name","shift"]
+            fields=["name", "employee_name", "department", "department_name","shift"]
         )
 
 
@@ -294,7 +294,8 @@ def get_employee_attendance_handler(employee=None,from_date=None,to_date=None):
 
             day_result = get_employee_attendance(date=indexDate, employee=emp.name)
             if day_result:
-                day_result["department"] = emp.department_name
+                day_result["department"] = emp.department
+                day_result["department_name"] = emp.department_name
                 result.append(day_result)
             indexDate = add_days(indexDate, 1)    
     
