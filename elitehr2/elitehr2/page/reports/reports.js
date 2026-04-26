@@ -41,9 +41,9 @@ function renderStatistics(wrapper) {
 			<!-- Cards -->
 			<div class="cardContainers flex-wrap">
 			${statisticsCard("attendanceRate",__("Attendance rate"), __("Loading..."), "#3B82F6","/assets/elitehr2/icons/users.svg")}
-			${statisticsCard("averageWorkingRate",__("Average working hours"), __("Loading..."), "#14B8A6","/assets/elitehr2/icons/clock.svg")}
+			${statisticsCard("absentRate",__("Absent Rate"), __("Loading..."), "#14B8A6","/assets/elitehr2/icons/clock.svg")}
 			${statisticsCard("totalPay",__("Total pay"), __("Loading..."), "#10B981","/assets/elitehr2/icons/wallet.svg")}
-			${statisticsCard("tardinessRate",__("Tardiness rate"), __("Loading..."), "#F59E0B","/assets/elitehr2/icons/arrow.svg ")}
+			${statisticsCard("lateRate",__("Late rate"), __("Loading..."), "#F59E0B","/assets/elitehr2/icons/arrow.svg ")}
 			</div>
 			 
 		</div>
@@ -72,29 +72,35 @@ function statisticsCard(id,title, value, background,icon) {
 }
 
 function loadStatisticsData() {
-	Promise.all([getEmployees(), getAttendance()])
-		.then(([empRes, attRes]) => {
+	const today = frappe.datetime.get_today();
+    const from_date = frappe.datetime.month_start(today);
+    const to_date = frappe.datetime.month_end(today);
+    frappe.call({
+        method: "elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin.get_employee_attendance_handler",
+        args: { 
+			from_date: from_date,
+            to_date: to_date
+		 },
+		 callback: function(r) {
+			let attendance = r.message
+			if (attendance) {			
+				let present = attendance.filter(e => e.status_code === "Present").length;
+				let absent = attendance.filter(e => e.status_code === "Absent").length;
+				let late = attendance.filter(e => e.status_code === "Late").length;
+			
+				// إجمالي سجلات الشهر
+				let totalAttendanceRecords = present + absent + late;
+			
+				$("#attendanceRate .card-value").text(getPrecent(present,totalAttendanceRecords));
+				$("#lateRate .card-value").text(getPrecent(late,totalAttendanceRecords));
+				$("#absentRate .card-value").text(getPrecent(absent,totalAttendanceRecords));
+			}
+		 }
+    });
 
-			let employees = empRes.message || [];
-			let attendance = attRes.message || [];
-
-			let totalEmployee = employees.length;
-
-			let present = attendance.filter(e => e.status_code === "Present").length;
-			let absent = attendance.filter(e => e.status_code === "Absent").length;
-			let late = attendance.filter(e => e.status_code === "Late").length;
-
-			// $("#attendanceRate .card-value").text(totalEmployee);
-			// $("#presenToday .card-value").text(present);
-			// $("#absentToday .card-value").text(absent);
-			$("#tardinessRate .card-value").text(getPrecent(late,totalEmployee));
-			$("#attendanceRate .card-value").text(getPrecent(present+late,totalEmployee));
 
 
-		});
 
-	// latestLogs();
-	// incominVacation()
 
 	frappe.call(
 		{
@@ -937,23 +943,6 @@ function initChart(chartContainer,type,data, extraOptions = {}) {
     });
 }
 
-function getEmployees() {
-    return frappe.call({
-        method: "frappe.client.get_list",
-        args: {
-            doctype: "Elitehr Employee",
-            filters: { status: "Active" },
-            fields: ["name"]
-        }
-    });
-}
-
-function getAttendance() {
-    return frappe.call({
-        method: "elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin.get_employee_attendance_handler",
-        args: { from_date: frappe.datetime.get_today() }
-    });
-}
 
 function getPrecent(count,totalEmployee) {
 	return totalEmployee > 0
