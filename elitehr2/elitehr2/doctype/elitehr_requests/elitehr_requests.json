@@ -25,6 +25,7 @@
   "priority",
   "section_break_yoof",
   "start_date",
+  "total_days",
   "column_break_cizj",
   "end_date",
   "section_break_ilmd",
@@ -483,12 +484,20 @@
    "fieldname": "check_out",
    "fieldtype": "Time",
    "label": "Check Out"
+  },
+  {
+   "default": "0",
+   "depends_on": "eval: [\n        \"LEAVE_ANNUAL\",\n        \"LEAVE_EMERGENCY\",\n        \"LEAVE_SICK\",\n        \"TRAINING\"\n    ].includes(doc.request_type_code);",
+   "fieldname": "total_days",
+   "fieldtype": "Data",
+   "label": "Total Days",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-04-14 10:49:43.710797",
+ "modified": "2026-04-23 10:14:39.208428",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Requests",
