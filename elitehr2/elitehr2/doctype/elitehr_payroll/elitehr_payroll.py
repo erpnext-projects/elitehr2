@@ -7,7 +7,7 @@ from frappe.model.document import Document
 from frappe.utils import get_first_day, get_last_day, add_months, flt, today,add_days, format_datetime
 from elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin import get_employee_attendance_handler 
 import calendar
-
+from datetime import datetime
 
 class ElitehrPayroll(Document):
     def before_save(self):
@@ -245,3 +245,181 @@ def update_payroll_status(payroll,status):
     doc.status = status
     doc.save()
     return True
+
+
+
+@frappe.whitelist()
+def get_deductions_summary(from_date, to_date):
+    rows = frappe.db.sql("""
+        SELECT 
+            d.name1,
+            d.type,
+            d.amount,
+            p.basic_salary
+        FROM `tabElitehr Employee Deductions` d
+        INNER JOIN `tabElitehr Payroll` p 
+            ON d.parent = p.name
+        WHERE 
+            p.date BETWEEN %s AND %s
+    """, (from_date, to_date), as_dict=True)
+    
+    # frappe.log("rows")
+    # for r in rows:
+    #     frappe.log(r)
+
+    grouped = {}
+    total = 0
+    for r in rows:
+        if r.type == "Percentage":
+            amount = (r.amount / 100) * (r.basic_salary or 0)
+        else:  # Constant number
+            amount = r.amount or 0
+
+        if r.name1 not in grouped:
+            grouped[r.name1] = 0
+
+        grouped[r.name1] += amount
+        total += amount
+
+    # frappe.log("grouped")
+    # frappe.log(grouped)
+
+    # 👇 تحويل لـ list + حساب النسبة
+    result = []
+    for name, value in grouped.items():
+        result.append({
+            "type": name,
+            "amount": round(value, 2),
+            "percentage": round((value / total * 100), 2) if total else 0
+        })
+
+    return {
+        "total": round(total, 2),
+        "data": result
+    }
+
+
+
+
+@frappe.whitelist()
+def get_monthly_payroll_trend(year=None):
+    
+
+    if not year:
+        year = datetime.now().year
+
+    rows = frappe.db.sql("""
+        SELECT 
+            MONTH(p.date) as month,
+            SUM(p.net_salary) as net_salary,
+            SUM(p.basic_salary) as total_salary,
+            SUM(p.total_allowances) as total_allowances,
+            SUM(p.total_deductions) as total_deductions
+        FROM `tabElitehr Payroll` p
+        WHERE YEAR(p.date) = %s
+        GROUP BY MONTH(p.date)
+    """, (year,), as_dict=True)
+
+    # frappe.log("get_monthly_payroll_trend")
+    # frappe.log(rows)
+
+    # نحول ل map
+    data_map = {r.month: r for r in rows}
+
+    months = []
+    salaries = []
+    allowances = []
+    deductions = []
+    net = []
+
+    for m in range(1, 13):
+        row = data_map.get(m, {})
+        months.append(m)
+        net.append(row.get("net_salary", 0) or 0)
+        salaries.append(row.get("total_salary", 0) or 0)
+        allowances.append(row.get("total_allowances", 0) or 0)
+        deductions.append(row.get("total_deductions", 0) or 0)
+    
+
+    return {
+        "months": months,
+        "salaries": salaries,
+        "allowances": allowances,
+        "deductions": deductions,
+        "net": net
+    }
+
+
+
+@frappe.whitelist()
+def get_salary_distribution(from_date, to_date):
+    rows = frappe.db.sql("""
+        SELECT net_salary
+        FROM `tabElitehr Payroll` p
+        WHERE 
+            p.date BETWEEN %s AND %s
+    """, (from_date, to_date) , as_dict=True)
+
+    ranges = {
+        "0 - 3,000": 0,
+        "3,000 - 5,000": 0,
+        "5,000 - 8,000": 0,
+        "8,000 - 12,000": 0,
+        "12,000 - 15,000": 0,
+        "15,000+": 0
+    }
+
+    for r in rows:
+        salary = r.net_salary or 0
+
+        if salary <= 3000:
+            ranges["0 - 3,000"] += 1
+        elif salary <= 5000:
+            ranges["3,000 - 5,000"] += 1
+        elif salary <= 8000:
+            ranges["5,000 - 8,000"] += 1
+        elif salary <= 12000:
+            ranges["8,000 - 12,000"] += 1
+        elif salary <= 15000:
+            ranges["12,000 - 15,000"] += 1
+        else:
+            ranges["15,000+"] += 1
+
+    return ranges
+
+
+
+
+@frappe.whitelist()
+def get_top_employees_leaves(limit=10):
+    rows = frappe.db.sql("""
+        SELECT 
+            r.employee,
+            r.employee_name,
+            e.job_title,
+            SUM(total_days) as total_days
+        FROM `tabElitehr Requests` r
+        LEFT JOIN `tabElitehr Employee` e ON r.employee = e.name
+        where r.request_type_code in ('LEAVE_ANNUAL','LEAVE_EMERGENCY','LEAVE_SICK')
+        GROUP BY r.employee
+        ORDER BY total_days DESC
+        LIMIT %s
+    """, (limit,), as_dict=True)
+    # frappe.log("get_top_employees_leaves")
+    # frappe.log(rows)
+    return rows
+
+
+@frappe.whitelist()
+def get_leaves_summary():
+    rows = frappe.db.sql(f"""
+        SELECT 
+            request_type_name as leave_type,
+            SUM(total_days) as total_days
+        FROM `tabElitehr Requests`
+        WHERE request_type_code IN ('LEAVE_ANNUAL','LEAVE_EMERGENCY','LEAVE_SICK','LEAVE_MATERNITY')
+        GROUP BY request_type_name
+        ORDER BY total_days DESC
+    """, as_dict=True)
+
+    return rows

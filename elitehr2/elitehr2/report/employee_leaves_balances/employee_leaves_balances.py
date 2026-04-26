@@ -49,7 +49,7 @@ def get_columns():
 
 
 def get_data(filters):
-    data = []
+    
 
     employees = frappe.get_all(
         "Elitehr Employee",
@@ -57,6 +57,11 @@ def get_data(filters):
         fields=["name", "employee_name"]
     )
 
+    return get_leave_summary(employees)
+
+
+def get_leave_summary(employees):
+    data = []
     for emp in employees:
         doc = frappe.get_doc("Elitehr Employee", emp.name)
 
@@ -82,30 +87,26 @@ def get_data(filters):
             ])
 
     return data
+    # data = []
+    # employees = frappe.get_all("Elitehr Employee", fields=["name", "employee_name"])
 
+    # for emp in employees:
+    #     doc = frappe.get_doc("Elitehr Employee", emp.name)
+    #     for l in doc.table_leaves:
+    #         used_days = frappe.db.sql("""
+    #             SELECT SUM(days) FROM `tabElitehr Leaves`
+    #             WHERE employee=%s AND type=%s AND status='مكتمل'
+    #         """, (emp.name, l.leave))[0][0] or 0
 
-@frappe.whitelist()
-def get_leave_summary():
-    data = []
-    employees = frappe.get_all("Elitehr Employee", fields=["name", "employee_name"])
+    #         allowed = float(l.days) if l.days else 0
+    #         percentage = round((used_days / allowed) * 100, 2) if allowed > 0 else 0
 
-    for emp in employees:
-        doc = frappe.get_doc("Elitehr Employee", emp.name)
-        for l in doc.table_leaves:
-            used_days = frappe.db.sql("""
-                SELECT SUM(days) FROM `tabElitehr Leaves`
-                WHERE employee=%s AND type=%s AND status='مكتمل'
-            """, (emp.name, l.leave))[0][0] or 0
-
-            allowed = float(l.days) if l.days else 0
-            percentage = round((used_days / allowed) * 100, 2) if allowed > 0 else 0
-
-            data.append({
-                "employee": emp.name,
-                "employee_name": emp.employee_name,
-                "leave_type": l.leave_name or l.leave,
-                "allowed_days": allowed,
-                "used_days": used_days,
-                "percentage": percentage
-            })
-    return data
+    #         data.append({
+    #             "employee": emp.name,
+    #             "employee_name": emp.employee_name,
+    #             "leave_type": l.leave_name or l.leave,
+    #             "allowed_days": allowed,
+    #             "used_days": used_days,
+    #             "percentage": percentage
+    #         })
+    # return data
