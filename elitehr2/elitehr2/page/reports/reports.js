@@ -89,7 +89,7 @@ function loadStatisticsData() {
 				let late = attendance.filter(e => e.status_code === "Late").length;
 			
 				// إجمالي سجلات الشهر
-				let totalAttendanceRecords = present + absent + late;
+				let totalAttendanceRecords = attendance.length;
 			
 				$("#attendanceRate .card-value").text(getPrecent(present,totalAttendanceRecords));
 				$("#lateRate .card-value").text(getPrecent(late,totalAttendanceRecords));
