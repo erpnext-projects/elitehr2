@@ -95,6 +95,20 @@ function loadStatisticsData() {
 
 	// latestLogs();
 	// incominVacation()
+
+	frappe.call(
+		{
+			method: "elitehr2.elitehr2.doctype.elitehr_payroll.elitehr_payroll.get_monthly_total_net_salary",
+			callback: function(r) {
+				if (r.message) {
+					let data = r.message;
+					if (data) {						
+						$("#totalPay .card-value").text(data.total_salary + " " + __(data.currency));
+					}
+				}
+			}
+		}
+	)
 }
 
 

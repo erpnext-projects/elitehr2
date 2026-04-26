@@ -4,7 +4,7 @@
 import frappe
 from frappe import _
 from frappe.model.document import Document
-from frappe.utils import get_first_day, get_last_day, add_months, flt, today,add_days, format_datetime
+from frappe.utils import get_first_day, get_last_day, add_months, flt, today,add_days, format_datetime,getdate
 from elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin import get_employee_attendance_handler 
 import calendar
 from datetime import datetime
@@ -423,3 +423,29 @@ def get_leaves_summary():
     """, as_dict=True)
 
     return rows
+
+@frappe.whitelist()
+def get_monthly_total_net_salary(date=None):
+    if not date:
+        date = frappe.utils.today()
+    
+    date = getdate(date)
+    from_date = get_first_day(date)
+    to_date = get_last_day(date)
+
+    total = frappe.db.sql("""
+        SELECT 
+            SUM(net_salary) as total_salary
+        FROM `tabElitehr Payroll`
+        WHERE date BETWEEN %s AND %s
+    """, (from_date, to_date), as_dict=True)
+    
+    currency = frappe.db.get_single_value(
+        "Elitehr Company",
+        "currency"
+    )
+
+    return {
+        "total_salary": total[0].get("total_salary") or 0,
+        "currency": currency
+    }
