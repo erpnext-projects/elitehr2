@@ -33,7 +33,8 @@ app_include_css = [
     ]
 app_include_js = [
     "/assets/elitehr2/js/elitehr.js",
-    "/assets/elitehr2/js/custom_table.js"
+    "/assets/elitehr2/js/custom_table.js",
+    "/assets/elitehr2/js/lib/chart.min.js"
 ]
 
 # include js, css files in header of web template
