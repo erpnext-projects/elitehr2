@@ -99,7 +99,7 @@
     font-size: 22px;
 }
 .requests-table * {
-	text-align: start !important;
+	text-align: center !important;
 }
 .custom-page .icon {
 	width: 32px;
@@ -192,6 +192,28 @@ select:hover {
 }
 .color7{
     color: #24A871;
+}
+
+.bg1{
+    background: #e67e22;
+}
+.bg2{
+    background: #2277e6;
+}
+.bg3{
+    background: #2ecc71;
+}
+.bg4{
+    background: red
+}
+.bg5{
+    background: green
+}
+.bg6{
+    background: #28a745;
+}
+.bg7{
+    background: #24A871;
 }
 
 
@@ -367,6 +389,12 @@ select:hover {
     border-radius: 12px;
     font-size: 16px;
     background: #ffd1a8 !important;
+}
+
+.badge2{
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 16px;
 }
 
 

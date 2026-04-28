@@ -258,6 +258,57 @@ def get_year_monthes_employees():
     return [months[m] for m in months]
 
 
+@frappe.whitelist()
+def get_monthly_attendance_matrix(from_date=None, to_date=None):
+
+    rows = get_employee_attendance_handler(
+        from_date=from_date,
+        to_date=to_date
+    ) or []
+
+    result = {}
+    for row in rows:
+        emp = row.get("employee")
+
+        # إنشاء الموظف مرة واحدة فقط
+        if emp not in result:
+            result[emp] = {
+                "employee": emp,
+                "employee_name": row.get("employee_name"),
+                "department": row.get("department"),
+                "department_name": row.get("department_name"),
+                "job_title": row.get("job_title"),
+                "days": {},
+                "presents": 0,
+                "absens": 0,
+                "lates": 0,
+                "leaves": 0
+            }
+
+        date_obj = getdate(row.get("date"))
+        day_number = str(date_obj.day)
+        day_name_en = date_obj.strftime("%A")
+
+        status = row.get("status_code")
+        # عدّ الحالات
+        if status == "Present":
+            result[emp]["presents"] += 1
+        elif status == "Absent":
+            result[emp]["absens"] += 1
+        elif status == "Late":
+            result[emp]["lates"] += 1
+        elif status == "Leave":
+            result[emp]["leaves"] += 1
+
+        # تخزين حالة اليوم + اسم اليوم بالعربي
+        result[emp]["days"][day_number] = {
+            "day_name": day_name_en,
+            **row,
+        }
+
+    return list(result.values())
+
+
 # الدالة الاساسية
 @frappe.whitelist()
 def get_employee_attendance_handler(employee=None,from_date=None,to_date=None):
@@ -272,13 +323,13 @@ def get_employee_attendance_handler(employee=None,from_date=None,to_date=None):
     if employee is None:
         employees = frappe.get_all(
             "Elitehr Employee",
-            fields=["name", "employee_name", "department","department_name","shift"]
+            fields=["name", "employee_name", "department","department_name","shift","job_title"]
         )
     else:
         employees = frappe.get_all(
             "Elitehr Employee",
             filters={"name":employee},
-            fields=["name", "employee_name", "department", "department_name","shift"]
+            fields=["name", "employee_name", "department", "department_name","shift","job_title"]
         )
 
 
@@ -289,6 +340,19 @@ def get_employee_attendance_handler(employee=None,from_date=None,to_date=None):
         while indexDate <= to_date:
             weekday = getdate(indexDate).strftime("%A")  # Saturday, Sunday...
             if weekday not in working_days:
+                result.append({
+                    "employee": emp.name,
+                    "employee_name": emp.employee_name,
+                    "date": indexDate,
+                    "check_in": "",
+                    "check_out": "",
+                    "status": "",
+                    "status_code": "Weekend",
+                    "working_hours": 0,
+                    "working_seconds": 0,
+                    "late_minutes": 0,
+                    "status_color": ""
+                })
                 indexDate = add_days(indexDate, 1)
                 continue
 
@@ -296,6 +360,7 @@ def get_employee_attendance_handler(employee=None,from_date=None,to_date=None):
             if day_result:
                 day_result["department"] = emp.department
                 day_result["department_name"] = emp.department_name
+                day_result["job_title"] = emp.job_title
                 result.append(day_result)
             indexDate = add_days(indexDate, 1)    
     

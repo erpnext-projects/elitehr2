@@ -493,6 +493,18 @@
    "type": "Link"
   },
   {
+   "child": 1,
+   "collapsible": 1,
+   "icon": "calendar-range",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Monthly attendance report",
+   "link_to": "monthly-attendance-report",
+   "link_type": "Page",
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
    "child": 0,
    "collapsible": 1,
    "icon": "unread-status",
@@ -603,7 +615,7 @@
    "url": "/desk/user?sidebar=Hr Pro"
   }
  ],
- "modified": "2026-04-22 11:11:07.321819",
+ "modified": "2026-04-26 20:40:21.926822",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Hr Pro",
