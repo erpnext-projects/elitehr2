@@ -4,8 +4,6 @@ let cardRow = $('<div class="cardContainers"></div>');
 let tableHeader = $('<br><div class="table-header" dir="rtl"></div>');
 let tableContainer = $('<div class="requests-table" dir="rtl"></div>');
 let filtersContainer = $(`<div class="myFiltersContainer"></div>`);
-// let bySectionContainer = $(`<div class="myBySectionContainer"></div>`);
-// let collectiveDisclosureContainer = $(`<div class="CollectiveDisclosure"></div>`);
 let fromDateField;
 let toDateField;
 let employeeField;
