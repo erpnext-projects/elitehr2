@@ -1,5 +1,6 @@
 // Copyright (c) 2026, Mohamed Elgohary and contributors
 // For license information, please see license.txt
+let tableContainer = $(`<div class="table_container"></div>`);
 
 frappe.ui.form.on("Elitehr Supply Contract Payroll", {
 	refresh(frm) {
@@ -21,101 +22,52 @@ frappe.ui.form.on("Elitehr Supply Contract Payroll", {
         }else{
             calculate(frm);
         }
+    },
+    the_contract: function(frm) {
+        calculate(frm);
     }
 });
 
-
 function calculate(frm) {
-    let fromDate = frm.doc.from;
-    let toDate = frm.doc.to;
+	let fromDate = frm.doc.from;
+	let toDate = frm.doc.to;
 
-    if (!fromDate || !toDate) return;
+	if (!fromDate || !toDate || !frm.doc.the_contract) {
+        tableContainer.empty();
+        return;
+    }
 
-    // console.log("Calculating: ", fromDate, toDate);
+	frappe.call({
+		method: "elitehr2.elitehr2.doctype.elitehr_supply_contract_payroll.elitehr_supply_contract_payroll.get_payroll_data",
+		args: {
+            the_contract: frm.doc.the_contract,
+            houry_wage: frm.doc.hourly_wage,
+			from_date: fromDate,
+			to_date: toDate,
+			deduction_percentage: frm.doc.deduction_percentage || 0
+		},
+		callback(r) {
+			if (!r.message) return;
 
-    frappe.call({
-        method: "frappe.client.get_list",
-        args: {
-            doctype: "Elitehr Workers Check_in_out",
-            filters: {"date": ["between",[fromDate,toDate]]},
-            fields: ["*"]
-        },
-        callback(r) {
-            let data = r.message;
-            if (data) {   
-                // console.log(data);
+			let response = r.message;
 
-                // STEP 1: GROUP attendance
-                let grouped = {};
-                for (let item of data) {
-                    let w = item.the_worker;
-                    if (!grouped[w]) {
-                        grouped[w] = {
-                            worker: w,
-                            worker_name: item.worker_name,
-                            days: new Set(),
-                            total_seconds: 0
-                        };
-                    }
-                    grouped[w].days.add(item.date);
-                    grouped[w].total_seconds += item.working_seconds || 0;
-                }
-                // console.log("grouped",grouped);
-                
+			renderTable(frm, response.payroll);
 
-                let totalSeconds = 0;
-                let totalTotal = 0;
-                let totalNet = 0;
-                let totalDeductions = 0;
-                // STEP 2: BUILD PAYROLL
-                let payroll = Object.values(grouped).map(r => {
-                    totalSeconds += r.total_seconds;
-                    let hours = Math.floor(r.total_seconds / 3600);
-                    let minutes = Math.floor((r.total_seconds % 3600) / 60);
-                    let working_hours = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
-                    let daily_wage = 50; // replace later from contract
-                    let total = r.days.size * daily_wage;
-                    totalTotal+=total;
-                    let deduction_percentage = frm.doc.deduction_percentage || 0;
-                    let deduction = total * (deduction_percentage / 100);
-                    totalDeductions+=deduction;
-                    let net = total - deduction;
-                    totalNet+=net;
-                    return {
-                        worker: r.worker,
-                        worker_name: r.worker_name,
-                        days: r.days.size,
-                        working_hours: working_hours,
-                        daily_wage: daily_wage,
-                        total: Number(total.toFixed(2)),
-                        deduction: deduction,
-                        net: Number(net.toFixed(2))
-                    };
-                });
-                
-                renderTable(frm,payroll);
-                frm.set_value("workers", payroll.length);
-                let hours = Math.floor(totalSeconds / 3600);
-                let minutes = Math.floor((totalSeconds % 3600) / 60);
-                let working_hours = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
-                frm.set_value("total_seconds", totalSeconds);
-                frm.set_value("hours", working_hours);
-                frm.set_value("total", totalTotal);
-                frm.set_value("net", totalNet);
-                frm.set_value("total_deductions", totalDeductions);
-            }
-            
-        }
-
-    });
-    
+			frm.set_value("workers", response.workers);
+			frm.set_value("total_seconds", response.total_seconds);
+			frm.set_value("hours", response.hours);
+			frm.set_value("total", response.total);
+			frm.set_value("net", response.net);
+			frm.set_value("total_deductions", response.total_deductions);
+		}
+	});
 }
 
 function renderTable(frm,data) {
     let wrapper = $(frm.fields_dict.table.wrapper);
     wrapper.empty();
     
-    let tableContainer = $(`<div class="table_container"></div>`);
+    
     tableContainer.appendTo(wrapper);
 
     new CustomTable({
@@ -124,7 +76,7 @@ function renderTable(frm,data) {
             {id: "worker_name", name: "العامل"},
             {id: "days", name: "الأيام"},
             {id: "working_hours", name: "الساعات"},
-            {id: "daily_wage", name: "الأجر اليومي"},
+            // {id: "daily_wage", name: "الأجر اليومي"},
             {id: "total", name: "الأجمالي"},
             {id: "deduction", name: "الخصم"},
             {id: "net", name: "الصافي"},

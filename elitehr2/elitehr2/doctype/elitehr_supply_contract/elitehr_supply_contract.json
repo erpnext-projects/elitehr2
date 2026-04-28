@@ -92,7 +92,8 @@
   {
    "fieldname": "hourly_price",
    "fieldtype": "Float",
-   "label": "\u0627\u0644\u0627\u062c\u0631 \u0628\u0627\u0644\u0633\u0627\u0639\u0629"
+   "label": "\u0627\u0644\u0627\u062c\u0631 \u0628\u0627\u0644\u0633\u0627\u0639\u0629",
+   "precision": "2"
   },
   {
    "fieldname": "section_break_pova",
@@ -140,7 +141,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-04-28 17:55:51.086420",
+ "modified": "2026-04-28 18:45:03.502805",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Supply Contract",

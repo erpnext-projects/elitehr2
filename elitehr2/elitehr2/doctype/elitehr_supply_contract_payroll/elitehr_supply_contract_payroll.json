@@ -11,6 +11,7 @@
   "deduction_percentage",
   "column_break_nlek",
   "status",
+  "hourly_wage",
   "notes",
   "section_break_pjcv",
   "workers",
@@ -136,12 +137,20 @@
    "label": "The Contract",
    "options": "Elitehr Supply Contract",
    "reqd": 1
+  },
+  {
+   "fetch_from": "the_contract.hourly_price",
+   "fieldname": "hourly_wage",
+   "fieldtype": "Float",
+   "label": "Hourly wage",
+   "precision": "2",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-04-21 09:04:05.787376",
+ "modified": "2026-04-28 18:45:31.594893",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Supply Contract Payroll",
