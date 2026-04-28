@@ -596,7 +596,7 @@ function openPayslipModal(row) {
 	let minutes = Math.floor((totalSeconds % 3600) / 60);
 	let working_hours = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
 
-	$wrapper.find("#present-days").text(`${row.attedndace.filter(a => a.status_code in ["Present","Late"]).length} يوم`);
+	$wrapper.find("#present-days").text(`${row.attedndace.filter(a => ["Present", "Late","Early Out"].includes(a.status_code) ).length} يوم`);
 	$wrapper.find("#total_working_hours").text(`${working_hours} ساعة`);
 	$wrapper.find("#late_days").text(`${row.attedndace.filter(a => a.status_code == "Late").length} يوم`);
 	$wrapper.find("#absent_days").text(`${row.attedndace.filter(a => a.status_code == "Absent").length} يوم`);
