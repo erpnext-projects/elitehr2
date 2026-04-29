@@ -20,15 +20,44 @@ $( document ).ajaxSuccess(function(){
         }
     }
 
+    frappe.router.on("change", () => {
+        const preferredSidebar = localStorage.getItem("preferred_sidebar");
+
+        if (preferredSidebar){
+            const url = new URL(window.location.href);
+            if (url.searchParams.has("sidebar")) {
+                console.log("has sidebr");
+                return
+            };    
+            url.searchParams.set("sidebar", "Hr Pro");
+            window.location.href = url.toString();
+        }else{
+            console.log("not preferred_sidebar");
+            
+        }
+
+    });
+
+
+     document.querySelectorAll(".sidebar-item-container.section-item").forEach(
+        e => {            
+            if(!e.querySelector(".active-sidebar") && e.querySelector("button.drop-icon[data-state='opened']")){
+                e.querySelector("button.drop-icon[data-state='opened']").click()
+            }
+        }
+    )
 
     
 
+
 });
+
+
 
 frappe.router.on('change', () => {
     let route = frappe.get_route();
     // console.log(route);
-    if (frappe.get_route()[0] === "List" && frappe.get_route()[1] === "User") {
+    // if (frappe.get_route()[0] === "List" && frappe.get_route()[1] === "User") {
         // let urlParams = new URLSearchParams(window.location.search);
         // console.log(urlParams);
         // if (urlParams.get('sidebar') !== 'Hr Pro') {
@@ -36,7 +65,11 @@ frappe.router.on('change', () => {
         //     let newUrl = window.location.pathname + '?' + urlParams.toString() + window.location.hash;
         //     window.location.replace(newUrl);
         // }
-    }
+    // }
+
+
+
+
 });
 
 // frappe.ui.form.on('Dashboard', {
@@ -62,6 +95,8 @@ $(document).ready(function() {
             e.style.top = start + "px";
             start += 52;
     }) 
+
+
 })
 
 
