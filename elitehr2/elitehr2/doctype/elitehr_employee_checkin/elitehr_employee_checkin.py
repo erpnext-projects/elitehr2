@@ -319,6 +319,9 @@ def get_employee_attendance_handler(employee=None,from_date=None,to_date=None):
     if to_date is None:
         to_date = from_date
 
+    from_date = getdate(from_date)
+    to_date = getdate(to_date)
+
     targetEmployees = []
     if employee is None:
         employees = frappe.get_all(
@@ -339,6 +342,7 @@ def get_employee_attendance_handler(employee=None,from_date=None,to_date=None):
         indexDate = from_date
         while indexDate <= to_date:
             weekday = getdate(indexDate).strftime("%A")  # Saturday, Sunday...
+            # return weekday
             if weekday not in working_days:
                 result.append({
                     "employee": emp.name,
