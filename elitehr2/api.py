@@ -2,8 +2,9 @@ import frappe
 from frappe import _
 from frappe.auth import LoginManager
 from frappe.utils import getdate,nowdate
+from datetime import datetime
 from elitehr2.elitehr2.report.employee_leaves_balances.employee_leaves_balances import get_leave_summary 
-
+from  elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin import get_employee_attendance_handler
 
 @frappe.whitelist(allow_guest=True)
 def login(username, password):
@@ -288,3 +289,25 @@ def get_employee_leave_summary():
 
 		})
 	return final_result
+
+
+
+@frappe.whitelist()
+def get_employee_attendance_by_date(date):
+	user = frappe.session.user
+
+	employee = frappe.db.get_value(
+		"Elitehr Employee",
+		{"login_data": user},
+		["name", "employee_name"],
+		as_dict=True
+	)
+
+	if not employee:
+		frappe.throw(_("No employee linked to this user"))
+
+	from_date = datetime.strptime(str(date), "%d-%m-%Y").date()
+	
+	res = get_employee_attendance_handler(employee=employee.name,from_date=getdate(from_date))
+	# from_date
+	return res
