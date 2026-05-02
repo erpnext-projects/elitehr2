@@ -350,7 +350,7 @@ def get_employee_attendance_handler(employee=None,from_date=None,to_date=None):
                     "date": indexDate,
                     "check_in": "",
                     "check_out": "",
-                    "status": "",
+                    "status": _("Weekend"),
                     "status_code": "Weekend",
                     "working_hours": 0,
                     "working_seconds": 0,

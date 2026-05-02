@@ -27,7 +27,8 @@ def login(username, password):
 	return {
 		"access_token": access_token,
 		"user": user.name,
-		"full_name": user.full_name
+		"full_name": user.full_name,
+		
 	}
 
 
