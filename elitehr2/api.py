@@ -28,7 +28,7 @@ def login(username, password):
 		"access_token": access_token,
 		"user": user.name,
 		"full_name": user.full_name,
-		
+		"role": user.custom_assign_role
 	}
 
 
