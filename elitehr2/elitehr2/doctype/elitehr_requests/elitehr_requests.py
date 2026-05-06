@@ -80,8 +80,8 @@ class ElitehrRequests(Document):
         # Check if all levels have been approved
         frappe.log(f"self.levels[0].status: {self.levels[0].status}")
         if self.levels and all(l.status is not None for l in self.levels):
-            # self.status = "Completed"
             self.status = self.levels[-1].status
+            self.status = "Completed"
 
 
 @frappe.whitelist()
