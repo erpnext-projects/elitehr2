@@ -334,8 +334,8 @@
    "indent": 0,
    "keep_closed": 0,
    "label": "Leaves Requests",
-   "link_to": "Elitehr Leaves",
-   "link_type": "DocType",
+   "link_to": "leaves-requests",
+   "link_type": "Page",
    "show_arrow": 0,
    "type": "Link"
   },
@@ -370,8 +370,8 @@
    "indent": 0,
    "keep_closed": 0,
    "label": "Employee Leaves balances",
-   "link_to": "Employee Leaves balances",
-   "link_type": "Report",
+   "link_to": "employee-leaves-balances",
+   "link_type": "Page",
    "show_arrow": 0,
    "type": "Link"
   },
@@ -615,7 +615,7 @@
    "url": "/desk/user?sidebar=Hr Pro"
   }
  ],
- "modified": "2026-04-26 20:40:21.926822",
+ "modified": "2026-05-06 14:43:21.458939",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Hr Pro",
