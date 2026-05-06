@@ -15,11 +15,11 @@ class ElitehrEmployee(Document):
 
 
     # used
-    def onload(self):
-        for l in self.table_leaves:
-            res = leaveUsed(self.name, l.leave, l.days)
-            l.used = res['used_days']
-            l.precent = res['percentage']
+    # def onload(self):
+    #     for l in self.table_leaves:
+    #         res = leaveUsed(self.name, l.leave, l.days)
+    #         l.used = res['used_days']
+    #         l.precent = res['percentage']
 
     def before_insert(self):
         self.set("table_leaves", [])
@@ -45,14 +45,14 @@ class ElitehrEmployee(Document):
 
     
 
-def leaveUsed(employee, leave, daysAllowed=0):
-    requests = frappe.get_all("Elitehr Leaves", filters={"employee": employee,"type": leave,"status":"مكتمل"}, fields=["type","name", "days","status"])
-    used_days = sum(int(r.days) for r in requests)
-    percentage = (used_days / int(daysAllowed)) * 100 if daysAllowed else 0
-    return {
-        "used_days": used_days,
-        "percentage": percentage
-    }
+# def leaveUsed(employee, leave, daysAllowed=0):
+#     requests = frappe.get_all("Elitehr Requests", filters={"employee": employee,"leave_type": leave,"status":"Completed"}, fields=["type","name", "total_days","status"])
+#     used_days = sum(int(r.total_days) for r in requests)
+#     percentage = (used_days / int(daysAllowed)) * 100 if daysAllowed else 0
+#     return {
+#         "used_days": used_days,
+#         "percentage": percentage
+#     }
 
 
 @frappe.whitelist()
