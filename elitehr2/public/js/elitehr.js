@@ -20,23 +20,23 @@ $( document ).ajaxSuccess(function(){
         }
     }
 
-    frappe.router.on("change", () => {
-        const preferredSidebar = localStorage.getItem("preferred_sidebar");
+    // frappe.router.on("change", () => {
+    //     const preferredSidebar = localStorage.getItem("preferred_sidebar");
 
-        if (preferredSidebar){
-            const url = new URL(window.location.href);
-            if (url.searchParams.has("sidebar")) {
-                console.log("has sidebr");
-                return
-            };    
-            url.searchParams.set("sidebar", "Hr Pro");
-            window.location.href = url.toString();
-        }else{
-            console.log("not preferred_sidebar");
+    //     if (preferredSidebar){
+    //         const url = new URL(window.location.href);
+    //         if (url.searchParams.has("sidebar")) {
+    //             console.log("has sidebr");
+    //             return
+    //         };    
+    //         url.searchParams.set("sidebar", "Hr Pro");
+    //         window.location.href = url.toString();
+    //     }else{
+    //         console.log("not preferred_sidebar");
             
-        }
+    //     }
 
-    });
+    // });
 
 
      document.querySelectorAll(".sidebar-item-container.section-item").forEach(
