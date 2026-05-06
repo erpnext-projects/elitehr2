@@ -32,7 +32,7 @@
   "fields": "[\"due_date\", \"priority\"]",
   "filters": null,
   "kanban_board_name": "Tasks View",
-  "modified": "2026-04-10 22:53:15.748292",
+  "modified": "2026-04-29 09:51:45.680888",
   "name": "Tasks View",
   "private": 0,
   "reference_doctype": "Elitehr Tasks",
