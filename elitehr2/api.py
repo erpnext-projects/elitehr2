@@ -12,16 +12,22 @@ def login(username, password):
 	login_manager = LoginManager()
 	login_manager.authenticate(username, password)
 	login_manager.post_login()
+	
 
 	user = frappe.get_doc("User", frappe.session.user)
 
 	# Always refresh api_key and api_secret on login
-	user.api_key = frappe.generate_hash(length=15)
-	user.api_secret = frappe.generate_hash(length=15)
+	# user.api_key = frappe.generate_hash(length=15)
+	# user.api_secret = frappe.generate_hash(length=15)
+	# user.save(ignore_permissions=True)
+	# api_secret = user.get_password("api_secret")
+
+	if not user.api_key:
+		user.api_key = frappe.generate_hash(length=15)
+		user.save(ignore_permissions=True)
+	api_secret = frappe.generate_hash(length=15)
+	user.api_secret = api_secret
 	user.save(ignore_permissions=True)
-
-	api_secret = user.get_password("api_secret")
-
 	access_token = f"{user.api_key}:{api_secret}"
 
 	return {
@@ -53,6 +59,7 @@ def logout():
 # used in app
 @frappe.whitelist()
 def get_leave_request_types():
+	user = frappe.session.user
 	data = frappe.get_all(
 		"Elitehr Requests Types",
 		filters={
@@ -312,3 +319,37 @@ def get_employee_attendance_by_date(date):
 	res = get_employee_attendance_handler(employee=employee.name,from_date=getdate(from_date))
 	# from_date
 	return res
+
+
+@frappe.whitelist()
+def get_leave_summary():
+
+	data = []
+	employees = frappe.get_all("Elitehr Employee", pluck="name")
+
+	for emp_name in employees or []:
+		emp = frappe.get_doc("Elitehr Employee", emp_name)
+
+		for l in emp.table_leaves:
+			used_days = frappe.db.sql("""
+				SELECT SUM(total_days)
+				FROM `tabElitehr Requests`
+				WHERE employee=%s
+				AND leave_type=%s
+				AND status="Completed"
+				
+			""", (emp.name, l.leave))[0][0] or 0
+
+			total_days = float(l.days or 0)
+			percentage = (used_days / total_days * 100) if total_days else 0
+
+			data.append({
+				"employee": emp.name,
+				"employee_name": emp.employee_name,
+				"leave_name": l.leave_name or l.leave,
+				"days": l.days,
+				"used_days": used_days,
+				"percentage": round(percentage, 1),
+			})
+
+	return data
