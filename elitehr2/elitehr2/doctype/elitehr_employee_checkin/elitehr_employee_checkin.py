@@ -265,7 +265,6 @@ def get_monthly_attendance_matrix(from_date=None, to_date=None):
         from_date=from_date,
         to_date=to_date
     ) or []
-
     result = {}
     for row in rows:
         emp = row.get("employee")
@@ -347,6 +346,9 @@ def get_employee_attendance_handler(employee=None,from_date=None,to_date=None):
                 result.append({
                     "employee": emp.name,
                     "employee_name": emp.employee_name,
+                    "department": emp.department,
+                    "department_name": emp.department_name,
+                    "job_title": emp.job_title,
                     "date": indexDate,
                     "check_in": "",
                     "check_out": "",
