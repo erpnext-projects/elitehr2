@@ -48,7 +48,7 @@ frappe.pages['employee-leaves-balances'].on_page_load = function(wrapper) {
 
 function loadData() {
 	frappe.call({
-		method: "elitehr2.api.get_leave_summary",
+		method: "elitehr2.api.get_employees_leave_summary",
 		callback: function(r) {
 			const data = r.message || [];
 			AllData = data;

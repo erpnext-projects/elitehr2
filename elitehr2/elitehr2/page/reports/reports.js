@@ -648,7 +648,7 @@ function renderAttendanceOverview(container) {
 			// console.log(data);
 			const resultByDepartment = {};
 			data.forEach(item => {
-				const dept = item.department || "Unknown";
+				const dept = item.department_name || "Unknown";
 				resultByDepartment[dept] = (resultByDepartment[dept] || 0) + 1;
 			});
 			const labels = Object.keys(resultByDepartment);

@@ -3,7 +3,7 @@ from frappe import _
 from frappe.auth import LoginManager
 from frappe.utils import getdate,nowdate
 from datetime import datetime
-from elitehr2.elitehr2.report.employee_leaves_balances.employee_leaves_balances import get_leave_summary 
+# from elitehr2.elitehr2.report.employee_leaves_balances.employee_leaves_balances import get_leave_summary 
 from  elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin import get_employee_attendance_handler
 
 @frappe.whitelist(allow_guest=True)
@@ -60,22 +60,27 @@ def logout():
 @frappe.whitelist()
 def get_leave_request_types():
 	user = frappe.session.user
-	data = frappe.get_all(
-		"Elitehr Requests Types",
+
+	employee = frappe.db.get_value(
+		"Elitehr Employee",
+		{"login_data": user},
+		["name", "employee_name"],
+		as_dict=True
+	)
+	if not employee:
+		frappe.throw(_("No employee linked to this user"))
+
+	leaves = frappe.get_all(
+		"Elitehr Employee Leaves Child Table",
 		filters={
-			"docstatus": "1",
-			"category": "أجازة"
+			"parent": employee.name
 		},
-		fields=[
-			"name",
-			"arabic_type_name"
-		],
-		order_by="name asc"
+		fields=["leave", "leave_name", "days"]
 	)
 
 	return {
 		"status": "success",
-		"data": data
+		"data": leaves
 	}
 
 
@@ -102,7 +107,7 @@ def create_leave_request(request_type, subject,start_date, end_date, details):
 		frappe.throw(_("Request type is required"))
 	
 	request_type_exists = frappe.db.exists(
-		"Elitehr Requests Types",
+		"Elitehr Leave Policies",
 		{
 			"name": request_type,
 		}
@@ -150,7 +155,8 @@ def create_leave_request(request_type, subject,start_date, end_date, details):
 
 	doc = frappe.new_doc("Elitehr Requests")
 	doc.status = "New"
-	doc.type = request_type
+	doc.type="LEAVE"
+	doc.leave_type = request_type
 	doc.employee = employee.name
 	doc.start_date = start_date
 	doc.end_date = end_date
@@ -188,6 +194,8 @@ def get_employee_leave_requests():
 			"name",
 			"type",
 			"request_type_name",
+			"leave_type",
+			"leave_type_name",
 			"start_date",
 			"end_date",
 			"total_days",
@@ -206,6 +214,8 @@ def get_employee_leave_requests():
 			"id": row.name,
 			"type": row.type,
 			"type_name": row.request_type_name,
+			"leave_type": row.leave_type,
+			"leave_type_name": row.leave_type_name,
 			"start_date": row.start_date,
 			"end_date": row.end_date,
 			"total_days": row.total_days,
@@ -284,48 +294,17 @@ def get_employee_leave_summary():
 	if not employee:
 		frappe.throw(_("No employee linked to this user"))
 	
-	final_result = []
-	for i in get_leave_summary([employee]):
-		# emploayee, emploayee_name,  leave_name, days, used_days , percentage
-		final_result.append({
-			"employee": i[0],	
-			"employee_name": i[1],
-			"leave_name": i[2],
-			"days": i[3],
-			"used_days" : i[4],
-			"percentage" : i[5],
-
-		})
-	return final_result
+	return get_employees_leave_summary(employees=[employee.name])
 
 
 
 @frappe.whitelist()
-def get_employee_attendance_by_date(date):
-	user = frappe.session.user
-
-	employee = frappe.db.get_value(
-		"Elitehr Employee",
-		{"login_data": user},
-		["name", "employee_name"],
-		as_dict=True
-	)
-
-	if not employee:
-		frappe.throw(_("No employee linked to this user"))
-
-	from_date = datetime.strptime(str(date), "%d-%m-%Y").date()
-	
-	res = get_employee_attendance_handler(employee=employee.name,from_date=getdate(from_date))
-	# from_date
-	return res
-
-
-@frappe.whitelist()
-def get_leave_summary():
+def get_employees_leave_summary(employees=None):
 
 	data = []
-	employees = frappe.get_all("Elitehr Employee", pluck="name")
+
+	if not employees:
+		employees = frappe.get_all("Elitehr Employee", pluck="name")
 
 	for emp_name in employees or []:
 		emp = frappe.get_doc("Elitehr Employee", emp_name)
@@ -353,3 +332,25 @@ def get_leave_summary():
 			})
 
 	return data
+
+
+@frappe.whitelist()
+def get_employee_attendance_by_date(date):
+	user = frappe.session.user
+
+	employee = frappe.db.get_value(
+		"Elitehr Employee",
+		{"login_data": user},
+		["name", "employee_name"],
+		as_dict=True
+	)
+
+	if not employee:
+		frappe.throw(_("No employee linked to this user"))
+
+	from_date = datetime.strptime(str(date), "%d-%m-%Y").date()
+	
+	res = get_employee_attendance_handler(employee=employee.name,from_date=getdate(from_date))
+	# from_date
+	return res
+
