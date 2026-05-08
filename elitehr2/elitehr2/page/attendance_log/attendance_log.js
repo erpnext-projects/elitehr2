@@ -4,7 +4,7 @@ let selectedDate = frappe.datetime.get_today();
 const wrapperContent = $('<div dir="rtl" class="custom-page"></div>');
 let cardRow = $('<div class="cardContainers"></div>');
 let tableContainer = $('<div class="requests-table" dir="rtl"></div>');
-let filterDate = $(`<div class="myFiltersContainer"></div>`);
+// let filterDate = $(`<div class="myFiltersContainer"></div>`);
 
 frappe.pages['attendance-log'].on_page_load = function (wrapper) {
 	var page = frappe.ui.make_app_page({
@@ -28,19 +28,30 @@ frappe.pages['attendance-log'].on_page_load = function (wrapper) {
 	$(`<span>${__("Monitoring employee attendance and departure records")}</span><br>`).appendTo(wrapperContent);
 
 	cardRow.appendTo(wrapperContent);
-	filterDate.appendTo(wrapperContent);
+	// filterDate.appendTo(wrapperContent);
 	tableContainer.appendTo(wrapperContent);
 
 
-	filterDate.html(`
-			<label>التاريخ:</label>
-			<input type="date" id="attendance-date" class="form-control" style="max-width: 250px;">
-	`)
-	$('#attendance-date').val(selectedDate);
-	$('#attendance-date').on('change', function () {
-		selectedDate = $(this).val();
-		loadStatistics(selectedDate);
-	});
+	// filterDate.html(`
+	// 		<label>التاريخ:</label>
+	// 		<input type="date" id="attendance-date" class="form-control" style="max-width: 250px;">
+	// `)
+	// $('#attendance-date').val(selectedDate);
+	// $('#attendance-date').on('change', function () {
+	// 	selectedDate = $(this).val();
+	// 	loadStatistics(selectedDate);
+	// });
+	page.add_field({
+		fieldtype: 'Date',
+		label: __('التاريخ'),
+		fieldname: 'attendance_date',
+		default: selectedDate,
+		reqd: 1,
+		onchange: function (e) {
+			selectedDate = e.target.value;
+			loadStatistics(selectedDate);
+		}
+	})
 
 	// Load data
 	loadStatistics(selectedDate);
@@ -85,9 +96,12 @@ function loadStatistics(selectedDate) {
 		callback: function (r) {
 			const requests = r.message || [];
 
-			const presentCount = requests.filter(r => r.check_in && r.check_in !== "").length;
-			const absentCount = requests.filter(r => !r.check_in || r.check_in === "").length;
-			const lateCount = requests.filter(r => r.check_in && r.late_minutes > 0).length;
+			const presentCount = requests.filter(r => r.status_code == "Present" || r.status_code == "Late" || r.status_code == "Early Out").length;
+			const absentCount = requests.filter(r => r.status_code == "Absent").length;
+			const lateCount = requests.filter(r => r.status_code == "Late").length;
+			const leaveCount = requests.filter(r => r.status_code == "Leave" || r.status_code == "Weekend").length;
+			console.log("attendance_log/loadStatistics/requests", requests);
+			
 
 			// Cards
 			cardRow.html(`
@@ -105,7 +119,7 @@ function loadStatistics(selectedDate) {
                     </div>
 					<div class="card">
                         <div class="card-title">في أجازة</div>
-                        <div class="card-value">0</div>
+                        <div class="card-value">${leaveCount}</div>
                     </div>
                 `);
 
