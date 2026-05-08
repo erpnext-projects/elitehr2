@@ -342,6 +342,7 @@ def get_employee_attendance_handler(employee=None,from_date=None,to_date=None):
         while indexDate <= to_date:
             weekday = getdate(indexDate).strftime("%A")  # Saturday, Sunday...
             # return weekday
+            # check is weekend
             if weekday not in working_days:
                 result.append({
                     "employee": emp.name,
@@ -362,6 +363,29 @@ def get_employee_attendance_handler(employee=None,from_date=None,to_date=None):
                 indexDate = add_days(indexDate, 1)
                 continue
 
+            # check leave request (holiday)
+            if check_employee_leave(emp.name, indexDate):
+                result.append({
+                    "employee": emp.name,
+                    "employee_name": emp.employee_name,
+                    "department": emp.department,
+                    "department_name": emp.department_name,
+                    "job_title": emp.job_title,
+                    "date": indexDate,
+                    "check_in": "",
+                    "check_out": "",
+                    "status": _("Leave"),
+                    "status_code": "Leave",
+                    "working_hours": 0,
+                    "working_seconds": 0,
+                    "late_minutes": 0,
+                    "status_color": ""
+                })
+                indexDate = add_days(indexDate, 1)
+                continue
+
+             # get attendance
+
             day_result = get_employee_attendance(date=indexDate, employee=emp.name)
             if day_result:
                 day_result["department"] = emp.department
@@ -373,6 +397,20 @@ def get_employee_attendance_handler(employee=None,from_date=None,to_date=None):
     # frappe.log(f"get_employee_attendance_handler/ results: {result}")
     return result
 
+
+def check_employee_leave(employee, date):
+
+    leave = frappe.db.exists(
+        "Elitehr Requests",
+        {
+            "employee": employee,
+            "status": "Completed",
+            "start_date": ["<=", date],
+            "end_date": [">=", date]
+        }
+    )
+
+    return leave
 
 def get_employee_attendance(employee, date):
 

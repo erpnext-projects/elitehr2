@@ -348,9 +348,9 @@ def get_employee_attendance_by_date(date):
 	if not employee:
 		frappe.throw(_("No employee linked to this user"))
 
-	from_date = datetime.strptime(str(date), "%d-%m-%Y").date()
+	# from_date = datetime.strptime(str(date), "%d-%m-%Y").date()
 	
-	res = get_employee_attendance_handler(employee=employee.name,from_date=getdate(from_date))
+	res = get_employee_attendance_handler(employee=employee.name,from_date=getdate(date))
 	# from_date
 	return res
 

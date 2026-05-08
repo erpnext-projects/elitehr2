@@ -40,13 +40,13 @@ const attendanceStatusConfig = {
 		icon: "◔"
 	},
 	Weekend: {
-		label: "عطلة",
+		label: "أجازة اسبوعية",
 		bg: "#94a3b8",
 		color: "#fff",
 		icon: ""
 	},
 	Holiday: {
-		label: "عطلة رسمية",
+		label: "أجازة",
 		bg: "#d8b4fe",
 		color: "#fff",
 		icon: ""
@@ -210,8 +210,12 @@ function renderTableData(data) {
 						return getAttendanceBox('Present')
 					} else if (dayData.status_code == "Early Out") {
 						return getAttendanceBox('Early Out')
-					}else{
-						console.log(e.days[day].day_name);
+					}else if (dayData.status_code == "Leave") {
+						return getAttendanceBox('Leave')
+					}
+					else{
+						console.error("monthly_attendance_report/status_code is not found",dayData);
+						return "";
 					}
 
 				}
