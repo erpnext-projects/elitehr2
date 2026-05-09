@@ -6,6 +6,9 @@ let cardRow = $('<div class="cardContainers"></div>');
 let tableContainer = $('<div class="requests-table" dir="rtl"></div>');
 // let filterDate = $(`<div class="myFiltersContainer"></div>`);
 
+let manualBtn;
+let deviceBtn;
+
 frappe.pages['attendance-log'].on_page_load = function (wrapper) {
 	var page = frappe.ui.make_app_page({
 		parent: wrapper,
@@ -57,18 +60,36 @@ frappe.pages['attendance-log'].on_page_load = function (wrapper) {
 	loadStatistics(selectedDate);
 
 
-	page.add_inner_button(__("تسجيل حضور يدوي"), function () {
-		manualAttendanceRegistration()
+	
+	manualBtn = page.add_inner_button(__("تسجيل حضور يدوي"), function () {
+		manualAttendanceRegistration();
 	});
-	page.add_inner_button(__("جهاز تسجيل الحضور"), function () {
-		showAttendanceModal(cardRow,tableContainer);
+
+	deviceBtn = page.add_inner_button(__("جهاز تسجيل الحضور"), function () {
+		showAttendanceModal(cardRow, tableContainer);
 	});
+
 	page.add_inner_button(__("Update"), function () {
 		loadStatistics(selectedDate);
 	});
 
+	toggleAttendanceButtons();
 
 
+}
+
+
+function toggleAttendanceButtons() {
+
+	const isToday = selectedDate === frappe.datetime.get_today();
+
+	if (isToday) {
+		$(manualBtn).show();
+		$(deviceBtn).show();
+	} else {
+		$(manualBtn).hide();
+		$(deviceBtn).hide();
+	}
 }
 
 function manualAttendanceRegistration() {
@@ -124,6 +145,7 @@ function loadStatistics(selectedDate) {
                 `);
 
 			renderTable(requests,selectedDate);
+			toggleAttendanceButtons();
 		}
 	});
 }
