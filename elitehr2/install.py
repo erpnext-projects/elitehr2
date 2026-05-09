@@ -89,7 +89,7 @@ def create_admin_user():
             "Elitehr Shift Schedule",
             "Elitehr Shifts Days",
             "Elitehr Attendance Correction Request",
-            "Elitehr Leaves",
+            # "Elitehr Leaves",
             "Elitehr Employment",
             "Eliteht Employee Contracts",
             "Elitehr Leave Policies",
