@@ -308,7 +308,7 @@ def get_monthly_attendance_matrix(from_date=None, to_date=None):
     return list(result.values())
 
 
-# الدالة الاساسية
+# دالة الاساسية
 @frappe.whitelist()
 def get_employee_attendance_handler(employee=None,from_date=None,to_date=None):
     
@@ -499,6 +499,8 @@ def get_employee_attendance(employee, date):
         "status_color": status_color
     }
 
+
+# دالة الاساسية
 @frappe.whitelist()
 def set_attendance(logType,employee, date = today()):
     date = today()
@@ -536,15 +538,8 @@ def set_attendance_by_employee_id(employee_id):
     if len(employees) > 1:
         frappe.throw(_("خطأ: يوجد أكثر من موظف مسجل بنفس الرقم ({0})، يرجى مراجعة شؤون الموظفين").format(employee_id))
 
-    new_log = frappe.get_doc({
-        "doctype": "Elitehr Employee Checkin",
-        "employee": employees[0].name,
-        "log_type": "Check In",
-        "date": getdate(),
-        "time": now_datetime().strftime("%H:%M:%S"), 
-    })
-    new_log.insert()
-    frappe.db.commit()
+    set_attendance("Check In",employees[0].name, date = today())
+
     return True
 
 
@@ -559,12 +554,5 @@ def loggedin_manual_attendance():
     if not employee:
         frappe.throw(_("بيانات الدخول غير مرتبطة بأي موظف"))
 
-    doc = frappe.get_doc({
-        "doctype": "Elitehr Employee Checkin",
-        "employee": employee,
-        "log_type": "Check In",
-        "date": getdate(),
-        "time": now_datetime().strftime("%H:%M:%S"), 
-    })
-    doc.insert()
+    set_attendance("Check In",employee, date = today())
     return True
