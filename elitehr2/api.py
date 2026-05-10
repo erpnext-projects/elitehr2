@@ -408,7 +408,7 @@ def get_mobile_home_statistics():
 	return final_result
 	
 
-def get_employee_logged_in():
+def get_employee_logged_in(): 
 	user = frappe.session.user
 
 	employee = frappe.db.get_value(
