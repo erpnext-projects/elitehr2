@@ -349,7 +349,7 @@ def get_employee_attendance_by_date(date):
 @frappe.whitelist()
 def get_employee_tasks():
 	emp = get_employee_logged_in()
-	# frappe.local.lang = "ar"
+	frappe.local.lang = "en"
 	tasks = frappe.get_all(
 		"Elitehr Tasks",
 		filters={ "responsable": emp.name },
