@@ -1,10 +1,11 @@
 import frappe
 from frappe import _
 from frappe.auth import LoginManager
-from frappe.utils import getdate,nowdate
+from frappe.utils import getdate,nowdate,today,get_first_day
 from datetime import datetime
 # from elitehr2.elitehr2.report.employee_leaves_balances.employee_leaves_balances import get_leave_summary 
 from  elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin import get_employee_attendance_handler
+
 
 @frappe.whitelist(allow_guest=True)
 def login(username, password):
@@ -336,6 +337,78 @@ def get_employees_leave_summary(employees=None):
 
 @frappe.whitelist()
 def get_employee_attendance_by_date(date):
+	emp = get_employee_logged_in()
+	# from_date = datetime.strptime(str(date), "%d-%m-%Y").date()
+	
+	res = get_employee_attendance_handler(employee=emp.name,from_date=getdate(date))
+	# from_date
+	return res
+
+
+
+@frappe.whitelist()
+def get_employee_tasks():
+	emp = get_employee_logged_in()
+	# frappe.local.lang = "ar"
+	tasks = frappe.get_all(
+		"Elitehr Tasks",
+		filters={ "responsable": emp.name },
+		fields=["name", "task_title", "task_description", "priority", "due_date","status"]
+	)
+
+	return [
+		{
+			"name": task.name,
+			"title": task.task_title,
+			"description": task.task_description,
+			"priority": _(task.priority),
+			"due_date": task.due_date,
+			"status": _(task.status)
+		}
+		for task in tasks
+	]
+
+@frappe.whitelist()
+def get_mobile_home_statistics():
+	emp = get_employee_logged_in()
+
+	final_result = {
+		"attendance_dayes": 0,
+		"leaves_balance": 0,
+		"pending_requests": 0,
+		"current_month_salary": 0
+	}
+	# attendance_dayes
+	# from start of month to today 
+	attendance = get_employee_attendance_handler(employee=emp.name, from_date=get_first_day(today()),to_date=today())
+	# filter by status
+	attendance = [a for a in attendance if a['status_code'] in ("Present", "Late", "Early Out")]
+	attendance_dayes = len(attendance)
+	final_result["attendance_dayes"] = attendance_dayes
+
+	# leaves
+	leaves = get_employee_leave_summary()
+	leaves_balance = sum( int(leave['days'])  - int(leave['used_days'])  for leave in leaves)
+	final_result["leaves_balance"] = leaves_balance
+
+	# pending requests by status not Completed
+	pending_requests = frappe.db.count("Elitehr Requests", filters={"employee": emp.name, "status": ["!=", "Completed"]})
+	
+	final_result["pending_requests"] = pending_requests
+
+	# salary of current month
+	current_month_salary = frappe.db.get_value("Elitehr Payroll", 
+		filters={
+			"employee": emp.name,
+			"creation": ["between", (get_first_day(today()), today())]
+			},
+		fieldname="net_salary") or 0
+	final_result["current_month_salary"] = current_month_salary
+
+	return final_result
+	
+
+def get_employee_logged_in():
 	user = frappe.session.user
 
 	employee = frappe.db.get_value(
@@ -347,10 +420,4 @@ def get_employee_attendance_by_date(date):
 
 	if not employee:
 		frappe.throw(_("No employee linked to this user"))
-
-	# from_date = datetime.strptime(str(date), "%d-%m-%Y").date()
-	
-	res = get_employee_attendance_handler(employee=employee.name,from_date=getdate(date))
-	# from_date
-	return res
-
+	return employee
