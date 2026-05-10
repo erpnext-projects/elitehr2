@@ -400,7 +400,7 @@ def get_mobile_home_statistics():
 	current_month_salary = frappe.db.get_value("Elitehr Payroll", 
 		filters={
 			"employee": emp.name,
-			"creation": ["between", (get_first_day(today()), today())]
+			"date": ["between", (get_first_day(today()), today())]
 			},
 		fieldname="net_salary") or 0
 	final_result["current_month_salary"] = current_month_salary
