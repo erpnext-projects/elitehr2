@@ -118,7 +118,6 @@ def create_admin_user():
             "Elitehr Supply Contract Workers",
             "Elitehr Workers Check_in_out",
             "Elitehr Supply Contract Payroll",
-            "Elitehr Employee Authorized Device"
         ]
         for r in roles:
             allow_role_read_doctype(role_name,r)
