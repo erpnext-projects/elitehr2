@@ -523,7 +523,8 @@ def create_authorized_device_request(phone_id, phone_name, subject, details):
 	return {
 		"status": "success",
 		"message": _("Device authorization request created successfully"),
-		"request_id": doc.name
+		"request_id": doc.name,
+		"request_status": doc.status
 	}
 
 
