@@ -23,6 +23,10 @@
   "subject",
   "column_break_toye",
   "priority",
+  "section_break_kfct",
+  "device_name",
+  "column_break_ilyr",
+  "device_id",
   "section_break_yoof",
   "leave_type",
   "start_date",
@@ -508,12 +512,32 @@
    "fieldtype": "Read Only",
    "hidden": 1,
    "label": "Leave Type Name"
+  },
+  {
+   "fieldname": "section_break_kfct",
+   "fieldtype": "Section Break"
+  },
+  {
+   "depends_on": "eval: doc.request_type_code == \"ADD_AUTHORIZED_DEVICE\"",
+   "fieldname": "device_name",
+   "fieldtype": "Data",
+   "label": "Device Name"
+  },
+  {
+   "fieldname": "column_break_ilyr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval: doc.request_type_code == \"ADD_AUTHORIZED_DEVICE\"",
+   "fieldname": "device_id",
+   "fieldtype": "Data",
+   "label": "Device Id"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-05-08 14:30:26.260138",
+ "modified": "2026-05-13 10:14:55.038414",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Requests",
