@@ -96,7 +96,7 @@
    "indent": 0,
    "keep_closed": 0,
    "label": "Authorized Device",
-   "link_to": "Employee Authorized Device",
+   "link_to": "Elitehr Employee Authorized Device",
    "link_type": "DocType",
    "show_arrow": 0,
    "type": "Link"
@@ -627,7 +627,7 @@
    "url": "/desk/user?sidebar=Hr Pro"
   }
  ],
- "modified": "2026-05-13 09:44:55.936193",
+ "modified": "2026-05-13 10:00:43.858695",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Hr Pro",
