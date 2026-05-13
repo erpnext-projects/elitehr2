@@ -226,7 +226,10 @@ function renderTable(requests,selectedDate) {
 				args: {
 					logType: logType,
 					employee: employee_id,
-					date: selectedDate // التاريخ اللي أنت واقف عليه في الفلتر
+					latitude: "", 
+					Longitude: "", 
+					device_name: "",
+					device_id: ""
 				},
 				callback: function (r) {
 					if (!r.exc) {
