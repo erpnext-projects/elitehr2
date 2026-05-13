@@ -4,7 +4,7 @@ from frappe.auth import LoginManager
 from frappe.utils import getdate,nowdate,today,get_first_day
 from datetime import datetime
 # from elitehr2.elitehr2.report.employee_leaves_balances.employee_leaves_balances import get_leave_summary 
-from  elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin import get_employee_attendance_handler
+from  elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin import get_employee_attendance_handler,set_attendance
 
 
 @frappe.whitelist(allow_guest=True)
@@ -459,6 +459,32 @@ def get_mobile_home_statistics():
 
 	return final_result
 	
+
+
+@frappe.whitelist()
+def set_employee_attendance(attendace_type,lat,long,phone_name,phone_id):
+	emp = get_employee_logged_in()
+	now = datetime.now()
+	date = now.date()
+	time = now.time()
+
+	# check phone_id in employee Requests and its Completed
+	allowed_devices = frappe.db.exists("Elitehr Requests", {
+		"employee": emp.name,
+		"status": "Completed",
+		"device_id": phone_id
+	})
+
+	if not allowed_devices:
+		frappe.throw(_("Device not authorized for attendance"))
+
+	set_attendance(attendace_type,emp.name, lat, long, phone_name, phone_id)
+
+
+	return {"status": "success",}
+
+
+
 
 def get_employee_logged_in(): 
 	user = frappe.session.user

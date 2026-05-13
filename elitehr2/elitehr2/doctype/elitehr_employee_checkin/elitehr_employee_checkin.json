@@ -10,7 +10,13 @@
   "column_break_tpep",
   "employee_name",
   "date",
-  "time"
+  "time",
+  "section_break_sezo",
+  "latitude",
+  "device_id",
+  "column_break_pabu",
+  "longitude",
+  "device_name"
  ],
  "fields": [
   {
@@ -52,12 +58,45 @@
    "in_list_view": 1,
    "label": "Date",
    "reqd": 1
+  },
+  {
+   "fieldname": "section_break_sezo",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "device_id",
+   "fieldtype": "Data",
+   "label": "Device Id",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_pabu",
+   "fieldtype": "Column Break",
+   "read_only": 1
+  },
+  {
+   "fieldname": "latitude",
+   "fieldtype": "Data",
+   "label": "Latitude",
+   "read_only": 1
+  },
+  {
+   "fieldname": "longitude",
+   "fieldtype": "Data",
+   "label": "Longitude",
+   "read_only": 1
+  },
+  {
+   "fieldname": "device_name",
+   "fieldtype": "Data",
+   "label": "Device Name",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-29 12:51:42.189714",
+ "modified": "2026-05-13 11:09:01.183630",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Employee Checkin",

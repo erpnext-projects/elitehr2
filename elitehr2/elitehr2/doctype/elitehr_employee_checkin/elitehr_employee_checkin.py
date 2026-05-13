@@ -502,7 +502,7 @@ def get_employee_attendance(employee, date):
 
 # دالة الاساسية
 @frappe.whitelist()
-def set_attendance(logType,employee, date = today()):
+def set_attendance(logType,employee,latitude,Longitude,device_name,device_id):
     date = today()
     working_days = get_employee_working_days_and_time(employee)
     currentDay =   getdate(date).strftime("%A")
@@ -531,6 +531,10 @@ def set_attendance(logType,employee, date = today()):
         "log_type": logType,
         "date": date,
         "time": now_datetime().strftime("%H:%M:%S"), 
+        "latitude": latitude,
+        "longitude": Longitude,
+        "device_name": device_name,
+        "device_id": device_id
     })
     new_log.insert()
     frappe.db.commit()
@@ -549,7 +553,7 @@ def set_attendance_by_employee_id(employee_id):
     if len(employees) > 1:
         frappe.throw(_("خطأ: يوجد أكثر من موظف مسجل بنفس الرقم ({0})، يرجى مراجعة شؤون الموظفين").format(employee_id))
 
-    set_attendance("Check In",employees[0].name, date = today())
+    set_attendance("Check In",employees[0].name,"","","","")
 
     return True
 
@@ -565,5 +569,5 @@ def loggedin_manual_attendance():
     if not employee:
         frappe.throw(_("بيانات الدخول غير مرتبطة بأي موظف"))
 
-    set_attendance("Check In",employee, date = today())
+    set_attendance("Check In",employee,"","","","")
     return True
