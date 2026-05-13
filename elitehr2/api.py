@@ -404,7 +404,7 @@ def get_employee_tasks():
 	return result
 
 @frappe.whitelist()
-def update_tasks_status(task_name, status):
+def update_task_status(task_name, status):
 	emp = get_employee_logged_in()
 
 	task = frappe.get_doc("Elitehr Tasks", task_name)
