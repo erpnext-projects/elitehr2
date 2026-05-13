@@ -476,6 +476,17 @@ def set_employee_attendance(attendace_type,lat,long,phone_name,phone_id):
 		"device_id": phone_id
 	})
 
+	# check if request for this device is already created and pending
+	pending_request = frappe.db.exists("Elitehr Requests", {
+		"employee": emp.name,
+		"status": ["!=", "Completed"],
+		"device_id": phone_id,
+		"type": "ADD_AUTHORIZED_DEVICE"
+	})
+
+	if pending_request:
+		frappe.throw(_("Device not authorized for attendance, And There's a request for this device, waiting for approval"))
+
 	if not allowed_devices:
 		frappe.throw(_("Device not authorized for attendance"))
 
