@@ -489,6 +489,16 @@ def set_employee_attendance(attendace_type,lat,long,phone_name,phone_id):
 def create_authorized_device_request(phone_id, phone_name, subject, details):
 	emp = get_employee_logged_in()
 
+	# check if there's already a pending request for this device
+	existing_request = frappe.db.exists("Elitehr Requests", {
+		"employee": emp.name,
+		"type": "ADD_AUTHORIZED_DEVICE",
+		"device_id": phone_id
+	})
+
+	if existing_request:
+		frappe.throw(_("There's already a request for this device"))
+
 	doc = frappe.new_doc("Elitehr Requests")
 	doc.status = "New"
 	doc.type="ADD_AUTHORIZED_DEVICE"
