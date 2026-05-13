@@ -485,6 +485,26 @@ def set_employee_attendance(attendace_type,lat,long,phone_name,phone_id):
 	return {"status": "success",}
 
 
+@frappe.whitelist()
+def create_authorized_device_request(phone_id, phone_name, subject, details):
+	emp = get_employee_logged_in()
+
+	doc = frappe.new_doc("Elitehr Requests")
+	doc.status = "New"
+	doc.type="ADD_AUTHORIZED_DEVICE"
+	doc.employee = emp.name
+	doc.subject = subject
+	doc.details = details
+	doc.device_id = phone_id
+	doc.device_name = phone_name
+	doc.insert()
+
+	return {
+		"status": "success",
+		"message": _("Device authorization request created successfully"),
+		"request_id": doc.name
+	}
+
 
 
 def get_employee_logged_in(): 
