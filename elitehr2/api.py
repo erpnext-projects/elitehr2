@@ -350,40 +350,58 @@ def get_employee_attendance_by_date(date):
 def get_employee_tasks():
 	emp = get_employee_logged_in()
 	frappe.local.lang = "en"
+
 	tasks = frappe.get_all(
 		"Elitehr Tasks",
 		filters={ "responsable": emp.name },
 		fields=["name", "task_title", "task_description", "priority", "due_date","status"]
 	)
 
-	return [
-		{
+	result = []
+
+	for task in tasks:
+		tags = frappe.get_all(
+			"Tag Link",
+			filters={
+				"document_type": "Elitehr Tasks",
+				"document_name": task.name
+			},
+			pluck="tag"
+		)
+
+		assigns = frappe.get_all(
+			"ToDo",
+			filters={
+				"reference_type": "Elitehr Tasks",
+				"reference_name": task.name,
+				"status": ["!=", "Cancelled"]
+			},
+			fields=["allocated_to"]
+		)
+
+		assigns_data = [
+			{
+				"email": assign.allocated_to,
+				"name": frappe.db.get_value(
+					"User",
+					assign.allocated_to,
+					"full_name"
+				)
+			}
+			for assign in assigns
+		]
+
+		result.append({
 			"name": task.name,
 			"title": task.task_title,
 			"description": task.task_description,
 			"priority": _(task.priority),
 			"due_date": task.due_date,
 			"status": _(task.status),
-			"tags": frappe.get_all(
-				"Tag Link",
-				filters={
-					"document_type": "Elitehr Tasks",
-					"document_name": task.name
-				},
-				pluck="tag"
-			),
-			"assigns": frappe.get_all(
-				"ToDo",
-				filters={
-					"reference_type": "Elitehr Tasks",
-					"reference_name": task.name,
-					"status": ["!=", "Cancelled"]
-				},
-				pluck="allocated_to"
-			)
-		}
-		for task in tasks
-	]
+			"tags": tags,
+			"assigns": assigns_data
+		})
+	return result
 
 @frappe.whitelist()
 def update_employee_tasks_status(task_name, status):
