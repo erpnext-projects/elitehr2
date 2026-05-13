@@ -9,6 +9,7 @@
     "action": "frappe.ui.toolbar.show_about()",
     "condition": null,
     "hidden": 1,
+    "icon": null,
     "is_standard": 1,
     "item_label": "About",
     "item_type": "Action",
@@ -18,6 +19,7 @@
     "action": "frappe.ui.toolbar.show_shortcuts(event)",
     "condition": null,
     "hidden": 1,
+    "icon": null,
     "is_standard": 1,
     "item_label": "Keyboard Shortcuts",
     "item_type": "Action",
@@ -27,6 +29,7 @@
     "action": null,
     "condition": null,
     "hidden": 1,
+    "icon": null,
     "is_standard": 1,
     "item_label": "System Health",
     "item_type": "Route",
@@ -36,33 +39,15 @@
     "action": null,
     "condition": null,
     "hidden": 1,
+    "icon": null,
     "is_standard": 1,
     "item_label": "Frappe Support",
     "item_type": "Route",
     "route": "https://frappe.io/support"
    }
   ],
-  "modified": "2026-04-25 19:23:41.956290",
+  "modified": "2026-05-11 18:08:44.901767",
   "name": "Navbar Settings",
-  "settings_dropdown": [
-   {
-    "action": "frappe.ui.toolbar.route_to_user()",
-    "condition": null,
-    "hidden": 1,
-    "is_standard": 1,
-    "item_label": "User Settings",
-    "item_type": "Action",
-    "route": null
-   },
-   {
-    "action": "frappe.app.logout()",
-    "condition": null,
-    "hidden": 0,
-    "is_standard": 1,
-    "item_label": "Log out",
-    "item_type": "Action",
-    "route": null
-   }
-  ]
+  "settings_dropdown": []
  }
 ]

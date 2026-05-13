@@ -219,5 +219,22 @@
   "minimum_apporvals": 1,
   "modified": "2026-05-06 11:28:11.069031",
   "name": "LEAVE"
+ },
+ {
+  "amended_from": null,
+  "arabic_type_name": "اضافة جهاز معتمد لموظف",
+  "attachment_required": 0,
+  "auto_approval_if_lower": 0,
+  "category": "",
+  "code": "ADD_AUTHORIZED_DEVICE",
+  "description": null,
+  "docstatus": 1,
+  "doctype": "Elitehr Requests Types",
+  "english_type_name": null,
+  "maximun_apporvals_copy": 3,
+  "maxmum_buget_for_mony_request": 0,
+  "minimum_apporvals": 1,
+  "modified": "2026-05-13 10:10:25.931612",
+  "name": "ADD_AUTHORIZED_DEVICE"
  }
 ]
