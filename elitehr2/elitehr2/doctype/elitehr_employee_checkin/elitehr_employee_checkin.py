@@ -514,6 +514,17 @@ def set_attendance(logType,employee, date = today()):
         frappe.throw("Attendance Log Type Not Valid.")
     current_time = now_datetime()
 
+    #check if there's already a logType for today
+    existing_log = frappe.db.exists(
+        "Elitehr Employee Checkin",
+        {
+            "employee": employee,
+            "date": date,
+            "log_type": logType
+        }    )
+    if existing_log:
+        frappe.throw(_("You have already done {0} for today").format(logType))
+
     new_log = frappe.get_doc({
         "doctype": "Elitehr Employee Checkin",
         "employee": employee,
