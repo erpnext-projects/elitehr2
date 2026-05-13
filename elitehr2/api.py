@@ -461,6 +461,7 @@ def get_mobile_home_statistics():
 	
 
 
+
 @frappe.whitelist()
 def set_employee_attendance(attendace_type,lat,long,phone_name,phone_id):
 	emp = get_employee_logged_in()
