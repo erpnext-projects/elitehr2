@@ -5,5 +5,5 @@
 from frappe.model.document import Document
 
 
-class EmployeeAuthorizedDevice(Document):
+class ElitehrEmployeeAuthorizedDevice(Document):
 	pass

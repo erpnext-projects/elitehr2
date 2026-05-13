@@ -39,6 +39,9 @@
     color: white !important;
     stroke: white !important;
  }
+.body-sidebar{
+    width: 80px;
+ }
 :root{
     --sidebar-width: 288px !important;
     --surface-menu-bar: #1C2B40 !important;

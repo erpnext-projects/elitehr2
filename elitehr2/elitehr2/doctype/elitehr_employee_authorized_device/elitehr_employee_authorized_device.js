@@ -1,7 +1,7 @@
 // Copyright (c) 2026, Mohamed Elgohary and contributors
 // For license information, please see license.txt
 
-// frappe.ui.form.on("Employee Authorized Device", {
+// frappe.ui.form.on("Elitehr Employee Authorized Device", {
 // 	refresh(frm) {
 
 // 	},
