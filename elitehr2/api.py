@@ -363,10 +363,44 @@ def get_employee_tasks():
 			"description": task.task_description,
 			"priority": _(task.priority),
 			"due_date": task.due_date,
-			"status": _(task.status)
+			"status": _(task.status),
+			"tags": frappe.get_all(
+				"Tag Link",
+				filters={
+					"document_type": "Elitehr Tasks",
+					"document_name": task.name
+				},
+				pluck="tag"
+			),
+			"assigns": frappe.get_all(
+				"ToDo",
+				filters={
+					"reference_type": "Elitehr Tasks",
+					"reference_name": task.name,
+					"status": ["!=", "Cancelled"]
+				},
+				pluck="allocated_to"
+			)
 		}
 		for task in tasks
 	]
+
+@frappe.whitelist()
+def update_employee_tasks_status(task_name, status):
+	emp = get_employee_logged_in()
+
+	task = frappe.get_doc("Elitehr Tasks", task_name)
+	# check if status in field select options
+	status_options = frappe.get_meta("Elitehr Tasks").get_field("status").options
+	if status not in status_options.split("\n"):
+		frappe.throw(_("Invalid status, must be one of: {0}").format(status_options.replace("\n", ", ")))
+	task.status = status
+	task.save()
+
+	return {
+		"status": "success",
+		"message": _("Task status updated successfully")
+	}
 
 @frappe.whitelist()
 def get_mobile_home_statistics():
