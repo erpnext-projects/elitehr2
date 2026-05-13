@@ -20,6 +20,13 @@ class ElitehrRequests(Document):
         self.getRequestLevels()
         self.checkAllLevelsApproved()
 
+        # check if request is add authorized device and its first one
+        r = frappe.get_all("Elitehr Requests", filters={"employee": self.employee, "type": "ADD_AUTHORIZED_DEVICE"}, fields=["name"])
+        if self.type == "ADD_AUTHORIZED_DEVICE" and len(r) == 0:
+            self.status = "Completed"
+
+
+        
 
 
     def getRequestLevels(self):
