@@ -8,6 +8,7 @@ from collections import defaultdict
 from datetime import datetime, timedelta
 from frappe.utils import get_datetime, time_diff_in_seconds, format_datetime, now_datetime, nowtime, get_first_day, get_last_day, add_months, flt, today,add_days,getdate
 import calendar
+import math
 
 class ElitehrEmployeeCheckin(Document):
     pass
@@ -194,7 +195,7 @@ def get_employee_checkin_list_old(date=None,employee=None):
     return final
 
 
-def get_employee_working_days_and_time(employee):
+def get_employee_working_days_and_time(employee,onlyCurrentDay=False):
     employee_doc = frappe.get_doc("Elitehr Employee", employee)
 
     # get shift details and workking dayes
@@ -216,6 +217,9 @@ def get_employee_working_days_and_time(employee):
             "to_time": d.get("to"),
             "break": d.get("break")
         }
+    if onlyCurrentDay:
+        currentDay = getdate(today()).strftime("%A")
+        return working_days.get(currentDay) if currentDay in working_days else {}
     return working_days
 
 
@@ -498,6 +502,58 @@ def get_employee_attendance(employee, date):
         "late_minutes": late_minutes,
         "status_color": status_color
     }
+
+
+def get_valid_attendance_site(employee,lat, long):
+    # 0.000009
+    # try converting lat and long to float
+    try:
+        lat = float(lat)
+        long = float(long)
+    except ValueError:
+        frappe.throw(_("Invalid latitude or longitude"))
+
+    employee_doc = frappe.get_doc("Elitehr Employee", employee)
+    sites = employee_doc.fingerprint_sites
+    
+    distances = []
+    for site in sites:
+        site_doc = frappe.get_doc("Elitehr Fingerprint Sites", site.site_name)
+        site_lat = float(site_doc.latitude)
+        site_long = float(site_doc.longitude)
+        allowed_range = float(site_doc.allowed_range or 0)
+
+        is_valid, distance = verify_geofence(lat, long, site_lat, site_long, allowed_range)
+        distances.append(f"Site: {site_doc.site_name}, Distance: {distance} meters, Valid: {is_valid}")
+
+        if is_valid:
+            return [True,site_doc,distance]
+
+    # if end and not site found
+    return [False, None, distances]
+
+
+# used in get_valid_attendance_site
+def verify_geofence(user_lat, user_lon, office_lat, office_lon, allowed_radius):
+    # تحويل الدرجات إلى راديان
+    user_lat, user_lon, office_lat, office_lon = map(math.radians, [user_lat, user_lon, office_lat, office_lon])
+
+    # فرق الإحداثيات
+    dlat = office_lat - user_lat
+    dlon = office_lon - user_lon
+
+    # حساب المسافة باستخدام صيغة هافيرسين
+    a = math.sin(dlat / 2)**2 + math.cos(user_lat) * math.cos(office_lat) * math.sin(dlon / 2)**2
+    c = 2 * math.asin(math.sqrt(a))
+
+    # نصف قطر الأرض بالكيلومترات
+    r = 6371000
+    distance = c * r  # المسافة بالمتر
+    distance = round(distance, 2)
+    if distance <= allowed_radius:
+        return True, distance
+    else:
+        return False, distance
 
 
 # دالة الاساسية
