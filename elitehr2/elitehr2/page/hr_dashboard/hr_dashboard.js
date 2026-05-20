@@ -164,6 +164,7 @@ function renderUI(wrapper) {
     `);
 }
 
+let showAllIncominVacation = false;
 function incominVacation() {
 	frappe.call({
         method: "frappe.client.get_list",
@@ -176,8 +177,17 @@ function incominVacation() {
 		},
 		callback: function (r) {
 			let data = r.message || []	
-			
-			let html = data.map(e => {
+			if(data.length === 0){
+				$("#incomin-vaction").html(`
+					<div class="text-center p-5">
+						<img alt="no data" src="/assets/elitehr2/icons/no_data.png" style="width:120px;opacity: .6;"/>
+						<h4 class="mt-3">لا توجد إجازات قادمة</h4>
+					</div>
+				`);
+				return;
+			}
+			let displayedData = showAllIncominVacation ? data : data.slice(0, 5);
+			let html = displayedData.map(e => {
 				let diffDays = frappe.datetime.get_diff(e.end_date, e.start_date) + 1;
 				return incominVacationRow(
 						e.employee_name,
@@ -187,7 +197,27 @@ function incominVacation() {
 						diffDays
 					);
 				}).join("");
+
+			// زر عرض المزيد
+			if (logs.length > 5) {
+				html += `
+					<div class="text-center mt-3">
+						<button class="btn btn-light btn-sm" id="toggleLogsBtn1">
+							${showAllIncominVacation ? "عرض أقل" : "عرض المزيد"}
+						</button>
+					</div>
+				`;
+			}
+
 			$("#incomin-vaction").html(html);
+
+			// Event
+			$("#toggleLogsBtn1").on("click", function () {
+				showAllIncominVacation = !showAllIncominVacation;
+				incominVacation();
+			});
+
+			
 		}
 	});
 
@@ -233,6 +263,7 @@ function latestLogRow(icon,background,name,desc,time) {
 	`;
 }
 
+let showAllLogs = false;
 function latestLogs() {
 	frappe.call({
         method: "frappe.client.get_list",
@@ -243,8 +274,9 @@ function latestLogs() {
 			limit_page_length:10
 		},
 		callback: function (r) {
-			let logs = r.message || []			
-			let html = logs.map(l => {
+			let logs = r.message || []		
+			let displayedLogs = showAllLogs ? logs : logs.slice(0, 5);	
+			let html = displayedLogs.map(l => {
 				let action = l.log_type === "Check In" ? "سجل دخوله" : "سجل خروجه";
 				let icon_name = l.log_type === "Check In" ? "check_in" : "check_out";
 				let background = l.log_type === "Check In" ? "#24A8711A" : "#94A3B8";
@@ -256,7 +288,25 @@ function latestLogs() {
 						l.time
 					);
 				}).join("");
+
+			if (logs.length > 5) {
+				html += `
+					<div class="text-center mt-3">
+						<button class="btn btn-light btn-sm" id="toggleLogsBtn">
+							${showAllLogs ? "عرض أقل" : "عرض المزيد"}
+						</button>
+					</div>
+				`;
+			}
+
 			$("#latest-log-list").html(html);
+
+			// Event
+			$("#toggleLogsBtn").on("click", function () {
+				showAllLogs = !showAllLogs;
+				latestLogs();
+			});
+			
 		}
 	});
 
