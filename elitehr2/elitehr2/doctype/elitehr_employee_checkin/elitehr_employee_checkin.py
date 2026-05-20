@@ -329,6 +329,7 @@ def get_employee_attendance_handler(employee=None,from_date=None,to_date=None):
     if employee is None:
         employees = frappe.get_all(
             "Elitehr Employee",
+            filters={"status": "Active"},
             fields=["name", "employee_name", "department","department_name","shift","job_title"]
         )
     else:
