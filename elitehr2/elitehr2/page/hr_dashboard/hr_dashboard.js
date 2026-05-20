@@ -15,7 +15,9 @@ frappe.pages['hr-dashboard'].on_page_load = function(wrapper) {
 		loadPageData()
 	});
 }
-
+frappe.pages['hr-dashboard'].on_page_show = function(wrapper) {
+	loadPageData();
+}
 function loadPageData() {
 	Promise.all([getEmployees(), getAttendance()])
 		.then(([empRes, attRes]) => {
