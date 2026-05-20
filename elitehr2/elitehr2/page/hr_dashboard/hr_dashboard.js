@@ -27,23 +27,28 @@ function loadPageData() {
 
 			let totalEmployee = employees.length;
 
-			let present = attendance.filter(e => e.status_code === "Present").length;
-			let absent = attendance.filter(e => e.status_code === "Absent").length;
-			let late = attendance.filter(e => e.status_code === "Late").length;
+			// let present = attendance.filter(e => e.status_code === "Present").length;
+			// let absent = attendance.filter(e => e.status_code === "Absent").length;
+			// let late = attendance.filter(e => e.status_code === "Late").length;
+			const presentCount = attendance.filter(r => r.status_code == "Present" || r.status_code == "Late" || r.status_code == "Early Out").length;
+			const absentCount = attendance.filter(r => r.status_code == "Absent").length;
+			const lateCount = attendance.filter(r => r.status_code == "Late").length;
+			const leaveCount = attendance.filter(r => r.status_code == "Leave" || r.status_code == "Weekend").length;
 
 			$("#totalEmployee .card-value").text(totalEmployee);
-			$("#presenToday .card-value").text(present);
-			$("#absentToday .card-value").text(absent);
-			$("#lateToday .card-value").text(late);
-			$("#presenPrecentage .card-value").text(getPrecent(present+late,totalEmployee));
+			$("#presenToday .card-value").text(presentCount);
+			$("#absentToday .card-value").text(absentCount);
+			$("#lateToday .card-value").text(lateCount);
+			$("#inHoliday .card-value").text(leaveCount);
+			$("#presenPrecentage .card-value").text(getPrecent(presentCount,totalEmployee));
 
 
 			frappe.require("https://cdn.jsdelivr.net/npm/chart.js", () => {
 				initChart({
-					present,
-					late,
-					absent,
-					vacation: 0,
+					present: presentCount,
+					late: lateCount,
+					absent: absentCount,
+					vacation: leaveCount,
 					totalEmployee: totalEmployee,
 				});
 			});
@@ -298,7 +303,7 @@ function initChart(stats) {
     });
 
 	$("#attendanceLegend").html(`
-        ${legendItem("حاضر", getPrecent((stats.present+stats.late),stats.totalEmployee), "#22c55e")}
+        ${legendItem("حاضر", getPrecent((stats.present),stats.totalEmployee), "#22c55e")}
         ${legendItem("متأخر", getPrecent(stats.late,stats.totalEmployee), "#f59e0b")}
         ${legendItem("غائب", getPrecent(stats.absent,stats.totalEmployee), "#ef4444")}
         ${legendItem("إجازة", getPrecent(stats.vacation,stats.totalEmployee), "#0ea5e9")}
