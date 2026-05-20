@@ -21,11 +21,10 @@ frappe.pages['hr-dashboard'].on_page_show = function(wrapper) {
 function loadPageData() {
 	Promise.all([getEmployees(), getAttendance()])
 		.then(([empRes, attRes]) => {
-
-			let employees = empRes.message || [];
+			console.log(empRes);
+			
+			let totalEmployee = empRes.message || [];
 			let attendance = attRes.message || [];
-
-			let totalEmployee = employees.length;
 
 			// let present = attendance.filter(e => e.status_code === "Present").length;
 			// let absent = attendance.filter(e => e.status_code === "Absent").length;
@@ -318,11 +317,10 @@ function getPrecent(count,totalEmployee) {
 
 function getEmployees() {
     return frappe.call({
-        method: "frappe.client.get_list",
+        method: "frappe.client.get_count",
         args: {
             doctype: "Elitehr Employee",
-            filters: { status: "Active" },
-            fields: ["name"]
+            filters: { status: "Active" }
         }
     });
 }
