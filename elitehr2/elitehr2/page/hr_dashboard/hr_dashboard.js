@@ -180,7 +180,6 @@ function incominVacation() {
 			if(data.length === 0){
 				$("#incomin-vaction").html(`
 					<div class="text-center p-5">
-						<img alt="no data" src="/assets/elitehr2/icons/no_data.png" style="width:120px;opacity: .6;"/>
 						<h4 class="mt-3">لا توجد إجازات قادمة</h4>
 					</div>
 				`);
