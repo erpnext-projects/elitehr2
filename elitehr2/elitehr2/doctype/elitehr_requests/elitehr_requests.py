@@ -54,7 +54,7 @@ class ElitehrRequests(Document):
             directSupervisor = frappe.get_doc('Elitehr Employee', self.employee).manager
             
             if not directSupervisor:
-                frappe.throw(_("الموظف ليس له مدير"))
+                frappe.throw(_("The request cannot be Save. Please go to the employee's file and select (Manager) from the (Employee Data) tab."))
 
             directSupervisor = frappe.get_doc('Elitehr Employee', directSupervisor)
 
