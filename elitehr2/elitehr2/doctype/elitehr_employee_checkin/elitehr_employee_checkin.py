@@ -478,7 +478,19 @@ def get_employee_attendance(employee, date):
         if late_diff > 0:
             late_minutes = int(late_diff // 60)
             statusCode = "Late"
-            status = _("Late ({0}) minutes").format(late_minutes)
+            
+            hours = late_minutes // 60
+            minutes = late_minutes % 60
+
+            if hours > 0:
+                if minutes > 0:
+                    status = _("Late {0}h {1}m").format(int(hours), str(int(minutes)).zfill(2))
+                else:
+                    status = _("Late {0}h").format(int(hours))
+            else:
+                status = _("Late {0}m").format(int(late_minutes))
+
+            # status = _("Late ({0}) minutes").format(late_minutes)
             status_color = "color1"
 
     # Early Out
@@ -487,7 +499,19 @@ def get_employee_attendance(employee, date):
         if early_diff > 0:
             early_minutes = int(early_diff // 60)
             statusCode = "Early Out"
-            status = _("Early Out ({0}) minutes").format(early_minutes)
+
+            hours = early_minutes // 60
+            minutes = early_minutes % 60
+
+            if hours > 0:
+                if minutes > 0:
+                    status = _("Early Out {0}h {1}m").format(int(hours), str(int(minutes)).zfill(2))
+                else:
+                    status = _("Early Out {0}h").format(int(hours))
+            else:
+                status = _("Early Out {0}m").format(int(early_minutes))
+
+            # status = _("Early Out ({0}) minutes").format(early_minutes)
             status_color = "color1"
 
     return {

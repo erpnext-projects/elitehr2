@@ -451,3 +451,9 @@ Device Name, اسم الجهاز
 Authorized Device, الاجهزة المعتمدة
 Managing and reviewing employee authorized device requests, إدارة ومراجعة طلبات الأجهزة المعتمدة للموظفين
 Are you sure you want to log out?, تأكيد تسجيل الخروج ؟
+Late {0}h {1}m, متأخر {0} ساعة {1} دقيقة
+Late {0}h, متأخر {0} ساعة
+Late {0}m, متأخر {0} دقيقة
+Early Out {0}h {1}m, انصراف مبكر {0} ساعة {1} دقيقة
+Early Out {0}h, انصراف مبكر {0} ساعة
+Early Out {0}m, انصراف مبكر {0} دقيقة
