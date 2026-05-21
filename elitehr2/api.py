@@ -574,3 +574,10 @@ def get_employee_logged_in():
     if not employee:
         frappe.throw(_("No employee linked to this user"))
     return employee
+
+
+@frappe.whitelist()
+def profile():
+    emp = get_employee_logged_in()
+    emp_doc = frappe.get_doc("Elitehr Employee", emp.name)
+    return emp_doc
