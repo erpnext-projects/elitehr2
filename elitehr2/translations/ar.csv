@@ -457,3 +457,4 @@ Late {0}m, متأخر {0} دقيقة
 Early Out {0}h {1}m, انصراف مبكر {0} ساعة {1} دقيقة
 Early Out {0}h, انصراف مبكر {0} ساعة
 Early Out {0}m, انصراف مبكر {0} دقيقة
+End Date must be greater than Start Date, يجب أن يكون تاريخ الانتهاء أكبر من تاريخ البدء

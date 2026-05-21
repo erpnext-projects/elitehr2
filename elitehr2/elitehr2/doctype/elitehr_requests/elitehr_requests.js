@@ -24,7 +24,32 @@ frappe.ui.form.on("Elitehr Requests", {
 
 
     },
+    start_date(frm) {
+        calculate_total_days(frm);
+    },
+    end_date(frm) {
+        calculate_total_days(frm);
+    }
 });
+
+function calculate_total_days(frm) {
+    if (frm.doc.start_date && frm.doc.end_date) {
+        let start = frappe.datetime.str_to_obj(frm.doc.start_date);
+        let end = frappe.datetime.str_to_obj(frm.doc.end_date);
+
+        let diff = frappe.datetime.get_diff(end, start);
+
+        if (diff < 0) {
+            frappe.msgprint(__("End Date must be greater than Start Date"));
+            frm.set_value("total_days", 0);
+            return;
+        }
+
+        let days = diff + 1; // include both start and end day
+
+        frm.set_value("total_days", days);
+    }
+}
 
 function updateStatusBtn(frm) {
     if (frm.doc.status != "Completed") {
