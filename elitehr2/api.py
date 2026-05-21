@@ -581,3 +581,28 @@ def profile():
     emp = get_employee_logged_in()
     emp_doc = frappe.get_doc("Elitehr Employee", emp.name)
     return emp_doc
+
+@frappe.whitelist()
+def employee_salary(only_current_month=False):
+    emp = get_employee_logged_in()
+    filters = {
+        "employee": emp.name
+    }
+
+    
+    if only_current_month:
+        filters["date"] = ["between", (get_first_day(today()), today())]
+
+    salary = frappe.get_all(
+        "Elitehr Payroll",
+        filters=filters,
+        fields=["name"]
+    )  
+
+    final_result = []
+    for s in salary:
+        doc = frappe.get_doc("Elitehr Payroll", s.name)
+        final_result.append(doc)
+
+
+    return final_result
