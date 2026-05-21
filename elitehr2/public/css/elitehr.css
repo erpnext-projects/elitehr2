@@ -1,5 +1,11 @@
-.navbar-search-bar,.dropdown-notifications,.dropdown-help,.frappe-menu{
+.navbar-search-bar,
+.dropdown-notifications
+,.dropdown-help,.frappe-menu
+{
     display: none !important;
+}
+.expanded .logout-label {
+    display: inline-block !important;
 }
 
 .btn-reset.standard-sidebar-label{

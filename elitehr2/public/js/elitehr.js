@@ -20,6 +20,28 @@ $( document ).ajaxSuccess(function(){
         }
     }
 
+
+    // Logout
+    if (!document.querySelector(".logout-btn")) {
+        const logoutItem = `
+            <div class="nav-item logout-btn">
+                <button class="nav-link bg-danger border-0" onclick="frappe.app.logout()">
+                    <span class="sidebar-item-icon">
+                        <svg class="icon icon-sm">
+                            <use href="#icon-log-out"></use>
+                        </svg>
+                    </span>
+    
+                    <span class="sidebar-item-label logout-label d-none">
+                        تسجيل الخروج
+                    </span>
+                </button>
+            </div>
+        `;
+    
+        document.querySelector(".body-sidebar-bottom .nav-item").insertAdjacentHTML("afterend", logoutItem);
+    }
+
     // frappe.router.on("change", () => {
     //     const preferredSidebar = localStorage.getItem("preferred_sidebar");
 
