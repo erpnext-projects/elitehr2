@@ -189,7 +189,6 @@ def get_employee_leave_requests():
     data = frappe.get_all(
         "Elitehr Requests",
         filters={
-            "employee": employee.name
         },
         fields=[
             "name",
@@ -580,7 +579,9 @@ def get_employee_logged_in():
 def profile():
     emp = get_employee_logged_in()
     emp_doc = frappe.get_doc("Elitehr Employee", emp.name)
-    return emp_doc
+    data = emp_doc.as_dict()
+    data["mobile_home_statistics"] = get_mobile_home_statistics()
+    return data
 
 @frappe.whitelist()
 def employee_salary(only_current_month=False):
@@ -606,3 +607,16 @@ def employee_salary(only_current_month=False):
 
 
     return final_result
+
+
+@frappe.whitelist()
+def leave_policies_rules():
+    # get single doc of leave policies rules
+
+    meta = frappe.get_meta("Elitehr Leave Policies Rules")
+
+    html_field = meta.get_field("html_itrd")
+
+    return {
+        "html": html_field.options
+    }
