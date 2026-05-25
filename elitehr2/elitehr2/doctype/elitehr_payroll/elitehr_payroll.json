@@ -69,9 +69,10 @@
   {
    "fetch_from": "employee.salary",
    "fieldname": "basic_salary",
-   "fieldtype": "Int",
+   "fieldtype": "Float",
    "in_list_view": 1,
    "label": "Basic Salary",
+   "precision": "2",
    "read_only": 1
   },
   {
@@ -105,10 +106,11 @@
   },
   {
    "fieldname": "net_salary",
-   "fieldtype": "Int",
+   "fieldtype": "Float",
    "in_list_view": 1,
    "label": "Net salary",
-   "non_negative": 1
+   "non_negative": 1,
+   "precision": "2"
   },
   {
    "fieldname": "total_allowances",
@@ -200,7 +202,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-04-22 11:27:05.514136",
+ "modified": "2026-05-25 11:53:48.619557",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Payroll",

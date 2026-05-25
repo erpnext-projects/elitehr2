@@ -25,6 +25,7 @@
   "column_break_efhq",
   "type_of_contract",
   "salary",
+  "net_salary",
   "registration_date",
   "manager",
   "section_break_osbg",
@@ -89,10 +90,11 @@
   {
    "default": "0",
    "fieldname": "salary",
-   "fieldtype": "Int",
+   "fieldtype": "Float",
    "in_list_view": 1,
    "label": "\u0627\u0644\u0631\u0627\u062a\u0628 \u0627\u0644\u0627\u0633\u0627\u0633\u064a",
-   "non_negative": 1
+   "non_negative": 1,
+   "precision": "2"
   },
   {
    "fieldname": "phone_number",
@@ -315,12 +317,19 @@
    "in_list_view": 1,
    "label": "Job title",
    "options": "Elitehr Fingerprint Sites"
+  },
+  {
+   "fieldname": "net_salary",
+   "fieldtype": "Float",
+   "label": "Net salary",
+   "precision": "2",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-04-12 11:17:19.912571",
+ "modified": "2026-05-25 11:54:46.063225",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Employee",

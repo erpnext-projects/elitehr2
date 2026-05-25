@@ -13,6 +13,26 @@ class ElitehrEmployee(Document):
         if not self.department and self.fingerprint_sites:
             self.department = self.fingerprint_sites[0].site_name
 
+        # Total Allowances
+        total_allowances = 0
+        for allowance in self.allowances:
+            if allowance.type == "Constant number":
+                total_allowances += allowance.amount
+            elif allowance.type == "Percentage":
+                total_allowances += (allowance.amount / 100) * self.salary
+
+        
+        # Total Deductions
+        total_deductions = 0
+        for deduction in self.deductions:
+            if deduction.type == "Constant number":
+               total_deductions += deduction.amount
+            elif deduction.type == "Percentage":
+                total_deductions += (deduction.amount / 100) * self.salary
+        
+        self.net_salary = (self.salary + total_allowances) - total_deductions
+
+
 
     # used
     # def onload(self):
