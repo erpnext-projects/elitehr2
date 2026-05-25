@@ -182,20 +182,33 @@ function renderTable(requests,selectedDate) {
 			id: "actions",
 			name: "الإجراءات",
 			format: (value, row) => {
-				if (selectedDate != frappe.datetime.get_today()) {
+				let edit_attendance = `
+					<button class="btn btn-xs btn-info btn-edit-attendance" 
+							data-employee="${row.employee}" 
+							style="padding: 2px 8px;"
+							onclick="frappe.new_doc('Elitehr Requests')">
+						${__("Fingerprint correction request")}
+					</button>
+				`
+
+				if (selectedDate > frappe.datetime.get_today()) {
 					return "";
 				}
+				if (selectedDate != frappe.datetime.get_today()) {
+					return edit_attendance;
+				}
+
 				if (row.check_out == "" && row.check_in != "") {
-					return `
+					return  `
+
 							<button class="btn btn-xs btn-danger btn-check-in-out" 
 									data-employee="${row.employee}" 
 									data-logType="Check Out" 
 									style="padding: 2px 8px;">
 								${__("Check Out")}
 							</button>
-						`;
-				}
-				if (row.check_in == "") {
+						` + edit_attendance;
+				}else if (row.check_in == "") {
 					return `
 							<button class="btn btn-xs btn-primary btn-check-in-out" 
 									data-employee="${row.employee}" 
@@ -204,6 +217,8 @@ function renderTable(requests,selectedDate) {
 								${__("Check In")}
 							</button>
 						`;
+				}else{
+					return edit_attendance;
 				}
 			}
 		}

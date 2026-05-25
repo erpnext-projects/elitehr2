@@ -115,6 +115,7 @@ function renderUI(wrapper) {
 							${quickAction("إعداد الرواتب","#10B981","/assets/elitehr2/icons/wallet.svg","/desk/payroll")}
 							${quickAction("تصدير تقرير","#F97316","/assets/elitehr2/icons/download.png","/desk/reports")}
 							${quickAction("عرض التقارير","#EC4899","/assets/elitehr2/icons/doc.png","/desk/reports")}
+							${quickAction("طلب تعديل بصمة","#A855F7","/assets/elitehr2/icons/edit.png","/desk/elitehr-requests/new-elitehr-requests")}
 						</div>
 					</div>
 

@@ -10,6 +10,11 @@ frappe.pages['fingerprint-correcti'].on_page_load = function (wrapper) {
 	page.add_inner_button(__("تحديث"), function () {
 		loadRequests();
 	});
+	page.add_inner_button(__("Submit an application"), function () {
+		frappe.new_doc("Elitehr Requests", {
+			// type: "ADVANCE_SALARY"
+		});
+	});
 
 	// Outer wrapper with margin
 	const wrapperContent = $('<div dir="rtl" class="custom-page"></div>').appendTo(page.main);
