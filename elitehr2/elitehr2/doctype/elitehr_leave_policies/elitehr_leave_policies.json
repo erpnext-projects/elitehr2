@@ -83,9 +83,10 @@
   },
   {
    "fieldname": "pay_percentage",
-   "fieldtype": "Int",
+   "fieldtype": "Float",
    "label": "\u0646\u0633\u0628\u0629 \u0627\u0644\u0623\u062c\u0631 (%)",
    "non_negative": 1,
+   "precision": "2",
    "reqd": 1
   },
   {
@@ -127,7 +128,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-10 10:59:57.506511",
+ "modified": "2026-05-25 12:00:35.536213",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Leave Policies",
