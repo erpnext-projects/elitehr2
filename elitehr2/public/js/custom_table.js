@@ -24,14 +24,14 @@ class CustomTable {
         this.columns.forEach(col => {
             if(col.width){
                 thead.append(`
-                    <th style="
+                    <th class="${col.classs || ''}" style="
                         width:${col.width || 'auto'};
                         min-width:${col.width || 'auto'};
                         white-space: nowrap;
                     ">${col.name}</th>
                 `);
             }else{
-                thead.append(`<th>${col.name}</th>`);
+                thead.append(`<th class="${col.classs || ''}">${col.name}</th>`);
             }
         });
         table.find("thead").append(thead);
@@ -49,7 +49,7 @@ class CustomTable {
                     value = col.format(value, row);
                 }
 
-                tr.append(`<td class="align-middle">${value || ""}</td>`);
+                tr.append(`<td class="align-middle ${col.classs || ''}">${value || ""}</td>`);
             });
 
             tbody.append(tr);

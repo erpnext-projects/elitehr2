@@ -152,9 +152,10 @@ function renderTableData(data) {
 				id: "employee_name",
 				name: __("Employee"),
 				width: "220px",
+				classs: "sticky-col-1",
 				format: (value, row) => {
 					return `
-								<div>
+								<div">
 									<strong>${row.employee_name}</strong>
 									<br>
 									<small>${row.job_title || ""}</small>
@@ -165,29 +166,30 @@ function renderTableData(data) {
 			{
 				id: "presents",
 				name: __("Attendance"),
+				classs: "sticky-col-2",
 				format: v => `<strong class="text-white badge2 bg3">${v}</strong>`
 			},
 			{
 				id: "absens",
 				name: __("Absence"),
+				classs: "sticky-col-3",
 				format: v => `<strong class="text-white badge2 bg4">${v}</strong>`
 			},
 			{
 				id: "lates",
 				name: __("Tardiness"),
+				classs: "sticky-col-4",
 				format: v => `<strong class="text-white badge2 bg1">${v}</strong>`
 			},
 			{
 				id: "leaves",
 				name: __("Vacations"),
+				classs: "sticky-col-5",
 				format: v => `<strong class="text-white badge2 bg-secondary">${v}</strong>`
 			}
 		];
 
-		// const startDay = frappe.datetime.str_to_obj(selectedDate).getDate();
-		// const lastDayOfMonth = frappe.datetime.month_end(selectedDate)
-		// const lastDay = frappe.datetime.str_to_obj(lastDayOfMonth).getDate();
-		// console.log(data);
+		
 		
 		// أعمدة الأيام
 		const firstRow = data[0] || []
@@ -221,27 +223,6 @@ function renderTableData(data) {
 				}
 			});
 		}
-		// for (let day = startDay; day <= lastDay; day++) {
-		// 	columns.push({
-		// 		id: `day_${day}`,
-		// 		name: day,
-		// 		format: (value, row) => {
-		// 			let dayData = row.days?.[day];
-		// 			if (!dayData) {
-		// 				return getAttendanceBox("Weekend", "");
-		// 			} else if (dayData.status_code == "Absent") {
-		// 				return getAttendanceBox('Absent')
-		// 			} else if (dayData.status_code == "Late") {
-		// 				return getAttendanceBox('Late')
-		// 			} else if (dayData.status_code == "Present") {
-		// 				return getAttendanceBox('Present')
-		// 			} else if (dayData.status_code == "Early Out") {
-		// 				return getAttendanceBox('Early Out')
-		// 			}
-
-		// 		}
-		// 	});
-		// }
 
 		new CustomTable({
 			container: tableContainer,

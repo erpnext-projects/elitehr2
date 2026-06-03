@@ -485,3 +485,55 @@ select:hover {
 	display: grid !important;
 	grid-template-columns: repeat(2,1fr);
 }
+
+
+
+
+
+/* الكلاسات الأساسية المشتركة */
+.sticky-col-1, .sticky-col-2, .sticky-col-3, .sticky-col-4, .sticky-col-5 {
+    position: -webkit-sticky;
+    position: sticky;
+    background-color: #ffffff;
+    z-index: 2;
+}
+
+thead .sticky-col-1, 
+thead .sticky-col-2, 
+thead .sticky-col-3, 
+thead .sticky-col-4, 
+thead .sticky-col-5 {
+    z-index: 3; 
+}
+
+
+.sticky-col-1 {
+    right: 0;
+    width: 220px;
+    min-width: 220px;
+}
+
+.sticky-col-2 {
+    right: 220px;
+    width: 80px;
+    min-width: 80px;
+}
+
+.sticky-col-3 {
+    right: 300px;
+    width: 80px;
+    min-width: 80px;
+}
+
+.sticky-col-4 {
+    right: 380px;
+    width: 80px;
+    min-width: 80px;
+}
+
+.sticky-col-5 {
+    right: 460px;
+    width: 80px;
+    min-width: 80px;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.05); 
+}
