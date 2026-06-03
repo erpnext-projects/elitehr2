@@ -173,7 +173,7 @@ def create_leave_request(request_type, subject,start_date, end_date, details):
 
 
 @frappe.whitelist()
-def get_employee_leave_requests():
+def get_employee_requests(only_leave_requests=False):
 
     user = frappe.session.user
     employee = frappe.db.get_value(
@@ -186,45 +186,57 @@ def get_employee_leave_requests():
     if not employee:
         frappe.throw(_("No employee linked to this user"))
 
-    data = frappe.get_all(
-        "Elitehr Requests",
-        filters={
-        },
-        fields=[
-            "name",
-            "type",
-            "request_type_name",
-            "leave_type",
-            "leave_type_name",
-            "start_date",
-            "end_date",
-            "total_days",
-            "subject",
-            "details",
-            "status",
-            "creation",
-        ],
-        order_by="name asc"
-    )
+    filters = {"employee": employee.name}
 
-    result = []
+    if only_leave_requests:
+        filters["type"] = "LEAVE"
+    
+        data = frappe.get_all(
+            "Elitehr Requests",
+            filters=filters,
+            fields=[
+                "name",
+                "type",
+                "request_type_name",
+                "leave_type",
+                "leave_type_name",
+                "start_date",
+                "end_date",
+                "total_days",
+                "subject",
+                "details",
+                "status",
+                "creation",
+            ],
+            order_by="name asc"
+        )
 
-    for row in data:
-        result.append({
-            "id": row.name,
-            "type": row.type,
-            "type_name": row.request_type_name,
-            "leave_type": row.leave_type,
-            "leave_type_name": row.leave_type_name,
-            "start_date": row.start_date,
-            "end_date": row.end_date,
-            "total_days": row.total_days,
-            "subject": row.subject,
-            "details": row.details,
-            "status": _(row.status),
-            "creation": row.creation,
-            "history": get_request_status_history(row.name)
-        })
+        result = []
+
+        for row in data:
+            result.append({
+                "id": row.name,
+                "type": row.type,
+                "type_name": row.request_type_name,
+                "leave_type": row.leave_type,
+                "leave_type_name": row.leave_type_name,
+                "start_date": row.start_date,
+                "end_date": row.end_date,
+                "total_days": row.total_days,
+                "subject": row.subject,
+                "details": row.details,
+                "status": _(row.status),
+                "creation": row.creation,
+                "history": get_request_status_history(row.name)
+            })
+    else:
+        filters["type"] = ["!=", "LEAVE"]
+        result = frappe.get_all(
+            "Elitehr Requests",
+            filters=filters,
+            fields=["*"],
+            order_by="name asc"
+        )
 
     return {
         "status": "success",
