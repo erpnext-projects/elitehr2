@@ -1,0 +1,151 @@
+{
+ "actions": [],
+ "creation": "2026-06-05 15:49:32.544105",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "amended_from",
+  "section_break_c4wk",
+  "authorizer_original_authorizer",
+  "delegator_authorized_approver",
+  "column_break_hcxq",
+  "authorizer_name",
+  "delegator_name",
+  "column_break_kfci",
+  "authorizer_email",
+  "delegator_email",
+  "section_break_dqla",
+  "request_type_optional",
+  "section_break_pzos",
+  "start_date",
+  "column_break_ougs",
+  "to_date"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_c4wk",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Elitehr Authorization Management",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "authorizer_original_authorizer",
+   "fieldtype": "Link",
+   "label": "Authorizer (Original Authorizer)",
+   "options": "Elitehr Employee",
+   "reqd": 1
+  },
+  {
+   "fieldname": "delegator_authorized_approver",
+   "fieldtype": "Link",
+   "label": "Delegator (Authorized Approver)",
+   "options": "Elitehr Employee",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_dqla",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "request_type_optional",
+   "fieldtype": "Link",
+   "label": "Request Type (Optional)",
+   "options": "Elitehr Requests Types"
+  },
+  {
+   "fieldname": "section_break_pzos",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_ougs",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "to_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "To Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_hcxq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "start_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Start Date",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "authorizer_original_authorizer.employee_name",
+   "fieldname": "authorizer_name",
+   "fieldtype": "Read Only",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Authorizer Name"
+  },
+  {
+   "fetch_from": "delegator_authorized_approver.employee_name",
+   "fieldname": "delegator_name",
+   "fieldtype": "Read Only",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Delegator Name"
+  },
+  {
+   "fieldname": "column_break_kfci",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "authorizer_original_authorizer.login_data",
+   "fieldname": "authorizer_email",
+   "fieldtype": "Read Only",
+   "label": "Authorizer Email"
+  },
+  {
+   "fetch_from": "delegator_authorized_approver.login_data",
+   "fieldname": "delegator_email",
+   "fieldtype": "Read Only",
+   "label": "Delegator Email"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-06-05 16:38:39.099425",
+ "modified_by": "Administrator",
+ "module": "Elitehr2",
+ "name": "Elitehr Authorization Management",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

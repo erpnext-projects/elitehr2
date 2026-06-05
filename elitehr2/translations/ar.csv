@@ -114,7 +114,6 @@ Actions, اجراءات
 Copy To Clipboard, نسخ الي الحافظة
 Status, الحالة
 Start Date, تاريخ البداية
-Start Date 
 Points, نقاط الانجاز
 High, عالي
 Medium, متوسط
@@ -460,3 +459,12 @@ Early Out {0}m, انصراف مبكر {0} دقيقة
 End Date must be greater than Start Date, يجب أن يكون تاريخ الانتهاء أكبر من تاريخ البدء
 Submit an application, تقديم طلب
 Fingerprint correction request, طلب تصحيح بصمة
+Elitehr Authorization Management, إدارة التفويضات
+Authorization Management, إدارة التفويضات
+Authorizer (Original Authorizer),  المفوِّض (صاحب الصلاحية الأصلية)
+Delegator (Authorized Approver),  المفوَّض إليه (من يوافق بالنيابة)
+Request Type (Optional),  نوع الطلب (اختياري) 
+Authorizer Name, اسم المفوِّض
+Delegator Name, اسم المفوَّض إليه
+Authorizer Email, ايميل المفوِّض
+Delegator Email, ايميل المفوَّض إليه

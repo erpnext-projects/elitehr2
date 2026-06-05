@@ -71,37 +71,69 @@ function updateStatusBtn(frm) {
                     let emp = r.message;        
                     if (emp) {
                         if (emp.login_data == frappe.session.user) {
-                            frm.add_custom_button(__("Edit Request Status"), function () {
-                                frappe.prompt([
-                                    {
-                                        label: 'Status',
-                                        fieldname: 'status',
-                                        fieldtype: 'Select',
-                                        options: ["Rejected", "Approve", "Under Liquidation", "Disbursement of Dues"],
-                                        reqd: 1,
-                                        default: level.status
-                                    }
-                                ], (values) => {
-                                    frappe.call({
-                                        method: "elitehr2.elitehr2.doctype.elitehr_requests.elitehr_requests.update_approval",
-                                        args: {
-                                            docname: frm.doc.name,
-                                            status: values.status,
-                                            level_name: level.name,
-                                            approved_by: emp.employee_name
-                                        },
-                                        callback: function () {
-                                            frm.reload_doc();
-                                        }
-                                    });
-                                })
-    
-    
-                            });
+                            add_btn(emp.employee_name);
                         }
                     }
                 }
             })
+
+            // التفويضات
+            frappe.call({
+                method: "frappe.client.get_list",
+                args: {
+                    doctype: "Elitehr Authorization Management",
+                    filters: {
+                        authorizer_original_authorizer: level.responsible_id,
+                        start_date: ["<=", frappe.datetime.get_today()],
+                        to_date: [">=", frappe.datetime.get_today()],
+                        request_type_optional: ["in", [null, frm.doc.type]],
+                        docstatus: 1
+                    },
+                    fields: ["*"]
+                },
+                callback: function (r) {
+                    let data = r.message;
+                    data.forEach(row => {
+                        console.log(row);    
+                        if (row.delegator_email == frappe.session.user) {
+                            add_btn(row.delegator_name);
+                            return;
+                        }
+                            
+                        
+                    });
+                }
+            })
+
+            function add_btn(approved_by) {
+                frm.add_custom_button(__("Edit Request Status"), function () {
+                    frappe.prompt([
+                        {
+                            label: 'Status',
+                            fieldname: 'status',
+                            fieldtype: 'Select',
+                            options: ["Rejected", "Approve", "Under Liquidation", "Disbursement of Dues"],
+                            reqd: 1,
+                            default: level.status
+                        }
+                    ], (values) => {
+                        frappe.call({
+                            method: "elitehr2.elitehr2.doctype.elitehr_requests.elitehr_requests.update_approval",
+                            args: {
+                                docname: frm.doc.name,
+                                status: values.status,
+                                level_name: level.name,
+                                approved_by: approved_by
+                            },
+                            callback: function () {
+                                frm.reload_doc();
+                            }
+                        });
+                    })
+
+
+                });
+            }
         }
     }
 }

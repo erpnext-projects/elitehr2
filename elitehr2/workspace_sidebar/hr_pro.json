@@ -564,6 +564,18 @@
    "type": "Link"
   },
   {
+   "child": 1,
+   "collapsible": 1,
+   "icon": "setting-gear",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Authorization Management",
+   "link_to": "Elitehr Authorization Management",
+   "link_type": "DocType",
+   "show_arrow": 0,
+   "type": "Link"
+  },
+  {
    "child": 0,
    "collapsible": 1,
    "icon": "setting-gear",
@@ -627,7 +639,7 @@
    "url": "/desk/user?sidebar=Hr Pro"
   }
  ],
- "modified": "2026-05-13 10:17:10.676791",
+ "modified": "2026-06-05 16:00:38.692228",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Hr Pro",

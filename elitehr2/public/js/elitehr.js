@@ -7,7 +7,7 @@ $( document ).ajaxSuccess(function(){
     //     }
     // }
 
-    
+
     let route = frappe.get_route();   
     if (route != null && route.length > 0 && route[0] === "dashboard-view") {
         let breadcrumbs = document.querySelectorAll(".navbar-breadcrumbs li");
@@ -76,6 +76,23 @@ $( document ).ajaxSuccess(function(){
 
 
 
+// setInterval(update_notifications, 30000);
+// update_notifications();
+// function update_notifications() {
+//     frappe.call({
+//         method: "frappe.client.get_count",
+//         args: {
+//             doctype: "Notification Log",
+//             filters: { read: 0, for_user: frappe.session.user }
+//         },
+//         callback: function (r) {
+//             if (r.message > 0) {
+//                 console.log("You have " + r.message + " unread notifications.");
+//             }
+//         }
+//     });
+// }
+
 frappe.router.on('change', () => {
     let route = frappe.get_route();
     // console.log(route);
@@ -119,14 +136,35 @@ $(document).ready(function() {
     }) 
 
 
+    // frappe.realtime.off("notification");
+
+    // frappe.realtime.on("notification", function(data) {
+    //     console.log("NOTIFICATION RECEIVED", data);
+
+    //     frappe.call({
+    //         method: "frappe.client.get_count",
+    //         args: {
+    //             doctype: "Notification Log",
+    //             filters: {
+    //                 read: 0,
+    //                 for_user: frappe.session.user
+    //             }
+    //         },
+    //         callback: function(r) {
+    //             console.log("Unread Count:", r.message);
+    //         }
+    //     });
+// });
+
+
 })
 
 
 // frappe.after_ajax(() => {
-//     d = document.querySelector('div[item-name="لوحة التحكم"]')
-//     if(d.querySelector(".drop-icon:not(.hidden) use[href='#es-line-down']")){
-//         d.querySelector(".drop-icon:not(.hidden)").click()
-//     }
+    // d = document.querySelector('div[item-name="لوحة التحكم"]')
+    // if(d.querySelector(".drop-icon:not(.hidden) use[href='#es-line-down']")){
+    //     d.querySelector(".drop-icon:not(.hidden)").click()
+    // }
 // });
 
 
