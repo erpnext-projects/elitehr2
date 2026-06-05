@@ -81,7 +81,7 @@ class CustomTable {
             tfoot.append(footerRow);
         }
 
-
+ 
 
         this.container.append(table);
     }
