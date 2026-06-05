@@ -84,6 +84,42 @@ def get_leave_request_types():
         "data": leaves
     }
 
+@frappe.whitelist()
+def get_request_types():
+    employee = get_employee_logged_in()
+
+    request_types = frappe.get_all(
+            "Elitehr Requests Types",
+            filters={"docstatus":1},
+            fields=["name","arabic_type_name","english_type_name","code","category"]
+        )
+
+    return {
+        "status": "success",
+        "data": request_types
+    }   
+
+@frappe.whitelist()
+def get_notifications(is_read=0):
+    employee = get_employee_logged_in()
+
+    if is_read not in ("0", "1"):
+        frappe.throw(_("Invalid value for is_read, must be 0 or 1"))
+
+    notifications = frappe.get_all(
+        "Notification Log",
+        filters={
+            "for_user": frappe.session.user,
+            "read": is_read
+        },
+        fields=["name","creation","subject","type","read"]
+    )
+
+    return {
+        "status": "success",
+        "data": notifications
+    }
+
 
 @frappe.whitelist()
 def create_leave_request(request_type, subject,start_date, end_date, details):
