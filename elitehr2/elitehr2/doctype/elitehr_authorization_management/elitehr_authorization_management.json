@@ -7,12 +7,15 @@
   "amended_from",
   "section_break_c4wk",
   "authorizer_original_authorizer",
-  "delegator_authorized_approver",
   "column_break_hcxq",
   "authorizer_name",
-  "delegator_name",
   "column_break_kfci",
   "authorizer_email",
+  "section_break_vvyv",
+  "delegator_authorized_approver",
+  "column_break_xxrk",
+  "delegator_name",
+  "column_break_jake",
   "delegator_email",
   "section_break_dqla",
   "request_type_optional",
@@ -117,13 +120,25 @@
    "fieldname": "delegator_email",
    "fieldtype": "Read Only",
    "label": "Delegator Email"
+  },
+  {
+   "fieldname": "section_break_vvyv",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_xxrk",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_jake",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-06-05 16:38:39.099425",
+ "modified": "2026-06-05 16:47:54.718188",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Authorization Management",
