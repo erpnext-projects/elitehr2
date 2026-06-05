@@ -13,7 +13,8 @@
   "currency",
   "column_break_dazn",
   "company_name",
-  "phone_number"
+  "phone_number",
+  "cutoff_day"
  ],
  "fields": [
   {
@@ -63,13 +64,21 @@
    "label": "Currency",
    "options": "EGP\nSAR",
    "reqd": 1
+  },
+  {
+   "fieldname": "cutoff_day",
+   "fieldtype": "Select",
+   "label": "Cut off Day",
+   "not_nullable": 1,
+   "options": "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29\n30\n31",
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-04-12 11:41:10.213361",
+ "modified": "2026-06-05 16:50:15.443185",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Company",
