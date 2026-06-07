@@ -173,8 +173,7 @@
    "fieldtype": "Date",
    "in_list_view": 1,
    "label": "Date",
-   "reqd": 1,
-   "set_only_once": 1
+   "reqd": 1
   },
   {
    "fieldname": "column_break_ftwg",
@@ -202,7 +201,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-05-25 11:53:48.619557",
+ "modified": "2026-06-06 11:49:09.716429",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Payroll",

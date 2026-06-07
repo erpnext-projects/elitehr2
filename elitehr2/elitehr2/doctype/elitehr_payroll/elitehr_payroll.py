@@ -5,7 +5,7 @@ import frappe
 from frappe import _
 from frappe.model.document import Document
 from frappe.utils import get_first_day, get_last_day, add_months, flt, today,add_days, format_datetime,getdate
-from elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin import get_employee_attendance_handler 
+from elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin import get_employee_attendance_handler,get_month_from_and_end_based_on_closing_day , get_attendance_penalty
 import calendar
 from datetime import datetime
 
@@ -61,7 +61,9 @@ class ElitehrPayroll(Document):
         self.net_salary = (employee.salary + self.total_allowances) - (self.total_deductions)
 
         # Attendance
-        attendance = get_employee_attendance_handler(employee= self.employee,from_date= get_first_day(self.date),to_date=get_last_day(self.date))
+        from_date, to_date = get_month_from_and_end_based_on_closing_day(self.date)
+
+        attendance = get_employee_attendance_handler(employee= self.employee,from_date= from_date,to_date=to_date)
         self.set("attendance_table", [])
         for day in attendance:
             self.append("attendance_table", {
@@ -75,6 +77,12 @@ class ElitehrPayroll(Document):
                 "working_seconds": day.get("working_seconds"),
                 "late_minutes": day.get("late_minutes", 0)
             })
+
+            # Attendance Penalty
+            # penalty_type
+            ap = get_attendance_penalty(employee=self.employee, date=day.get("date"), status_code=day.get("status_code"), notify=True)
+            frappe.log(f"Attendance penalty for {day.get('date')}: {ap}")
+
 
         # Requests
         # employee , creation , ATTENDANCE_EDIT
@@ -449,3 +457,4 @@ def get_monthly_total_net_salary(date=None):
         "total_salary": total[0].get("total_salary") or 0,
         "currency": currency
     }
+

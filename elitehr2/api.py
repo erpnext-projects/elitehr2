@@ -209,6 +209,26 @@ def create_leave_request(request_type, subject,start_date, end_date, details):
 
 
 @frappe.whitelist()
+def create_request(**kwargs):
+    emp = get_employee_logged_in()
+
+    parameters = kwargs.copy()
+    parameters["employee"] = emp.name
+
+    doc = frappe.get_doc({
+        "doctype": "Elitehr Requests",
+        **parameters
+    })
+
+    doc.insert()
+    return {
+        "status": "success",
+        "message": _("Request created successfully"),
+        "data": doc.as_dict()
+    }
+
+
+@frappe.whitelist()
 def get_employee_requests(only_leave_requests=False):
 
     user = frappe.session.user
@@ -668,3 +688,35 @@ def leave_policies_rules():
     return {
         "html": html_field.options
     }
+
+
+@frappe.whitelist()
+def mark_notifications_as_read():
+    emp = get_employee_logged_in()
+
+    notifications = frappe.get_all(
+        "Notification Log",
+        filters={
+            "for_user": frappe.session.user,
+            "read": 0
+        },
+        pluck="name"
+    )
+
+    for notification in notifications:
+        frappe.db.set_value(
+            "Notification Log",
+            notification,
+            "read",
+            1,
+            update_modified=False
+        )
+        
+    frappe.db.commit()
+
+    return {
+        "status": "success",
+        "total_marked": len(notifications),
+        "message": _("Notifications marked as read")
+    }
+    

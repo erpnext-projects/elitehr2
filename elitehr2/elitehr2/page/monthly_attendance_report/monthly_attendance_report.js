@@ -80,7 +80,7 @@ frappe.pages['monthly-attendance-report'].on_page_load = function (wrapper) {
 
 
 	renderFormFields();
-	// renderPageButtons(page);
+	renderPageButtons(page);
 }
 
 
@@ -193,6 +193,8 @@ function renderTableData(data) {
 		
 		// أعمدة الأيام
 		const firstRow = data[0] || []
+		console.log("firstRow",firstRow);
+		
 		for (const day in firstRow.days) {
 			columns.push({
 				id: `day_${day}`,
@@ -298,7 +300,7 @@ function fetchRequestsData(date, onComplete) {
 	frappe.dom.freeze("جاري تحميل التقرير...");
 	frappe.call({
 		method: "elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin.get_monthly_attendance_matrix",
-		args: { from_date: date, to_date: frappe.datetime.month_end(date) },
+		args: { ref_date: date},
 		callback: function (r) {
 			let dataFromServer = r.message || [];
 			onComplete(dataFromServer);

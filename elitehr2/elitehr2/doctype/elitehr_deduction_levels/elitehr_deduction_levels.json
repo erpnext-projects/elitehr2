@@ -8,8 +8,10 @@
  "field_order": [
   "from",
   "to",
+  "occurrence",
   "action",
-  "descriptopn"
+  "value",
+  "message"
  ],
  "fields": [
   {
@@ -17,15 +19,8 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "\u0627\u0644\u0627\u0645\u0631",
-   "options": "\u0644\u0627 \u062e\u0635\u0645\n\u0625\u0646\u0630\u0627\u0631\n\u0633\u0627\u0639\u0627\u062a\n\u0623\u064a\u0627\u0645\n\u0646\u0633\u0628\u0629",
+   "options": "No discount\nWarning\nHours\nDays\nPercentage",
    "reqd": 1
-  },
-  {
-   "fieldname": "descriptopn",
-   "fieldtype": "Int",
-   "in_list_view": 1,
-   "label": "\u0627\u0644\u0628\u064a\u0627\u0646",
-   "non_negative": 1
   },
   {
    "fieldname": "from",
@@ -46,13 +41,36 @@
    "label": "To",
    "non_negative": 1,
    "reqd": 1
+  },
+  {
+   "fieldname": "occurrence",
+   "fieldtype": "Int",
+   "hide_days": 1,
+   "hide_seconds": 1,
+   "in_list_view": 1,
+   "label": "Occurrence",
+   "non_negative": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "value",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "\u0627\u0644\u0628\u064a\u0627\u0646",
+   "non_negative": 1
+  },
+  {
+   "fieldname": "message",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "label": "Message"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-03-27 20:52:59.242540",
+ "modified": "2026-06-05 17:28:54.773436",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Deduction Levels",

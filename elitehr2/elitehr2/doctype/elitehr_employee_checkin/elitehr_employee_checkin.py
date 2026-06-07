@@ -5,15 +5,97 @@ import frappe
 from frappe import _
 from frappe.model.document import Document
 from collections import defaultdict
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta,date
 from frappe.utils import get_datetime, time_diff_in_seconds, format_datetime, now_datetime, nowtime, get_first_day, get_last_day, add_months, flt, today,add_days,getdate
 import calendar
 import math
 
 class ElitehrEmployeeCheckin(Document):
-    pass
+    def on_update(self):
+        if self.log_type == "Check In":
+            get_attendance_penalty(employee = self.employee, date = self.date,status_code="Late",notify=True)
+        elif self.log_type == "Check Out":
+            get_attendance_penalty(employee = self.employee, date = self.date,status_code="Early Out",notify=True)
+        
+            
+        
+        
+def get_attendance_penalty(employee, date, status_code=None,notify=False):
+    attendace_status = get_employee_attendance(employee, date)
+
+    frappe.log(f"Attendance after save: {attendace_status}")
+
+    if attendace_status and attendace_status.get('status_code') == status_code:
+        late_minutes = attendace_status.get("late_minutes", 0)
+        early_minutes = attendace_status.get("early_minutes", 0)
+
+        penalty_type = {
+            "Late": "lateness",
+            "Early Out": "Early Out",
+        }.get(status_code)
+
+        if penalty_type is None:
+            return
+
+        # get level from lateness
+        policy = get_matched_penalty(penalty_type=penalty_type)
+        target_policies = []
+
+        if status_code == "Late":
+            target_policies = [
+                row for row in policy.deduction_levels 
+                if row.get("from") <= late_minutes <= row.get("to")
+            ]
+        elif status_code == "Early Out":
+            target_policies = [
+                row for row in policy.deduction_levels 
+                if row.get("from") <= early_minutes <= row.get("to")
+            ]
+       
+            
+        if not target_policies:
+            frappe.throw(f"لم يتم العثور على شريحة مطابقة في اللائحة لدقائق : {late_minutes if status_code == 'Late' else early_minutes} من نوع {status_code}. يرجى مراجعة إدارة الموارد البشرية.")
+            return
 
 
+        target_level = target_policies[0]
+        frappe.log(f"Matched lateness minutes: {late_minutes} falls in range {target_level.get('from')} - {target_level.get('to')}, action is {target_level.action} with value {target_level.value}")
+
+
+        # occurrences in the past month
+        from_date, to_date = get_month_from_and_end_based_on_closing_day(date)
+        if to_date < getdate(date):
+            from_date = add_days(to_date, 1)
+            to_date = add_months(to_date, 1)
+
+        prior_lateness = get_employee_attendance_handler(
+            employee=employee,
+            from_date= from_date,
+            to_date= to_date
+        )
+        # frappe.log(f"from: {from_date}, to: {to_date}, prior_lateness: {prior_lateness}")
+
+        specific_prior_count = sum(
+            1 for p in prior_lateness 
+            if p.get("status_code") == status_code and target_level.get("from",0) <= p.get("late_minutes", 0) <= target_level.get("to",0) and getdate(p.get("date")) < getdate(date)
+        )
+        
+        frappe.log(f"{specific_prior_count} occurrences of lateness in the past month matching the current range")
+
+        # action
+        index = min(specific_prior_count, len(target_policies ) - 1)
+        target_action = target_policies[index]
+        frappe.log(f"Applying action: {target_action.get('from')} - {target_action.get('to')}, action is {target_action.action} with value {target_action.value} , occurrences: {target_action.get('occurrence')} , message: {target_action.get('message')}")
+        if notify:
+            frappe.msgprint(_(target_action.get("message")))
+            frappe.get_doc({
+                "doctype": "Notification Log",
+                "subject": _(target_action.get("message")),
+                "for_user": frappe.session.user,
+                "type": "Alert",
+            }).insert(ignore_permissions=True)
+
+        return target_action.as_dict()
 
 
 
@@ -263,12 +345,17 @@ def get_year_monthes_employees():
 
 
 @frappe.whitelist()
-def get_monthly_attendance_matrix(from_date=None, to_date=None):
+def get_monthly_attendance_matrix(ref_date):
+
+    from_date, to_date = get_month_from_and_end_based_on_closing_day(ref_date)
+    frappe.log(f"Generating attendance matrix for date: {ref_date}, from: {from_date}, to: {to_date}")
 
     rows = get_employee_attendance_handler(
         from_date=from_date,
         to_date=to_date
     ) or []
+
+
     result = {}
     for row in rows:
         emp = row.get("employee")
@@ -304,11 +391,11 @@ def get_monthly_attendance_matrix(from_date=None, to_date=None):
             result[emp]["leaves"] += 1
 
         # تخزين حالة اليوم + اسم اليوم بالعربي
-        result[emp]["days"][day_number] = {
+        result[emp]["days"][date_obj] = {
             "day_name": day_name_en,
             **row,
         }
-
+    frappe.log(f"Attendance matrix result: {result[emp]["days"]}")
     return list(result.values())
 
 
@@ -464,6 +551,7 @@ def get_employee_attendance(employee, date):
     status = _("Absent")
     status_color = "color4"
     late_minutes = 0
+    early_minutes = 0
 
     if check_in:
         statusCode = "Present"
@@ -525,6 +613,7 @@ def get_employee_attendance(employee, date):
         "working_hours": working_hours,
         "working_seconds": working_seconds,
         "late_minutes": late_minutes,
+        "early_minutes": early_minutes,
         "status_color": status_color
     }
 
@@ -652,3 +741,47 @@ def loggedin_manual_attendance():
 
     set_attendance("Check In",employee,"","","","")
     return True
+
+
+
+@frappe.whitelist()
+def get_matched_penalty(penalty_type):
+    docs = frappe.get_all(
+        "Elitehr Deduction Rules",
+        filters={
+            "type": penalty_type,
+            "active": 1
+        },
+        limit=1
+    )
+    if not docs:
+        frappe.throw(_("No active lateness deduction rules found. Please contact HR Manager. for {penalty_type}").format(penalty_type=penalty_type))
+    
+    return frappe.get_doc("Elitehr Deduction Rules", docs[0].name)
+
+
+@frappe.whitelist()
+def get_month_from_and_end_based_on_closing_day(ref_date=None):
+
+    closing_day = int(
+        frappe.db.get_single_value("Elitehr Company", "cutoff_day") or 30
+    )
+    frappe.log(f"Company cutoff_day: {closing_day}")
+
+    ref_date = getdate(ref_date) if ref_date else getdate()
+    
+    previous_month = add_months(ref_date, -1)
+
+    from_date = date(
+        previous_month.year,
+        previous_month.month,
+        closing_day + 1
+    )
+
+    to_date = date(
+        ref_date.year,
+        ref_date.month,
+        closing_day
+    )
+
+    return from_date, to_date
