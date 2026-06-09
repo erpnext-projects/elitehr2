@@ -66,6 +66,14 @@ class ElitehrPayroll(Document):
         attendance = get_employee_attendance_handler(employee= self.employee,from_date= from_date,to_date=to_date)
         self.set("attendance_table", [])
         for day in attendance:
+            # Attendance Penalty
+            # penalty_type
+            deduction_message = ""
+            ap = get_attendance_penalty(employee=self.employee, date=day.get("date"), status_code=day.get("status_code"), notify=True)
+            if ap and ap.get("message"):
+                deduction_message = ap.get("message")
+            frappe.log(f"Attendance penalty for {day.get('date')}: {ap}")
+            
             self.append("attendance_table", {
                 "date": day.get("date"),
                 "check_in": day.get("check_in"),
@@ -75,13 +83,11 @@ class ElitehrPayroll(Document):
                 "status_color": day.get("status_color"),
                 "working_hours": day.get("working_hours"),
                 "working_seconds": day.get("working_seconds"),
-                "late_minutes": day.get("late_minutes", 0)
+                "late_minutes": day.get("late_minutes", 0),
+                "deduction": deduction_message
             })
 
-            # Attendance Penalty
-            # penalty_type
-            ap = get_attendance_penalty(employee=self.employee, date=day.get("date"), status_code=day.get("status_code"), notify=True)
-            frappe.log(f"Attendance penalty for {day.get('date')}: {ap}")
+            
 
 
         # Requests

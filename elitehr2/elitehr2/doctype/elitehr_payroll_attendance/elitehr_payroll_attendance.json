@@ -15,6 +15,7 @@
   "working_hours",
   "working_seconds",
   "late_minutes",
+  "deduction",
   "status_color"
  ],
  "fields": [
@@ -75,13 +76,20 @@
    "fieldname": "section_break_lzgy",
    "fieldtype": "Section Break",
    "read_only": 1
+  },
+  {
+   "fieldname": "deduction",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Deduction Rules",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-04-15 22:57:24.419215",
+ "modified": "2026-06-09 11:38:44.013927",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Payroll Attendance",
