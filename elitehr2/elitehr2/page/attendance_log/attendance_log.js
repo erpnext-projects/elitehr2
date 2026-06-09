@@ -70,7 +70,7 @@ frappe.pages['attendance-log'].on_page_load = function (wrapper) {
 	});
 
 	page.add_inner_button(__("Update"), function () {
-		loadStatistics(selectedDate);
+		update_page();
 	});
 
 	toggleAttendanceButtons();
@@ -78,7 +78,9 @@ frappe.pages['attendance-log'].on_page_load = function (wrapper) {
 
 }
 
-
+function update_page() {
+	loadStatistics(selectedDate);
+}
 function toggleAttendanceButtons() {
 
 	const isToday = selectedDate === frappe.datetime.get_today();
@@ -93,19 +95,24 @@ function toggleAttendanceButtons() {
 }
 
 function manualAttendanceRegistration() {
-	frappe.call({
-		method: "elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin.loggedin_manual_attendance",
-		callback: function (r) {
-			if (r.message) {
-				frappe.show_alert({
-					message: __('تم تسجيل الحضور بنجاح'),
-					indicator: 'green'
-				});
-				// تحديث البيانات
-				loadStatistics(frappe.datetime.get_today());
-			}
+	frappe.getUserLocation(
+		function(lat,long,device_name,device_id) {
+			frappe.call({
+				method: "elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin.loggedin_manual_attendance",
+				args: { latitude: lat,longitude:long, device_name:device_name,device_id:device_id },
+				callback: function (r) {
+					if (r.message) {
+						frappe.show_alert({
+							message: __('تم تسجيل الحضور بنجاح'),
+							indicator: 'green'
+						});
+						// تحديث البيانات
+						loadStatistics(frappe.datetime.get_today());
+					}
+				}
+			});
 		}
-	});
+	)
 }
 
 
@@ -179,6 +186,23 @@ function renderTable(requests,selectedDate) {
 		},
 		{ id: "working_hours", name: "الساعات" },
 		{
+			id:"show_in_map",
+			name:"عرض علي الخريطة",
+			format: (value,row) => {
+				if (row.f_checkin_lat && row.f_checkin_long) {
+					return `
+						<button class="btn btn-xs btn-default btn-show-map" 
+								data-lat="${row.f_checkin_lat}" 
+								data-lng="${row.f_checkin_long}"
+								data-emp="${row.employee_name}"
+								style="padding: 2px 8px;">
+							<i class="fa fa-map-marker text-danger" aria-hidden="true"></i> عرض
+						</button>
+					`;
+				}
+			}
+		},
+		{
 			id: "actions",
 			name: "الإجراءات",
 			format: (value, row) => {
@@ -236,27 +260,42 @@ function renderTable(requests,selectedDate) {
 		frappe.confirm(__(`هل أنت متأكد من تسجيل ${__(logType)} لهذا الموظف؟`), () => {
 			// تعطيل الزرار لمنع الضغط المتكرر
 			btn.prop('disabled', true).text(__('جاري التسجيل...'));
-			frappe.call({
-				method: "elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin.set_attendance",
-				args: {
-					logType: logType,
-					employee: employee_id,
-					latitude: "", 
-					Longitude: "", 
-					device_name: "",
-					device_id: ""
-				},
-				callback: function (r) {
-					if (!r.exc) {
-						frappe.show_alert({ message: __(`تم تسجيل ${__(logType)} بنجاح`), subtitle: 'success' });
-						// إعادة تحميل البيانات لتحديث الجدول والكروت
-						loadStatistics(selectedDate);
-					} else {
-						btn.prop('disabled', false).text(__('Check Out'));
-					}
+			frappe.getUserLocation(
+				function(lat,long,device_name,device_id) {
+					frappe.call({
+						method: "elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin.set_attendance",
+						args: {
+							logType: logType,
+							employee: employee_id,
+							latitude: lat, 
+							Longitude: long, 
+							device_name: device_name,
+							device_id: device_id
+						},
+						callback: function (r) {
+							if (!r.exc) {
+								frappe.show_alert({ message: __(`تم تسجيل ${__(logType)} بنجاح`), subtitle: 'success' });
+								// إعادة تحميل البيانات لتحديث الجدول والكروت
+								loadStatistics(selectedDate);
+							} else {
+								btn.prop('disabled', false).text(__('Check Out'));
+							}
+						}
+					});
 				}
-			});
+			)
+			
 		});
+	});
+
+	tableContainer.off('click', '.btn-show-map');
+	tableContainer.on('click', '.btn-show-map', function (e) {
+		e.preventDefault();
+		const lat = $(this).data('lat');
+		const lng = $(this).data('lng');
+		const empName = $(this).data('emp');
+
+		showMapDialog(lat, lng, empName);
 	});
 
 	new CustomTable({
@@ -266,6 +305,29 @@ function renderTable(requests,selectedDate) {
 	});
 }
 
+
+function showMapDialog(lat, lng, empName) {
+	let mapUrl = `https://maps.google.com/maps?q=${lat},${lng}&hl=ar&z=15&output=embed`;
+
+	let mapDialog = new frappe.ui.Dialog({
+		title: __('موقع بصمة: ') + empName,
+		fields: [
+			{
+				fieldtype: 'HTML',
+				fieldname: 'map_html',
+				options: `
+					<div style="width: 100%; height: 400px; border-radius: 8px; overflow: hidden; border: 1px solid #d1d8dd;">
+						<iframe width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" 
+							src="${mapUrl}">
+						</iframe>
+					</div>
+				`
+			}
+		]
+	});
+	mapDialog.$wrapper.find('.modal-dialog').addClass('modal-xl');
+	mapDialog.show();
+}
 
 
 function showAttendanceModal(cardRow,tableContainer) {
@@ -321,19 +383,23 @@ function showAttendanceModal(cardRow,tableContainer) {
 
 function submitAttendance(emp_id, d) {
 	if (!emp_id) return;
-	frappe.call({
-		method: "elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin.set_attendance_by_employee_id",
-		args: {
-			employee_id: emp_id
-		},
-		callback: function (r) {
-			if (r.message) {
-				frappe.show_alert({ message: __('تم التسجيل بنجاح'), subtitle: 'success' });
-				loadStatistics(frappe.datetime.get_today());
-				d.hide();
-			}
+
+	frappe.getUserLocation(
+		function(lat,long,device_name,device_id) {
+			frappe.call({
+				method: "elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin.set_attendance_by_employee_id",
+				args: { employee_id: emp_id,latitude: lat,longitude:long, device_name:device_name,device_id:device_id },
+				callback: function (r) {
+					if (r.message) {
+						frappe.show_alert({ message: __('تم التسجيل بنجاح'), subtitle: 'success' });
+						loadStatistics(frappe.datetime.get_today());
+						d.hide();
+					}
+				}
+			});
 		}
-	});
+	)
+	
 }
 
 

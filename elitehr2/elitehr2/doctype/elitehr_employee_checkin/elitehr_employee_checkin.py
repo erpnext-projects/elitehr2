@@ -11,6 +11,23 @@ import calendar
 import math
 
 class ElitehrEmployeeCheckin(Document):
+    def before_insert(self):
+        if not self.latitude or not self.longitude:
+            frappe.throw(_("فشل تسجيل الحضور: يجب تشغيل الـ GPS وإرسال الموقع الجغرافي."))
+
+        is_valid, site_doc, distances = get_valid_attendance_site(self.employee, self.latitude, self.longitude)
+        if is_valid:
+            self.site = site_doc.name
+            self.site_name = site_doc.site_name
+        else:
+            frappe.throw(_(f"فشل تسجيل الحضور: موقعك الحالي خارج النطاق الجغرافي المسموح به للشركة."))
+                
+        frappe.log(f"is_valid: {is_valid}, site_doc: {site_doc}, distances: {distances}")
+        
+            
+        
+        
+
     def on_update(self):
         if self.log_type == "Check In":
             get_attendance_penalty(employee = self.employee, date = self.date,status_code="Late",notify=True)
@@ -23,7 +40,7 @@ class ElitehrEmployeeCheckin(Document):
 def get_attendance_penalty(employee, date, status_code=None,notify=False):
     attendace_status = get_employee_attendance(employee, date)
 
-    frappe.log(f"Attendance after save: {attendace_status}")
+    # frappe.log(f"Attendance after save: {attendace_status}")
 
     if attendace_status and attendace_status.get('status_code') == status_code:
         late_minutes = attendace_status.get("late_minutes", 0)
@@ -59,7 +76,7 @@ def get_attendance_penalty(employee, date, status_code=None,notify=False):
 
 
         target_level = target_policies[0]
-        frappe.log(f"Matched lateness minutes: {late_minutes} falls in range {target_level.get('from')} - {target_level.get('to')}, action is {target_level.action} with value {target_level.value}")
+        # frappe.log(f"Matched lateness minutes: {late_minutes} falls in range {target_level.get('from')} - {target_level.get('to')}, action is {target_level.action} with value {target_level.value}")
 
 
         # occurrences in the past month
@@ -80,17 +97,18 @@ def get_attendance_penalty(employee, date, status_code=None,notify=False):
             if p.get("status_code") == status_code and target_level.get("from",0) <= p.get("late_minutes", 0) <= target_level.get("to",0) and getdate(p.get("date")) < getdate(date)
         )
         
-        frappe.log(f"{specific_prior_count} occurrences of lateness in the past month matching the current range")
+        # frappe.log(f"{specific_prior_count} occurrences of lateness in the past month matching the current range")
 
         # action
         index = min(specific_prior_count, len(target_policies ) - 1)
         target_action = target_policies[index]
         frappe.log(f"Applying action: {target_action.get('from')} - {target_action.get('to')}, action is {target_action.action} with value {target_action.value} , occurrences: {target_action.get('occurrence')} , message: {target_action.get('message')}")
-        if notify:
-            frappe.msgprint(_(target_action.get("message")))
+        msg = target_action.get("message")
+        if notify and msg:
+            frappe.msgprint(_(msg))
             frappe.get_doc({
                 "doctype": "Notification Log",
-                "subject": _(target_action.get("message")),
+                "subject": _(msg),
                 "for_user": frappe.session.user,
                 "type": "Alert",
             }).insert(ignore_permissions=True)
@@ -444,6 +462,8 @@ def get_employee_attendance_handler(employee=None,from_date=None,to_date=None):
                     "job_title": emp.job_title,
                     "date": indexDate,
                     "check_in": "",
+                    "f_checkin_lat":"",
+                    "f_checkin_long":"",
                     "check_out": "",
                     "status": _("Weekend"),
                     "status_code": "Weekend",
@@ -465,6 +485,8 @@ def get_employee_attendance_handler(employee=None,from_date=None,to_date=None):
                     "job_title": emp.job_title,
                     "date": indexDate,
                     "check_in": "",
+                    "f_checkin_lat":"",
+                    "f_checkin_long":"",
                     "check_out": "",
                     "status": _("Leave"),
                     "status_code": "Leave",
@@ -521,18 +543,24 @@ def get_employee_attendance(employee, date):
             "employee": employee,
             "date": date
         },
-        fields=["log_type", "time"],
+        fields=["*"],
         order_by="time asc"
     )
 
     check_in = None
+    f_checkin_lat = ""
+    f_checkin_long = ""
     check_out = None
 
     for c in checkins:
         if c.log_type == "Check In" and not check_in:
             check_in = c.time
+            f_checkin_lat = c.latitude
+            f_checkin_long = c.longitude
         elif c.log_type == "Check Out":
             check_out = c.time
+            f_checkin_lat = c.latitude
+            f_checkin_long = c.longitude
 
     # Working Hours
     working_seconds = 0
@@ -607,6 +635,8 @@ def get_employee_attendance(employee, date):
         "employee_name": emp.employee_name,
         "date": date,
         "check_in": check_in or "",
+        "f_checkin_lat": f_checkin_lat or "",
+        "f_checkin_long": f_checkin_long or "",
         "check_out": check_out or "",
         "status": status,
         "status_code": statusCode,
@@ -711,7 +741,7 @@ def set_attendance(logType,employee,latitude,Longitude,device_name,device_id):
     return True
 
 @frappe.whitelist()
-def set_attendance_by_employee_id(employee_id):
+def set_attendance_by_employee_id(employee_id,latitude,longitude,device_name,device_id):
     employees = frappe.get_all("Elitehr Employee", 
         filters={"employee_id": employee_id}, 
         fields=["name", "employee_name"]
@@ -723,13 +753,13 @@ def set_attendance_by_employee_id(employee_id):
     if len(employees) > 1:
         frappe.throw(_("خطأ: يوجد أكثر من موظف مسجل بنفس الرقم ({0})، يرجى مراجعة شؤون الموظفين").format(employee_id))
 
-    set_attendance("Check In",employees[0].name,"","","","")
+    set_attendance("Check In",employees[0].name,latitude,longitude,device_name,device_id)
 
     return True
 
 
 @frappe.whitelist()
-def loggedin_manual_attendance():
+def loggedin_manual_attendance(latitude,longitude,device_name,device_id):
     user = frappe.session.user
     employee = frappe.db.get_value(
         "Elitehr Employee",
@@ -739,7 +769,7 @@ def loggedin_manual_attendance():
     if not employee:
         frappe.throw(_("بيانات الدخول غير مرتبطة بأي موظف"))
 
-    set_attendance("Check In",employee,"","","","")
+    set_attendance("Check In",employee,latitude,longitude,device_name,device_id)
     return True
 
 

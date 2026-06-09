@@ -16,7 +16,11 @@
   "device_id",
   "column_break_pabu",
   "longitude",
-  "device_name"
+  "device_name",
+  "section_break_mbqg",
+  "site",
+  "column_break_slnc",
+  "site_name"
  ],
  "fields": [
   {
@@ -67,6 +71,7 @@
    "fieldname": "device_id",
    "fieldtype": "Data",
    "label": "Device Id",
+   "no_copy": 1,
    "read_only": 1
   },
   {
@@ -78,25 +83,50 @@
    "fieldname": "latitude",
    "fieldtype": "Data",
    "label": "Latitude",
+   "no_copy": 1,
    "read_only": 1
   },
   {
    "fieldname": "longitude",
    "fieldtype": "Data",
    "label": "Longitude",
+   "no_copy": 1,
    "read_only": 1
   },
   {
    "fieldname": "device_name",
    "fieldtype": "Data",
    "label": "Device Name",
+   "no_copy": 1,
    "read_only": 1
+  },
+  {
+   "fieldname": "site",
+   "fieldtype": "Link",
+   "label": "Site",
+   "options": "Elitehr Fingerprint Sites",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "site.site_name",
+   "fieldname": "site_name",
+   "fieldtype": "Data",
+   "label": "Site Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_mbqg",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_slnc",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-05-13 11:09:01.183630",
+ "modified": "2026-06-09 11:24:00.875094",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Employee Checkin",

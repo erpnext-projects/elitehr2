@@ -188,3 +188,28 @@ $(document).ready(function() {
 
 
 
+frappe.getUserLocation = function(onSuccess) {
+    if (navigator.geolocation) {
+        frappe.show_alert({message: __('جاري تحديد موقعك الجغرافي بدقة...'), indicator: 'blue'});
+
+        navigator.geolocation.getCurrentPosition(
+            function(position) {
+                let latitude =  position.coords.latitude;
+                let longitude =  position.coords.longitude;
+                onSuccess(latitude,longitude,"Web Browser",navigator.userAgent)
+            },
+            function(error) {
+                let errorMsg = "فشل جلب الموقع: ";
+                if (error.code == error.PERMISSION_DENIED) {
+                    errorMsg += "يجب السماح للمتصفح بالوصول إلى الـ GPS لتتمكن من تسجيل الحضور.";
+                } else {
+                    errorMsg += "يرجى التأكد من تفعيل خدمة الموقع في جهازك.";
+                }
+                frappe.msgprint({ title: __('خطأ'), indicator: 'red', message: __(errorMsg) });
+            },
+            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+        );
+    } else {
+        frappe.throw(__("متصفحك لا يدعم تتبع الموقع الجغرافي."));
+    }
+};
