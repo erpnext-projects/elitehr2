@@ -552,15 +552,33 @@ def set_employee_attendance(attendace_type,lat,long,phone_name,phone_id):
     })
 
     if pending_request:
-        frappe.throw(_("Device not authorized for attendance, And There's a request for this device, waiting for approval"))
+        # frappe.throw(_("Device not authorized for attendance, And There's a request for this device, waiting for approval"))
+        frappe.local.response.http_status_code = 417
+        return{
+            "status": "error",
+            "message": _("Device not authorized for attendance, And There's a request for this device, waiting for approval")
+        }
 
     if not allowed_devices:
-        frappe.throw(_("Device not authorized for attendance"))
+        # frappe.throw(_("Device not authorized for attendance"))
+        frappe.local.response.http_status_code = 417
+        return{
+            "status": "error",
+            "message": _("Device not authorized for attendance")
+        }
 
-    set_attendance(attendace_type,emp.name, lat, long, phone_name, phone_id)
+    try:
+        set_attendance(attendace_type,emp.name, lat, long, phone_name, phone_id)
+        return {"status": "success",}
+    except frappe.ValidationError as e:
+        frappe.local.response.http_status_code = 417
+        return {
+            "status": "error",
+            "message": str(e)
+        }
 
 
-    return {"status": "success",}
+
 
 
 @frappe.whitelist()
