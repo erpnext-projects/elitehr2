@@ -202,13 +202,15 @@ def get_monthly_comparison_stats(field = "net_salary"):
 
 @frappe.whitelist()
 def calculate_payroll_for_all_employees(date):
-    start_of_month = get_first_day(date)
-    end_of_month = get_last_day(date)
+    # start_of_month = get_first_day(date)
+    # end_of_month = get_last_day(date)
 
+    from_date, to_date = get_month_from_and_end_based_on_closing_day(date)
+    frappe.log(f"{from_date} - {to_date} - {date}")
     if date > today():
         frappe.throw("لا يمكن اختيار تاريخ في المستقبل")
     
-    if date != end_of_month:
+    if f"{date}" != f"{to_date}":
         frappe.throw("لا يمكن تقفيل الشهر قبل نهايته")
 
     active_employees = frappe.get_all("Elitehr Employee", filters={"status": "Active"}, fields=["name", "employee_name", "salary"])
@@ -227,7 +229,7 @@ def calculate_payroll_for_all_employees(date):
         # check if payroll already exists for this employee for the current month
         existing_payroll = frappe.db.exists("Elitehr Payroll", {
             "employee": emp.name,
-            "date": ["between", [start_of_month, end_of_month]]
+            "date": ["between", [from_date, to_date]]
         })
 
         if existing_payroll:
