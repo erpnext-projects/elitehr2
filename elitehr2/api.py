@@ -344,6 +344,27 @@ def get_request_status_history(docname):
     return history
 
 
+@frappe.whitelist()
+def get_requests_field_options(fieldname):
+    meta = frappe.get_meta("Elitehr Requests")
+    field = meta.get_field(fieldname)
+    
+    if not field:
+        return {
+            "status": "error",
+            "message": "Field not found"
+        }
+
+    options = []
+
+    if field.options:
+        options = field.options.split("\n")
+
+    return {
+        "status" : "success",
+        "options": options
+    }
+
 
 # get_leave_summary
 
@@ -556,6 +577,7 @@ def set_employee_attendance(attendace_type,lat,long,phone_name,phone_id):
         frappe.local.response.http_status_code = 417
         return{
             "status": "error",
+            "error_code": 1001,
             "message": _("Device not authorized for attendance, And There's a request for this device, waiting for approval")
         }
 
@@ -564,16 +586,19 @@ def set_employee_attendance(attendace_type,lat,long,phone_name,phone_id):
         frappe.local.response.http_status_code = 417
         return{
             "status": "error",
+            "error_code": 1002,
             "message": _("Device not authorized for attendance")
         }
 
     try:
         set_attendance(attendace_type,emp.name, lat, long, phone_name, phone_id)
         return {"status": "success",}
+
     except frappe.ValidationError as e:
         frappe.local.response.http_status_code = 417
         return {
             "status": "error",
+            "error_code": 1003,
             "message": str(e)
         }
 
