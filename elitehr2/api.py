@@ -215,12 +215,22 @@ def create_request(**kwargs):
     parameters = kwargs.copy()
     parameters["employee"] = emp.name
 
-    doc = frappe.get_doc({
-        "doctype": "Elitehr Requests",
-        **parameters
-    })
+    try:
+        doc = frappe.get_doc({
+            "doctype": "Elitehr Requests",
+            **parameters
+        })
 
-    doc.insert()
+        doc.insert()
+
+    except frappe.ValidationError as e:
+        frappe.local.response.http_status_code = 417
+        return {
+            "status": "error",
+            # "error_code": 1003,
+            "message": str(e)
+        }
+
     return {
         "status": "success",
         "message": _("Request created successfully"),

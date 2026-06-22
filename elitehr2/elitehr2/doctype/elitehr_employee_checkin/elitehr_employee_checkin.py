@@ -23,6 +23,28 @@ class ElitehrEmployeeCheckin(Document):
             frappe.throw(_(f"فشل تسجيل الحضور: موقعك الحالي خارج النطاق الجغرافي المسموح به للشركة."))
                 
         frappe.log(f"is_valid: {is_valid}, site_doc: {site_doc}, distances: {distances}")
+
+        # check multi check in
+        working_days = get_employee_working_days_and_time(self.employee)
+        currentDay =   getdate(self.date).strftime("%A")
+        
+        if currentDay not in working_days:
+            frappe.throw(_("No attendance outside working days"))
+
+        if self.log_type not in ["Check In","Check Out"]:
+            frappe.throw("Attendance Log Type Not Valid.")
+        current_time = now_datetime()
+
+        #check if there's already a logType for today
+        existing_log = frappe.db.exists(
+            "Elitehr Employee Checkin",
+            {
+                "employee": self.employee,
+                "date": self.date,
+                "log_type": self.log_type
+            }    )
+        if existing_log:
+            frappe.throw(_("You have already done {0} for today").format(self.log_type))
         
             
         
@@ -704,26 +726,6 @@ def verify_geofence(user_lat, user_lon, office_lat, office_lon, allowed_radius):
 @frappe.whitelist()
 def set_attendance(logType,employee,latitude,Longitude,device_name,device_id):
     date = today()
-    working_days = get_employee_working_days_and_time(employee)
-    currentDay =   getdate(date).strftime("%A")
-    
-    if currentDay not in working_days:
-        frappe.throw(_("No attendance outside working days"))
-
-    if logType not in ["Check In","Check Out"]:
-        frappe.throw("Attendance Log Type Not Valid.")
-    current_time = now_datetime()
-
-    #check if there's already a logType for today
-    existing_log = frappe.db.exists(
-        "Elitehr Employee Checkin",
-        {
-            "employee": employee,
-            "date": date,
-            "log_type": logType
-        }    )
-    if existing_log:
-        frappe.throw(_("You have already done {0} for today").format(logType))
 
     new_log = frappe.get_doc({
         "doctype": "Elitehr Employee Checkin",
