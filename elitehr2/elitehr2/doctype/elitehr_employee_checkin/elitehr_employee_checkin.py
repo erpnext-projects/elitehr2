@@ -50,12 +50,15 @@ class ElitehrEmployeeCheckin(Document):
         
         
 
-    def on_update(self):
-        if self.log_type == "Check In":
-            get_attendance_penalty(employee = self.employee, date = self.date,status_code="Late",notify=True)
-        elif self.log_type == "Check Out":
-            get_attendance_penalty(employee = self.employee, date = self.date,status_code="Early Out",notify=True)
-        
+    def after_insert(self):
+        try:
+            if self.log_type == "Check In":
+                get_attendance_penalty(employee = self.employee, date = self.date,status_code="Late",notify=True)
+            elif self.log_type == "Check Out":
+                get_attendance_penalty(employee = self.employee, date = self.date,status_code="Early Out",notify=True)
+        except Exception:
+            frappe.db.rollback()
+            raise
             
         
         
