@@ -269,7 +269,7 @@ def get_employee_requests(only_leave_requests=False):
     filters = {"employee": employee.name}
 
     result = []
-    
+
     if only_leave_requests:
         filters["type"] = "LEAVE"
     
@@ -395,9 +395,11 @@ def get_request_status_history(docname):
 
 @frappe.whitelist()
 def get_requests_field_options(fieldname):
+    emp = get_employee_logged_in()
+
     meta = frappe.get_meta("Elitehr Requests")
     field = meta.get_field(fieldname)
-    
+
     if not field:
         return {
             "status": "error",
@@ -408,9 +410,16 @@ def get_requests_field_options(fieldname):
 
     if field.fieldtype == "Select" and field.options:
         options = [{"name": opt, "title": opt} for opt in field.options.split("\n")]
+
     elif field.fieldtype == "Link" and field.options:
-        records = frappe.get_all(field.options, fields=["name","site_name"])
-        options = [{"name": r.name, "title": r.site_name} for r in records]
+
+        if field.options == "Elitehr Fingerprint Sites":
+            records = frappe.get_all(field.options, fields=["name","site_name"], filters={"name":["!=",emp.department]})
+            options = [{"name": r.name, "title": r.site_name} for r in records]
+
+        elif field.options == "Elitehr Branches":
+            records = frappe.get_all(field.options, fields=["name","branch_name"], filters={"name":["!=",emp.branche]})
+            options = [{"name": r.name, "title": r.branch_name} for r in records]
 
     return {
         "status" : "success",
@@ -729,7 +738,7 @@ def get_employee_logged_in():
     employee = frappe.db.get_value(
         "Elitehr Employee",
         {"login_data": user},
-        ["name", "employee_name"],
+        ["name", "employee_name","branche","department"],
         as_dict=True
     )
 
