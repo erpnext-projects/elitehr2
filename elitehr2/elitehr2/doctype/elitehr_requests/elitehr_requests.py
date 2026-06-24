@@ -40,7 +40,7 @@ class ElitehrRequests(Document):
             ) if frappe.db.exists('Elitehr Approval Workflow', {'active': '1', "request_type": self.type}) else None
             
             if workflow is None:
-                frappe.throw(f"No active approval workflow found for request type: {self.type}")
+                frappe.throw(_("No active approval workflow found for request type: {0}. Please contact the HR department.").format(self.type))
             
             department = frappe.get_doc("Elitehr Employee",self.employee)
             departmentId = department.department

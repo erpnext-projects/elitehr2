@@ -5,7 +5,7 @@ from frappe.utils import getdate,nowdate,today,get_first_day
 from datetime import datetime
 # from elitehr2.elitehr2.report.employee_leaves_balances.employee_leaves_balances import get_leave_summary 
 from  elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin import get_employee_attendance_handler,set_attendance,get_valid_attendance_site,get_employee_working_days_and_time
-
+from frappe.utils.file_manager import save_file
 
 @frappe.whitelist(allow_guest=True)
 def login(username, password):
@@ -223,6 +223,20 @@ def create_request(**kwargs):
 
         doc.insert()
 
+        if hasattr(frappe.local, "request") and frappe.request.files:
+            # return len(frappe.request.files.getlist("attachments"))
+            for file_key in frappe.request.files:
+                for file in frappe.request.files.getlist(file_key):
+                        if file.filename:
+                            save_file(
+                                fname=file.filename,
+                                content=file.read(),
+                                dt="Elitehr Requests",
+                                dn=doc.name,
+                                is_private=1
+                            )
+            doc.reload()
+
     except frappe.ValidationError as e:
         frappe.local.response.http_status_code = 417
         return {
@@ -254,6 +268,8 @@ def get_employee_requests(only_leave_requests=False):
 
     filters = {"employee": employee.name}
 
+    result = []
+    
     if only_leave_requests:
         filters["type"] = "LEAVE"
     
@@ -277,9 +293,17 @@ def get_employee_requests(only_leave_requests=False):
             order_by="name asc"
         )
 
-        result = []
-
         for row in data:
+
+            files = frappe.get_all(
+                "File",
+                filters={
+                    "attached_to_doctype": "Elitehr Requests",
+                    "attached_to_name": row.name
+                },
+                fields=["file_name", "file_url"]
+            )
+
             result.append({
                 "id": row.name,
                 "type": row.type,
@@ -293,16 +317,31 @@ def get_employee_requests(only_leave_requests=False):
                 "details": row.details,
                 "status": _(row.status),
                 "creation": row.creation,
+                "files": files,
                 "history": get_request_status_history(row.name)
             })
     else:
         filters["type"] = ["!=", "LEAVE"]
-        result = frappe.get_all(
+        data = frappe.get_all(
             "Elitehr Requests",
             filters=filters,
             fields=["*"],
             order_by="name asc"
         )
+        
+        for row in data:
+            row_dict = dict(row)
+            files = frappe.get_all(
+                    "File",
+                    filters={
+                        "attached_to_doctype": "Elitehr Requests",
+                        "attached_to_name": row.name
+                    },
+                    fields=["file_name", "file_url"]
+                )
+            row_dict["files"] = files
+            result.append(row_dict)
+
 
     return {
         "status": "success",
@@ -367,8 +406,11 @@ def get_requests_field_options(fieldname):
 
     options = []
 
-    if field.options:
-        options = field.options.split("\n")
+    if field.fieldtype == "Select" and field.options:
+        options = [{"name": opt, "title": opt} for opt in field.options.split("\n")]
+    elif field.fieldtype == "Link" and field.options:
+        records = frappe.get_all(field.options, fields=["name","site_name"])
+        options = [{"name": r.name, "title": r.site_name} for r in records]
 
     return {
         "status" : "success",
@@ -693,6 +735,8 @@ def get_employee_logged_in():
 
     if not employee:
         frappe.throw(_("No employee linked to this user"))
+
+    frappe.local.lang = "ar"
     return employee
 
 
