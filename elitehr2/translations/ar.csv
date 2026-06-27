@@ -474,3 +474,10 @@ Warning, تحذير
 Hours, ساعات
 Days, أيام
 "No active approval workflow found for request type: {0}. Please contact the HR department.","لا يوجد مسار اعتماد نشط لنوع الطلب: {0}. برجاء مراجعة الـ HR."
+Identity card, بطاقة الهوية
+Passport, جواز سفر
+Employment contract, عقد العمل
+Certificate, شهادة
+Medical report, تقرير طبي
+Bank statements, بيانات بنكية
+Other, أخري

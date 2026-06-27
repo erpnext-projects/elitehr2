@@ -6,6 +6,8 @@ from datetime import datetime
 # from elitehr2.elitehr2.report.employee_leaves_balances.employee_leaves_balances import get_leave_summary 
 from  elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin import get_employee_attendance_handler,set_attendance,get_valid_attendance_site,get_employee_working_days_and_time
 from frappe.utils.file_manager import save_file
+import json
+from frappe.model.meta import get_meta
 
 @frappe.whitelist(allow_guest=True)
 def login(username, password):
@@ -215,6 +217,23 @@ def create_request(**kwargs):
     parameters = kwargs.copy()
     parameters["employee"] = emp.name
 
+    
+    attachments_raw = parameters.pop("attachments", None)
+    clean_raw = str(attachments_raw).strip()
+    attachments_list = []
+    
+    if attachments_raw:
+        try:
+            if isinstance(attachments_raw, str):
+                attachments_list = json.loads(attachments_raw)
+            elif isinstance(attachments_raw, list):
+                attachments_list = attachments_raw
+        except Exception as e:
+            frappe.log_error(str(e), "Error Parsing Attachments")
+            pass
+
+ 
+
     try:
         doc = frappe.get_doc({
             "doctype": "Elitehr Requests",
@@ -223,19 +242,36 @@ def create_request(**kwargs):
 
         doc.insert()
 
+        uploaded_files_urls = {}
+
         if hasattr(frappe.local, "request") and frappe.request.files:
             # return len(frappe.request.files.getlist("attachments"))
             for file_key in frappe.request.files:
                 for file in frappe.request.files.getlist(file_key):
-                        if file.filename:
-                            save_file(
-                                fname=file.filename,
-                                content=file.read(),
-                                dt="Elitehr Requests",
-                                dn=doc.name,
-                                is_private=1
-                            )
-            doc.reload()
+                    if file.filename:
+                        saved_file = save_file(
+                            fname=file.filename,
+                            content=file.read(),
+                            dt="Elitehr Requests",
+                            dn=doc.name,
+                            is_private=1
+                        )
+                        uploaded_files_urls[file.filename] = saved_file.file_url
+            
+        if doc.type in ["EXPENSE_PURCHASE","EXPENSE_TRAVEL","RESIGNATION"] and attachments_list:
+            for att in attachments_list:
+                fname = att.get("file_name")
+                doc.append("attachments", {
+                    "file_name": fname,
+                    "attach_type": att.get("attach_type"),
+                    "notes": att.get("notes"),
+                    # جلب رابط الملف الفعلي الذي تم رفعه باستخدام اسم الملف كمرجع
+                    "file": uploaded_files_urls.get(fname) 
+                })
+            doc.save()
+
+        doc.reload()
+
 
     except frappe.ValidationError as e:
         frappe.local.response.http_status_code = 417
@@ -249,6 +285,31 @@ def create_request(**kwargs):
         "status": "success",
         "message": _("Request created successfully"),
         "data": doc.as_dict()
+    }
+
+
+@frappe.whitelist()
+def get_expense_attach_types():
+    emp = get_employee_logged_in()
+
+    meta = get_meta("Elitehr Requests")
+    table_field = meta.get_field("attachments")
+
+    if not table_field:
+        return {"status": "error", "message": "Child table not found"}
+    
+    child_meta = get_meta(table_field.options)
+
+    attach_type_field = child_meta.get_field("attach_type")
+    if not attach_type_field:
+        return {"status": "error", "message": "Field not found"}
+
+    options = attach_type_field.options.split('\n')
+    clean_options = [{"name": opt,"title": _(opt)} for opt in options if opt.strip()]
+    
+    return {
+        "status": "success",
+        "data": clean_options
     }
 
 
