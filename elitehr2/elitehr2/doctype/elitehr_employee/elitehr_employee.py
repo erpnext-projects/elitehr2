@@ -122,6 +122,10 @@ def update_user_roles(doc, method=None):
             doc.append("roles", {
                 "role": "Elite HR Admin"
             })
+            doc.append("roles", {
+                "role": "Raven Admin"
+            })
+
 
 # @frappe.whitelist()
 # def test(doc):
