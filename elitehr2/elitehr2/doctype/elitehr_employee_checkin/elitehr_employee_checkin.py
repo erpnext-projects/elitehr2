@@ -798,7 +798,7 @@ def get_matched_penalty(penalty_type):
         limit=1
     )
     if not docs:
-        frappe.throw(_("No active lateness deduction rules found. Please contact HR Manager. for {penalty_type}").format(penalty_type=penalty_type))
+        frappe.throw(_("No active deduction rules found. Please contact HR Manager. for {penalty_type}").format(penalty_type=penalty_type))
     
     return frappe.get_doc("Elitehr Deduction Rules", docs[0].name)
 
