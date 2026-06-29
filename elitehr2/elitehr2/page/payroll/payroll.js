@@ -744,12 +744,34 @@ function renderPageButtons(page) {
 			({ date }) => {
 				// this is check and more in server side
 				const today = frappe.datetime.get_today();
-				if (date > today) {
-					frappe.msgprint(__('التاريخ لا يمكن أن يكون في المستقبل'));
-					return;
-				}
+				frappe.call({
+					method: "elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin.get_month_from_and_end_based_on_closing_day",
+					args: {ref_date:today},
+					callback: function(r) {
+						if (r.message) {
+							let from_date = r.message[0]
+							let to_date = r.message[1]
+							
+							if (date > to_date) {
+								frappe.msgprint(__('التاريخ لا يمكن أن يكون في المستقبل'));
+								return;
+							}else if (date < to_date){
+								frappe.confirm('تأكيد تقفيل  الشهر قبل معاده؟',
+								() => {
+									// frappe.dom.freeze(__('جاري الاحتساب...'));
+									payrollCalculation(date,force_close_before_month_end=true);
+									// frappe.dom.unfreeze();
+								})
+							}else{
+								payrollCalculation(date,force_close_before_month_end=false);
+							}						
+						}else{
+							alert("error!")
+						}
+					}
+				});
 				
-				payrollCalculation(date);
+				
 			}
 		);
 	});
@@ -764,17 +786,19 @@ function updatePageData() {
 	onFieldsUpdate();
 }
 
-function payrollCalculation(date) {
+function payrollCalculation(date,force_close_before_month_end) {
 	frappe.call({
 		method: "elitehr2.elitehr2.doctype.elitehr_payroll.elitehr_payroll.calculate_payroll_for_all_employees",
-		args: {date:date},
+		args: {date:date,force_close_before_month_end:force_close_before_month_end},
 		callback: function (r) {
 			if (r.message) {
 				frappe.show_alert({ message: __('تم حساب الرواتب بنجاح') });
 				requestsData = [];
 				onFieldsUpdate();
 			}
-		}
+		},
+		freeze: true,
+		freeze_message: "جاري حساب الرواتب للموظفين"
 	});
 }
 

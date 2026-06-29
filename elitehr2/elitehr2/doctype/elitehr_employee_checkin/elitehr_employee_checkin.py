@@ -568,6 +568,8 @@ def get_employee_attendance(employee, date):
     emp = frappe.get_doc("Elitehr Employee", employee)
 
     working_days_and_time = get_employee_working_days_and_time(employee)
+    if not working_days_and_time:
+        frappe.log(f"working_days_and_time: {working_days_and_time},\nemployee: {employee} \ndate: {date}")
 
     # ✅ بصمات اليوم
     checkins = frappe.get_all(
@@ -622,7 +624,7 @@ def get_employee_attendance(employee, date):
     # Late
     currentDay =   getdate(date).strftime("%A")
     currentDayTime = working_days_and_time.get(currentDay)
-    if check_in and currentDayTime['from_time']:
+    if check_in and currentDayTime and currentDayTime['from_time'] :
         late_diff = time_diff_in_seconds(check_in, currentDayTime['from_time'])
         if late_diff > 0:
             late_minutes = int(late_diff // 60)

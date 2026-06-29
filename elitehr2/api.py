@@ -799,7 +799,7 @@ def get_employee_logged_in():
     employee = frappe.db.get_value(
         "Elitehr Employee",
         {"login_data": user},
-        ["name", "employee_name","branche","department"],
+        ["name", "employee_name","branche","department","login_data"],
         as_dict=True
     )
 
@@ -887,3 +887,50 @@ def mark_notifications_as_read():
         "message": _("Notifications marked as read")
     }
     
+
+
+@frappe.whitelist()
+def user_fcm(device_name,device_token,device_type):
+
+    if device_type not in ["ios", "android"]:
+        return {
+            "success": False,
+            "message": _("Invalid device type must ios or android")
+        }
+
+    emp = get_employee_logged_in()
+
+    user_device = frappe.get_all("User Device",filters={"user":emp.login_data},fields=["name"])
+
+    try:
+        if user_device:
+            # update existing device
+            doc = frappe.get_doc("User Device", user_device[0].name)
+            doc.device_name = device_name
+            doc.device_token = device_token
+            doc.device_type = device_type
+            doc.is_active = True
+            doc.save(ignore_permissions=True)
+        else:
+            # create new device
+            doc = frappe.get_doc({
+                "doctype": "User Device",
+                "user": emp.login_data,
+                "device_name": device_name,
+                "device_token": device_token,
+                "device_type": device_type,
+                "is_active": True
+            })
+            doc.insert(ignore_permissions=True)
+        frappe.db.commit()
+
+    except Exception as e:
+        return{
+            "success": False,
+            "message": str(e)
+        }
+
+    return {
+        "success": True,
+        "device": doc.name
+    }

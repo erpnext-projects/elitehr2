@@ -48,7 +48,20 @@ class ElitehrPayroll(Document):
         absents_total = 0
         day_wage = round((self.basic_salary * 12) / 365,2)
         from_date, to_date = get_month_from_and_end_based_on_closing_day(self.date)
-        attendance = get_employee_attendance_handler(employee= self.employee,from_date= from_date,to_date=to_date)
+        # check end data and today
+
+        if getdate(self.date) > getdate(to_date):
+            frappe.throw("لا يمكن اختيار تاريخ في المستقبل")
+        elif getdate(self.date) < getdate(to_date):
+            self.date_is_before_month_end = True
+            if not self.force_close_before_month_end:
+                frappe.msgprint("التاريخ المختار قبل نهاية الشهر، قم بتفعيل خيار السماح بالتقفيل قبل نهاية الشهر لاعتماد الراتب.")
+                self.status = "Under review"
+        else:
+            self.date_is_before_month_end = False
+            self.force_close_before_month_end = False
+            
+        attendance = get_employee_attendance_handler(employee= self.employee,from_date= from_date,to_date=self.date)
         self.set("attendance_table", [])
         self.set("gaps_table", [])
         for day in attendance:
@@ -237,17 +250,12 @@ def get_monthly_comparison_stats(field = "net_salary"):
     
 
 @frappe.whitelist()
-def calculate_payroll_for_all_employees(date):
+def calculate_payroll_for_all_employees(date,force_close_before_month_end = False):
     # start_of_month = get_first_day(date)
     # end_of_month = get_last_day(date)
 
     from_date, to_date = get_month_from_and_end_based_on_closing_day(date)
-    frappe.log(f"{from_date} - {to_date} - {date}")
-    if date > today():
-        frappe.throw("لا يمكن اختيار تاريخ في المستقبل")
-    
-    if f"{date}" != f"{to_date}":
-        frappe.throw("لا يمكن تقفيل الشهر قبل نهايته")
+   
 
     active_employees = frappe.get_all("Elitehr Employee", filters={"status": "Active"}, fields=["name", "employee_name", "salary"])
     total_reviewed = len(active_employees)
@@ -260,7 +268,7 @@ def calculate_payroll_for_all_employees(date):
     already_has_payroll_count = 0
     successfully_processed_count = 0
     
-
+    frappe.log(f"active_employees: {active_employees}")
     for emp in active_employees:
         # check if payroll already exists for this employee for the current month
         existing_payroll = frappe.db.exists("Elitehr Payroll", {
@@ -274,6 +282,9 @@ def calculate_payroll_for_all_employees(date):
             payroll_doc = frappe.new_doc("Elitehr Payroll")
             payroll_doc.employee = emp.name
             payroll_doc.date = date
+            if force_close_before_month_end:
+                payroll_doc.date_is_before_month_end = True
+                payroll_doc.force_close_before_month_end = True
             payroll_doc.save()
             successfully_processed_count += 1
     

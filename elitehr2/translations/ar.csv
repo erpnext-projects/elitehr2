@@ -490,3 +490,5 @@ Only gaps, الفجوات فقط
 Elitehr Payroll Leaves, طلبات الاجازات
 Deduction for absences, خصم غياب
 No active deduction rules found. Please contact HR Manager. for {0}, لم يتم العثور على قواعد خصم فعّالة. يُرجى التواصل مع مدير الموارد البشرية. {0}
+Date is before month end, التاريخ محدد قبل نهاية دورة الاقفال للشركة
+Force close before month end, السماح بالتقفيل قبل نهاية الشهر 
