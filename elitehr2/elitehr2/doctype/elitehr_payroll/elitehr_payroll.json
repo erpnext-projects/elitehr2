@@ -12,24 +12,27 @@
   "employee_name",
   "date_of_appointment",
   "job_title",
-  "section_break_esrf",
-  "department",
-  "basic_salary",
-  "column_break_oxmh",
-  "department_name",
-  "net_salary",
-  "section_break_rqyw",
-  "allowances",
-  "total_allowances",
-  "deductions",
-  "total_deductions",
-  "salary_correction",
   "section_break_cnhs",
   "date",
   "column_break_ftwg",
   "status",
+  "section_break_esrf",
+  "department",
+  "basic_salary",
+  "total_allowances",
+  "column_break_oxmh",
+  "department_name",
+  "net_salary",
+  "total_deductions",
+  "section_break_rqyw",
+  "allowances",
+  "deductions",
+  "salary_correction",
   "section_break_jsnw",
+  "only_gaps",
   "attendance_table",
+  "gaps_table",
+  "processing_requests_section",
   "processing_requests"
  ],
  "fields": [
@@ -180,10 +183,13 @@
    "fieldtype": "Column Break"
   },
   {
+   "collapsible": 1,
    "fieldname": "section_break_jsnw",
-   "fieldtype": "Section Break"
+   "fieldtype": "Section Break",
+   "label": "Attendance table log and gaps"
   },
   {
+   "depends_on": "eval: doc.only_gaps == false",
    "fieldname": "attendance_table",
    "fieldtype": "Table",
    "label": "Attendance Table Log",
@@ -193,15 +199,34 @@
   {
    "fieldname": "processing_requests",
    "fieldtype": "Table",
-   "label": "Processing requests",
    "options": "Elitehr Payroll Processing requests",
    "read_only": 1
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "processing_requests_section",
+   "fieldtype": "Section Break",
+   "label": "Processing requests"
+  },
+  {
+   "depends_on": "eval: doc.only_gaps",
+   "fieldname": "gaps_table",
+   "fieldtype": "Table",
+   "label": "Gaps table",
+   "options": "Elitehr Payroll Attendance",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "only_gaps",
+   "fieldtype": "Check",
+   "label": "Only gaps"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-06-06 11:49:09.716429",
+ "modified": "2026-06-28 11:20:32.120870",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Payroll",

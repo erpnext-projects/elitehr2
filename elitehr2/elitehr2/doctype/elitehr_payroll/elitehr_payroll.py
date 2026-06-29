@@ -44,37 +44,37 @@ class ElitehrPayroll(Document):
                 self.total_deductions += (deduction.amount / 100) * employee.salary
 
 
-        # Salary correction
-        sallaryAddition = 0
-        sallaryDeduction = 0
-        for correction in self.salary_correction:
-            if correction.type == "Addition (+)":
-                sallaryAddition += correction.amount
-            elif correction.type == "Deduction (-)":
-                sallaryDeduction += correction.amount
-
-        # update salary dedction and allowance total
-        self.total_deductions += sallaryDeduction
-        self.total_allowances += sallaryAddition
-
-        # Net Salary
-        self.net_salary = (employee.salary + self.total_allowances) - (self.total_deductions)
-
         # Attendance
+        absents_total = 0
+        day_wage = round((self.basic_salary * 12) / 365,2)
         from_date, to_date = get_month_from_and_end_based_on_closing_day(self.date)
-
         attendance = get_employee_attendance_handler(employee= self.employee,from_date= from_date,to_date=to_date)
         self.set("attendance_table", [])
+        self.set("gaps_table", [])
         for day in attendance:
             # Attendance Penalty
             # penalty_type
             deduction_message = ""
-            ap = get_attendance_penalty(employee=self.employee, date=day.get("date"), status_code=day.get("status_code"), notify=True)
+            deduction_action = ""
+            deduction_value = ""
+            ap = get_attendance_penalty(employee=self.employee, date=day.get("date"), status_code=day.get("status_code"), notify=False)
             if ap and ap.get("message"):
                 deduction_message = ap.get("message")
-            frappe.log(f"Attendance penalty for {day.get('date')}: {ap}")
+            if ap:
+                deduction_action = ap.get("action") 
+                deduction_value = ap.get("value") 
+
+                # absents_total
+                if day.get("status_code") == "Absent" and ap and ap.get("value"):
+                    if ap.get("action") == "Days":
+                        absents_total = round(absents_total + (day_wage * ap.get("value")),2)
+                    elif ap.get("action") == "Percentage":
+                        absents_total = round(absents_total + ((day_wage/100) * ap.get("value")),2)
+                    
+                
+            # frappe.log(f"Attendance penalty for {day.get('date')}: {ap}")
             
-            self.append("attendance_table", {
+            data = {
                 "date": day.get("date"),
                 "check_in": day.get("check_in"),
                 "check_out": day.get("check_out"),
@@ -84,10 +84,31 @@ class ElitehrPayroll(Document):
                 "working_hours": day.get("working_hours"),
                 "working_seconds": day.get("working_seconds"),
                 "late_minutes": day.get("late_minutes", 0),
-                "deduction": deduction_message
-            })
+                "deduction_message": deduction_message,
+                "deduction_action" : deduction_action,
+                "deduction_value" : deduction_value
+            }
+            self.append("attendance_table", data)
 
-            
+            # gaps
+            if day.get("status_code") in ["Late","Absent","Early Out"]:
+                self.append("gaps_table", data)
+
+        # absents_total
+        # frappe.log(f"absents_total: {absents_total} / day_wage: {day_wage}")
+        # remove old absence deduction
+        self.salary_correction = [
+            row for row in self.salary_correction
+            if row.deduction_type != "Absence deduction"
+        ]
+        if absents_total > 0:
+            self.append("salary_correction", {
+                "type" : "Deduction (-)",
+                "deduction_type" : "Absence deduction",
+                "amount" : int(absents_total),
+                "description" : _("Deduction for absences"),
+                "reason" : _("Deduction for absences"),
+            })
 
 
         # Requests
@@ -116,6 +137,21 @@ class ElitehrPayroll(Document):
             })
 
 
+        # Salary correction
+        sallaryAddition = 0
+        sallaryDeduction = 0
+        for correction in self.salary_correction:
+            if correction.type == "Addition (+)":
+                sallaryAddition += correction.amount
+            elif correction.type == "Deduction (-)":
+                sallaryDeduction += correction.amount
+
+        # update salary dedction and allowance total
+        self.total_deductions += sallaryDeduction
+        self.total_allowances += sallaryAddition
+
+        # Net Salary
+        self.net_salary = (employee.salary + self.total_allowances) - (self.total_deductions)
     
 @frappe.whitelist()
 def payrloll(fromDate, toDate):

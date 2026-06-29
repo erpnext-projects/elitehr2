@@ -15,7 +15,9 @@
   "working_hours",
   "working_seconds",
   "late_minutes",
-  "deduction",
+  "deduction_action",
+  "deduction_value",
+  "deduction_message",
   "status_color"
  ],
  "fields": [
@@ -78,10 +80,22 @@
    "read_only": 1
   },
   {
-   "fieldname": "deduction",
+   "fieldname": "deduction_action",
+   "fieldtype": "Data",
+   "label": "Deduction action",
+   "read_only": 1
+  },
+  {
+   "fieldname": "deduction_value",
+   "fieldtype": "Data",
+   "label": "Deduction value",
+   "read_only": 1
+  },
+  {
+   "fieldname": "deduction_message",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Deduction Rules",
+   "label": "Deduction message",
    "read_only": 1
   }
  ],
@@ -89,7 +103,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-06-09 11:38:44.013927",
+ "modified": "2026-06-28 09:58:43.356836",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Payroll Attendance",

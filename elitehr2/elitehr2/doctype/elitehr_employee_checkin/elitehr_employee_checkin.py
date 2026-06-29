@@ -74,6 +74,7 @@ def get_attendance_penalty(employee, date, status_code=None,notify=False):
         penalty_type = {
             "Late": "lateness",
             "Early Out": "Early Out",
+            "Absent": "Absent",
         }.get(status_code)
 
         if penalty_type is None:
@@ -93,6 +94,8 @@ def get_attendance_penalty(employee, date, status_code=None,notify=False):
                 row for row in policy.deduction_levels 
                 if row.get("from") <= early_minutes <= row.get("to")
             ]
+        elif status_code == "Absent":
+            target_policies = policy.deduction_levels 
        
             
         if not target_policies:
@@ -121,13 +124,18 @@ def get_attendance_penalty(employee, date, status_code=None,notify=False):
             1 for p in prior_lateness 
             if p.get("status_code") == status_code and target_level.get("from",0) <= p.get("late_minutes", 0) <= target_level.get("to",0) and getdate(p.get("date")) < getdate(date)
         )
+        if status_code == "Absent":
+            specific_prior_count = sum(
+                1 for p in prior_lateness 
+                if p.get("status_code") == status_code and getdate(p.get("date")) < getdate(date)
+            )
         
         # frappe.log(f"{specific_prior_count} occurrences of lateness in the past month matching the current range")
 
         # action
         index = min(specific_prior_count, len(target_policies ) - 1)
         target_action = target_policies[index]
-        frappe.log(f"Applying action: {target_action.get('from')} - {target_action.get('to')}, action is {target_action.action} with value {target_action.value} , occurrences: {target_action.get('occurrence')} , message: {target_action.get('message')}")
+        # frappe.log(f"Applying action: {target_action.get('from')} - {target_action.get('to')}, action is {target_action.action} with value {target_action.value} , occurrences: {target_action.get('occurrence')} , message: {target_action.get('message')}")
         msg = target_action.get("message")
         if notify and msg:
             frappe.msgprint(_(msg))
