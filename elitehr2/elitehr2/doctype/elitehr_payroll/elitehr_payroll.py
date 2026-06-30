@@ -306,7 +306,13 @@ def process_payroll_background(date, force_close_before_month_end, user):
         
         frappe.publish_realtime(
             event='payroll_process_complete',
-            message={'status': 'Success', 'total': total_employees},
+            message={
+                'status': 'Success',
+                'total_reviewed': total_employees,
+                "already_has_payroll_count": already_has_payroll_count,
+                "successfully_processed_count": successfully_processed_count
+
+                },
             user=user
         )
     except Exception as e:
@@ -318,17 +324,6 @@ def process_payroll_background(date, force_close_before_month_end, user):
             user=user
         )
 
-    # msg = f"""
-    #     <b>تمت عملية المعالجة بنجاح:</b><br>
-    #     <ul>
-    #         <li>تم مراجعة <b>{total_reviewed}</b> موظف.</li>
-    #         <li><b>{already_has_payroll_count}</b> موظفين لديهم راتب لهذا الشهر بالفعل.</li>
-    #         <li>تم حساب الراتب لـ <b>{successfully_processed_count}</b> موظف بنجاح.</li>
-    #     </ul>
-    # """
-
-    # frappe.msgprint(msg,title="نتائج احتساب الرواتب")
-    # return True
 
 @frappe.whitelist()
 def start_calculate_payroll_for_all_employees(date,force_close_before_month_end = False):

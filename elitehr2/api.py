@@ -934,3 +934,7 @@ def user_fcm(device_name,device_token,device_type):
         "success": True,
         "device": doc.name
     }
+
+
+#  "ssl_certificate": "/etc/ssl/certs/erpnext-local.crt",
+#  "ssl_certificate_key": "/etc/ssl/private/erpnext-local.key"

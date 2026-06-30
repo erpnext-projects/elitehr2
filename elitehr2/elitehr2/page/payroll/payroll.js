@@ -807,7 +807,6 @@ function payrollCalculation(date,force_close_before_month_end) {
 
 
 frappe.realtime.on('payroll_progress_update', function(data) {
-	console.log("PAYROLL EVENT", data);
     // تحديث شريط التحميل بناءً على البيانات القادمة من البايثون
     let percent = (data.progress / data.total) * 100;
     frappe.show_progress(
@@ -825,14 +824,24 @@ frappe.realtime.on('payroll_process_complete', function(data) {
         frappe.msgprint({
             title: __('خطأ أثناء المعالجة'),
             indicator: 'red',
-            message: `<b>حدث خطأ في الخلفية:</b><br>${data.message}<br><br>يرجى مراجعة (Error Log) لمزيد من التفاصيل.`
+            message: data.message
         });
     } else {
-        frappe.msgprint({
-            title: __('اكتملت العملية'),
-            indicator: 'green',
-            message: `تم احتساب الرواتب بنجاح لعدد ${data.total} موظف.`
-        });
-        updatePageData();
+		let  msg = `
+			<b>تمت عملية المعالجة بنجاح:</b><br>
+			<ul>
+				<li>تم مراجعة <b>${data.total_reviewed}</b> موظف.</li>
+				<li><b>${data.already_has_payroll_count}</b> موظفين لديهم راتب لهذا الشهر بالفعل.</li>
+				<li>تم حساب الراتب لـ <b>${data.successfully_processed_count}</b> موظف بنجاح.</li>
+			</ul>
+		`
+
+		frappe.msgprint({
+			title: "نتائج احتساب الرواتب",
+			indicator: "green",
+			message: msg
+		})
+			
+		updatePageData();
     }
 });
