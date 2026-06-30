@@ -795,10 +795,6 @@ function payrollCalculation(date,force_close_before_month_end) {
 
 
 frappe.realtime.on('payroll_progress_update', function(data) {
-<<<<<<< HEAD
-=======
-    // تحديث شريط التحميل بناءً على البيانات القادمة من البايثون
->>>>>>> ba5a104c8bfbe1052be78b53e84673fd20a1ac2a
     let percent = (data.progress / data.total) * 100;
     frappe.show_progress(
         __("Payroll Calculation"), 
@@ -821,28 +817,16 @@ frappe.realtime.on('payroll_process_complete', function(data) {
         });
     } else {
 		let  msg = `
-<<<<<<< HEAD
 			<b>${__("Payroll calculation completed successfully")}</b><br>
 			<ul>
 				<li>${__("{0} employees were reviewed.", [data.total_reviewed])}</li>
 				<li>${__("{0} employees already have payroll for this month.", [data.already_has_payroll_count])}</li>
 				<li>${__("Payroll calculated successfully for {0} employees.", [data.successfully_processed_count])}</li>
-=======
-			<b>تمت عملية المعالجة بنجاح:</b><br>
-			<ul>
-				<li>تم مراجعة <b>${data.total_reviewed}</b> موظف.</li>
-				<li><b>${data.already_has_payroll_count}</b> موظفين لديهم راتب لهذا الشهر بالفعل.</li>
-				<li>تم حساب الراتب لـ <b>${data.successfully_processed_count}</b> موظف بنجاح.</li>
->>>>>>> ba5a104c8bfbe1052be78b53e84673fd20a1ac2a
 			</ul>
 		`
 
 		frappe.msgprint({
-<<<<<<< HEAD
 			title: __("Payroll Calculation Results"),
-=======
-			title: "نتائج احتساب الرواتب",
->>>>>>> ba5a104c8bfbe1052be78b53e84673fd20a1ac2a
 			indicator: "green",
 			message: msg
 		})
