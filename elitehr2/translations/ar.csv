@@ -492,3 +492,17 @@ Deduction for absences, خصم غياب
 No active deduction rules found. Please contact HR Manager. for {0}, لم يتم العثور على قواعد خصم فعّالة. يُرجى التواصل مع مدير الموارد البشرية. {0}
 Date is before month end, التاريخ محدد قبل نهاية دورة الاقفال للشركة
 Force close before month end, السماح بالتقفيل قبل نهاية الشهر 
+Select the date, اختر التاريخ
+Confirmation of closing the month before its due date?, تأكيد تقفيل  الشهر قبل معاده؟
+The date cannot be in the future, التاريخ لا يمكن أن يكون في المستقبل
+Payroll Calculation Results, نتائج احتساب الرواتب
+Processing error, خطأ أثناء المعالجة
+Payroll calculation in progress for {0} ({1} out of {2}), جاري حساب الرواتب للموظف {0} ({1} من {2})
+Payroll calculation completed successfully, تمت عملية احتساب الرواتب بنجاح
+{0} employees were reviewed., تم مراجعة {0} موظف.
+{0} employees already have payroll for this month., يوجد {0} موظفين لديهم راتب لهذا الشهر بالفعل.
+Payroll calculated successfully for {0} employees., تم حساب الراتب بنجاح لـ {0} موظف.
+To date, الي تاريخ
+Search for employee, بحث عن موظف
+Search for employee..., بحث عن موظف...
+From date, من تاريخ

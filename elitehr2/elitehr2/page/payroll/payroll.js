@@ -636,7 +636,7 @@ function renderFormFields() {
 	fromDateField = frappe.ui.form.make_control({
 		parent: filtersContainer,
 		df: {
-			label: __('من تاريخ:'),
+			label: __("From date"),
 			fieldname: 'from_date',
 			fieldtype: 'Date',
 			change: onFieldsUpdate
@@ -649,7 +649,7 @@ function renderFormFields() {
 	toDateField = frappe.ui.form.make_control({
 		parent: filtersContainer,
 		df: {
-			label: __('الي تاريخ:'),
+			label: __("To date"),
 			fieldname: 'to_date',
 			fieldtype: 'Date',
 			change: onFieldsUpdate
@@ -662,11 +662,10 @@ function renderFormFields() {
 		parent: filtersContainer,
 		df: {
 
-			label: 'بحث عن موظف',
+			label: __("Search for employee"),
 			fieldname: 'employee_search',
 			fieldtype: 'Link',
 			options: 'Elitehr Employee',
-			placeholder: 'بحث عن موظف...',
 			change: onFieldsUpdate
 		},
 		render_input: true
@@ -680,7 +679,7 @@ function renderFormFields() {
 		parent: filtersContainer,
 		df: {
 
-			label: 'القسم',
+			label: 'Department',
 			fieldname: 'department',
 			fieldtype: 'Link',
 			options: 'Elitehr Fingerprint Sites',
@@ -733,7 +732,7 @@ function renderPageButtons(page) {
 		const currentYear = new Date().getFullYear();
 		frappe.prompt(
 			{
-				label: 'اختر التاريخ',
+				label: __("Select the date"),
 				fieldname: 'date',
 				fieldtype: 'Date',
 				min: `${currentYear}-01-01`,
@@ -753,14 +752,12 @@ function renderPageButtons(page) {
 							let to_date = r.message[1]
 							
 							if (date > to_date) {
-								frappe.msgprint(__('التاريخ لا يمكن أن يكون في المستقبل'));
+								frappe.msgprint(__("The date cannot be in the future"));
 								return;
 							}else if (date < to_date){
-								frappe.confirm('تأكيد تقفيل  الشهر قبل معاده؟',
+								frappe.confirm(__("Confirmation of closing the month before its due date?"),
 								() => {
-									// frappe.dom.freeze(__('جاري الاحتساب...'));
 									payrollCalculation(date,true);
-									// frappe.dom.unfreeze();
 								})
 							}else{
 								payrollCalculation(date,false);
@@ -791,30 +788,21 @@ function payrollCalculation(date,force_close_before_month_end) {
 		method: "elitehr2.elitehr2.doctype.elitehr_payroll.elitehr_payroll.start_calculate_payroll_for_all_employees",
 		args: {date:date,force_close_before_month_end:force_close_before_month_end},
 		callback: function (r) {
-			if (r.message) {
-				// frappe.show_alert({ message: __('تم حساب الرواتب بنجاح') });
-				// requestsData = [];
-				// onFieldsUpdate();
-
-				frappe.show_progress(__('احتساب الرواتب'), 0, 100, __('جاري بدء الحساب في الخلفية...'));
-			}
 		},
-		// freeze: true,
-		// freeze_message: "جاري حساب الرواتب للموظفين"
 	});
 }
 
 
 
 frappe.realtime.on('payroll_progress_update', function(data) {
-	console.log("PAYROLL EVENT", data);
-    // تحديث شريط التحميل بناءً على البيانات القادمة من البايثون
     let percent = (data.progress / data.total) * 100;
     frappe.show_progress(
-        __('احتساب الرواتب'), 
+        __("Payroll Calculation"), 
         percent, 
         100, 
-        `جاري حساب الموظف: ${data.emp_name} (${data.progress} من ${data.total})`
+        // `جاري حساب الموظف: ${data.emp_name} (${data.progress} من ${data.total})`
+		__("Payroll calculation in progress for {0} ({1} out of {2})",[data.emp_name,data.progress,data.total])
+		
     );
 });
 
@@ -823,16 +811,26 @@ frappe.realtime.on('payroll_process_complete', function(data) {
     
     if (data.status === 'Failed') {
         frappe.msgprint({
-            title: __('خطأ أثناء المعالجة'),
+            title: __("Processing error"),
             indicator: 'red',
-            message: `<b>حدث خطأ في الخلفية:</b><br>${data.message}<br><br>يرجى مراجعة (Error Log) لمزيد من التفاصيل.`
+            message: data.message
         });
     } else {
-        frappe.msgprint({
-            title: __('اكتملت العملية'),
-            indicator: 'green',
-            message: `تم احتساب الرواتب بنجاح لعدد ${data.total} موظف.`
-        });
-        updatePageData();
+		let  msg = `
+			<b>${__("Payroll calculation completed successfully")}</b><br>
+			<ul>
+				<li>${__("{0} employees were reviewed.", [data.total_reviewed])}</li>
+				<li>${__("{0} employees already have payroll for this month.", [data.already_has_payroll_count])}</li>
+				<li>${__("Payroll calculated successfully for {0} employees.", [data.successfully_processed_count])}</li>
+			</ul>
+		`
+
+		frappe.msgprint({
+			title: __("Payroll Calculation Results"),
+			indicator: "green",
+			message: msg
+		})
+			
+		updatePageData();
     }
 });
