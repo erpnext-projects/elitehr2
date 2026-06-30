@@ -673,7 +673,7 @@ function renderFormFields() {
 	$(employeeField.wrapper).css({
 		"flex": "1 1 auto",
 		"min-width": "250px"
-	});
+	}); 
 
 	departmentField = frappe.ui.form.make_control({
 		parent: filtersContainer,
