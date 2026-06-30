@@ -8,6 +8,7 @@ from frappe.utils import get_first_day, get_last_day, add_months, flt, today,add
 from elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin import get_employee_attendance_handler,get_month_from_and_end_based_on_closing_day , get_attendance_penalty
 import calendar
 from datetime import datetime
+from frappe.utils.background_jobs import enqueue
 
 class ElitehrPayroll(Document):
     def before_save(self):
@@ -249,56 +250,101 @@ def get_monthly_comparison_stats(field = "net_salary"):
     }
     
 
+def process_payroll_background(date, force_close_before_month_end, user):
+    try:
+        from_date, to_date = get_month_from_and_end_based_on_closing_day(date)
+
+        active_employees = frappe.get_all("Elitehr Employee", filters={"status": "Active"}, fields=["name", "employee_name", "salary"])
+        total_employees = len(active_employees)
+
+        frappe.publish_realtime(
+            event='payroll_progress_update',
+            message={'progress': 0, 'total': total_employees, 'emp_name': 'جلب البيانات...'},
+            user=user
+        )
+
+        # check if any employee has invalid salary
+        for emp in active_employees:
+            if not emp.salary or emp.salary <= 0:
+                frappe.throw(f"Employee {emp.employee_name} has invalid salary.")
+        
+        already_has_payroll_count = 0
+        successfully_processed_count = 0
+        
+        existing_payrolls = frappe.get_all("Elitehr Payroll", 
+            filters={
+                "date": ["between", [from_date, to_date]]
+            }, 
+            fields=["employee"]
+        )
+        employees_with_payroll = {p.employee for p in existing_payrolls}
+
+        for index,emp in enumerate(active_employees):
+
+            if emp.name in employees_with_payroll:
+                already_has_payroll_count += 1
+            else:
+                payroll_doc = frappe.new_doc("Elitehr Payroll")
+                payroll_doc.employee = emp.name
+                payroll_doc.date = date
+                if force_close_before_month_end:
+                    payroll_doc.date_is_before_month_end = True
+                    payroll_doc.force_close_before_month_end = True
+                payroll_doc.save()
+                successfully_processed_count += 1
+                frappe.db.commit()
+                
+            frappe.publish_realtime(
+                event='payroll_progress_update',
+                message={
+                    'progress': index + 1,
+                    'total': total_employees,
+                    'emp_name': emp.employee_name
+                },
+                user=user
+            )
+        
+        frappe.publish_realtime(
+            event='payroll_process_complete',
+            message={'status': 'Success', 'total': total_employees},
+            user=user
+        )
+    except Exception as e:
+        frappe.db.rollback()
+        frappe.log_error(title="خطأ في احتساب الرواتب", message=frappe.get_traceback())
+        frappe.publish_realtime(
+            event='payroll_process_complete',
+            message={'status': 'Failed', 'message': str(e)},
+            user=user
+        )
+
+    # msg = f"""
+    #     <b>تمت عملية المعالجة بنجاح:</b><br>
+    #     <ul>
+    #         <li>تم مراجعة <b>{total_reviewed}</b> موظف.</li>
+    #         <li><b>{already_has_payroll_count}</b> موظفين لديهم راتب لهذا الشهر بالفعل.</li>
+    #         <li>تم حساب الراتب لـ <b>{successfully_processed_count}</b> موظف بنجاح.</li>
+    #     </ul>
+    # """
+
+    # frappe.msgprint(msg,title="نتائج احتساب الرواتب")
+    # return True
+
 @frappe.whitelist()
-def calculate_payroll_for_all_employees(date,force_close_before_month_end = False):
-    # start_of_month = get_first_day(date)
-    # end_of_month = get_last_day(date)
+def start_calculate_payroll_for_all_employees(date,force_close_before_month_end = False):
 
-    from_date, to_date = get_month_from_and_end_based_on_closing_day(date)
-   
 
-    active_employees = frappe.get_all("Elitehr Employee", filters={"status": "Active"}, fields=["name", "employee_name", "salary"])
-    total_reviewed = len(active_employees)
+    enqueue(
+        'elitehr2.elitehr2.doctype.elitehr_payroll.elitehr_payroll.process_payroll_background', 
+        queue='long',
+        timeout=3000,
+        date=date,
+        force_close_before_month_end=force_close_before_month_end,
+        user=frappe.session.user # ضروري عشان نبعت الإشعار للمستخدم ده بس
+    )
+    return "started"
 
-    # check if any employee has invalid salary
-    for emp in active_employees:
-        if not emp.salary or emp.salary <= 0:
-            frappe.throw(f"Employee {emp.employee_name} has invalid salary.")
     
-    already_has_payroll_count = 0
-    successfully_processed_count = 0
-    
-    frappe.log(f"active_employees: {active_employees}")
-    for emp in active_employees:
-        # check if payroll already exists for this employee for the current month
-        existing_payroll = frappe.db.exists("Elitehr Payroll", {
-            "employee": emp.name,
-            "date": ["between", [from_date, to_date]]
-        })
-
-        if existing_payroll:
-            already_has_payroll_count += 1
-        else:
-            payroll_doc = frappe.new_doc("Elitehr Payroll")
-            payroll_doc.employee = emp.name
-            payroll_doc.date = date
-            if force_close_before_month_end:
-                payroll_doc.date_is_before_month_end = True
-                payroll_doc.force_close_before_month_end = True
-            payroll_doc.save()
-            successfully_processed_count += 1
-    
-    msg = f"""
-        <b>تمت عملية المعالجة بنجاح:</b><br>
-        <ul>
-            <li>تم مراجعة <b>{total_reviewed}</b> موظف.</li>
-            <li><b>{already_has_payroll_count}</b> موظفين لديهم راتب لهذا الشهر بالفعل.</li>
-            <li>تم حساب الراتب لـ <b>{successfully_processed_count}</b> موظف بنجاح.</li>
-        </ul>
-    """
-
-    frappe.msgprint(msg,title="نتائج احتساب الرواتب")
-    return True
 
 
 

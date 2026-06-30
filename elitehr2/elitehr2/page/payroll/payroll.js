@@ -759,11 +759,11 @@ function renderPageButtons(page) {
 								frappe.confirm('تأكيد تقفيل  الشهر قبل معاده؟',
 								() => {
 									// frappe.dom.freeze(__('جاري الاحتساب...'));
-									payrollCalculation(date,force_close_before_month_end=true);
+									payrollCalculation(date,true);
 									// frappe.dom.unfreeze();
 								})
 							}else{
-								payrollCalculation(date,force_close_before_month_end=false);
+								payrollCalculation(date,false);
 							}						
 						}else{
 							alert("error!")
@@ -788,17 +788,51 @@ function updatePageData() {
 
 function payrollCalculation(date,force_close_before_month_end) {
 	frappe.call({
-		method: "elitehr2.elitehr2.doctype.elitehr_payroll.elitehr_payroll.calculate_payroll_for_all_employees",
+		method: "elitehr2.elitehr2.doctype.elitehr_payroll.elitehr_payroll.start_calculate_payroll_for_all_employees",
 		args: {date:date,force_close_before_month_end:force_close_before_month_end},
 		callback: function (r) {
 			if (r.message) {
-				frappe.show_alert({ message: __('تم حساب الرواتب بنجاح') });
-				requestsData = [];
-				onFieldsUpdate();
+				// frappe.show_alert({ message: __('تم حساب الرواتب بنجاح') });
+				// requestsData = [];
+				// onFieldsUpdate();
+
+				frappe.show_progress(__('احتساب الرواتب'), 0, 100, __('جاري بدء الحساب في الخلفية...'));
 			}
 		},
-		freeze: true,
-		freeze_message: "جاري حساب الرواتب للموظفين"
+		// freeze: true,
+		// freeze_message: "جاري حساب الرواتب للموظفين"
 	});
 }
 
+
+
+frappe.realtime.on('payroll_progress_update', function(data) {
+	console.log("PAYROLL EVENT", data);
+    // تحديث شريط التحميل بناءً على البيانات القادمة من البايثون
+    let percent = (data.progress / data.total) * 100;
+    frappe.show_progress(
+        __('احتساب الرواتب'), 
+        percent, 
+        100, 
+        `جاري حساب الموظف: ${data.emp_name} (${data.progress} من ${data.total})`
+    );
+});
+
+frappe.realtime.on('payroll_process_complete', function(data) {
+    frappe.hide_progress();
+    
+    if (data.status === 'Failed') {
+        frappe.msgprint({
+            title: __('خطأ أثناء المعالجة'),
+            indicator: 'red',
+            message: `<b>حدث خطأ في الخلفية:</b><br>${data.message}<br><br>يرجى مراجعة (Error Log) لمزيد من التفاصيل.`
+        });
+    } else {
+        frappe.msgprint({
+            title: __('اكتملت العملية'),
+            indicator: 'green',
+            message: `تم احتساب الرواتب بنجاح لعدد ${data.total} موظف.`
+        });
+        updatePageData();
+    }
+});
