@@ -42,6 +42,23 @@ $( document ).ajaxSuccess(function(){
         document.querySelector(".body-sidebar-bottom .nav-item").insertAdjacentHTML("afterend", logoutItem);
     }
 
+    document.querySelectorAll(".sidebar-item-container.section-item").forEach(
+        e => {
+            let hasActiveLink = [...e.querySelectorAll("a.item-anchor[href]")]
+                .some(a => new URL(a.href).pathname === window.location.pathname);
+
+            if (!hasActiveLink) {
+                let btn = e.querySelector(
+                    "button.drop-icon:has(use[href='#icon-chevron-down'])"
+                );
+
+                if (btn) {
+                    btn.click();
+                }
+            }
+        }
+    )
+
     // frappe.router.on("change", () => {
     //     const preferredSidebar = localStorage.getItem("preferred_sidebar");
 
@@ -59,17 +76,6 @@ $( document ).ajaxSuccess(function(){
     //     }
 
     // });
-
-
-     document.querySelectorAll(".sidebar-item-container.section-item").forEach(
-        e => {            
-            if(!e.querySelector(".active-sidebar") && e.querySelector("button.drop-icon[data-state='opened']")){
-                e.querySelector("button.drop-icon[data-state='opened']").click()
-            }
-        }
-    )
-
-    
 
 
 });
@@ -94,7 +100,8 @@ $( document ).ajaxSuccess(function(){
 // }
 
 frappe.router.on('change', () => {
-    let route = frappe.get_route();
+    
+    // let route = frappe.get_route();
     // console.log(route);
     // if (frappe.get_route()[0] === "List" && frappe.get_route()[1] === "User") {
         // let urlParams = new URLSearchParams(window.location.search);
