@@ -52,11 +52,6 @@ class ElitehrRequests(Document):
             manager = frappe.get_doc("Elitehr Employee",departmentManager)
 
             directSupervisor = frappe.get_doc('Elitehr Employee', self.employee).manager
-            
-            if not directSupervisor:
-                frappe.throw(_("The request cannot be Save. Please go to the employee's file and select (Manager) from the (Employee Data) tab."))
-
-            directSupervisor = frappe.get_doc('Elitehr Employee', directSupervisor)
 
             self.levels = []
             for level in workflow.levels:
@@ -71,6 +66,9 @@ class ElitehrRequests(Document):
                     responsible = manager.employee_name
                     responsibleId = manager.name
                 elif approvedType == "Direct Supervisor":
+                    if not directSupervisor:
+                        frappe.throw(_("The request cannot be Save. Please go to the employee's file and select (Manager) from the (Employee Data) tab."))
+                    directSupervisor = frappe.get_doc('Elitehr Employee', directSupervisor)
                     responsible = directSupervisor.employee_name
                     responsibleId = directSupervisor.name
                 

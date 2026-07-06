@@ -936,5 +936,111 @@ def user_fcm(device_name,device_token,device_type):
     }
 
 
-#  "ssl_certificate": "/etc/ssl/certs/erpnext-local.crt",
-#  "ssl_certificate_key": "/etc/ssl/private/erpnext-local.key"
+# admin
+
+
+def get_manager_team_members(manager_name):
+    return frappe.get_all(
+        "Elitehr Employee",
+        filters={"manager": manager_name, "status": "Active"},
+        fields=["name", "employee_name", "department", "department_name", "job_title"]
+    )
+
+
+@frappe.whitelist()
+def get_manager_team_attendance_summary():
+    manager = get_employee_logged_in()
+    team_members = get_manager_team_members(manager.name)
+    team_count = len(team_members)
+
+    attendance_records = []
+    for t in team_members:
+        attendance_records.append(get_employee_attendance_handler(employee = t.name,from_date=today(), to_date=today()))
+
+    return {
+        "status": "success",
+        "team_count": team_count,
+        "data": attendance_records
+    }
+
+
+@frappe.whitelist()
+def get_manager_team_requests():
+    manager = get_employee_logged_in()
+    members = get_manager_team_members(manager.name)
+
+    member_names = [m.get("name") for m in members]
+
+    if not member_names:
+        return {"status": "success", "data": []}
+
+    requests = frappe.get_all(
+        "Elitehr Requests",
+        filters={
+            "employee": ["in", member_names]
+        },
+        fields=["*"],
+        order_by="creation desc"
+    )
+
+    return {"status": "success", "data": requests}
+
+
+@frappe.whitelist()
+def get_requests_responsible_for_user():
+
+    emp = get_employee_logged_in()
+
+    request_names = frappe.get_all(
+        "Elitehr Requests",
+        filters=[
+            ["Elitehr Request Approvals", "responsible_id", "=", emp.name],
+            # ["Elitehr Request Approvals", "status", "=", "Pending"]
+        ],
+        pluck="name",
+        distinct=True
+    )
+
+    if not request_names:
+        return {"success": True, "data": []}
+
+
+    result = []
+
+    for name in request_names:
+        doc = frappe.get_cached_doc("Elitehr Requests", name)
+        result.append(doc.as_dict())
+
+    return {"success": True, "data": result}
+
+
+@frappe.whitelist()
+def update_request_approval_status(request_name, new_status):
+    emp = get_employee_logged_in()
+
+    if new_status not in ["Approved", "Rejected"]:
+        return {"success": False, "message": "Invalid status, It must Approved or Rejected"}
+
+    if not frappe.db.exists("Elitehr Requests", request_name):
+        return {"success": False, "message": "هذا الطلب غير موجود."}
+    
+    doc = frappe.get_doc("Elitehr Requests", request_name)
+    is_updated = False
+    for level in doc.levels:
+        if level.responsible_id == emp.name:
+            level.status = new_status
+            level.approved_by = frappe.session.user
+            is_updated = True
+            break
+    if is_updated:
+        doc.save()
+        frappe.db.commit()
+        return {
+            "success": True, 
+            "message": _("تم تحديث حالة الطلب إلى {0} بنجاح.").format(new_status)
+        }
+    else:
+        return {
+            "success": False, 
+            "message": _("Error not updated request.")
+        }
