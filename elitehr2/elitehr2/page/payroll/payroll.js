@@ -745,7 +745,7 @@ function renderPageButtons(page) {
 				const today = frappe.datetime.get_today();
 				frappe.call({
 					method: "elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin.get_month_from_and_end_based_on_closing_day",
-					args: {ref_date:today},
+					args: {ref_date:date},
 					callback: function(r) {
 						if (r.message) {
 							let from_date = r.message[0]
