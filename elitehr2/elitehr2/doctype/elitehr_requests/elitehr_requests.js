@@ -146,7 +146,9 @@ function updateStatusBtn(frm) {
 
 
 function requestForReview(frm) {
-    const allReviewed = frm.doc.levels.every(
+    const allReviewed = 
+    frm.doc.levels.length > 0 &&
+    frm.doc.levels.every(
         level => level.status != null
     );
     if (allReviewed) {
