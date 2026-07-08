@@ -52,6 +52,12 @@ function calculate_total_days(frm) {
 }
 
 function updateStatusBtn(frm) {
+    const allReviewed = frm.doc.levels.every(
+        level => level.status != null
+    );
+    if (allReviewed) {
+        return;
+    }
     if (frm.doc.status != "Completed") {
         for (const index in frm.doc.levels) {
             const level = frm.doc.levels[index];
@@ -140,8 +146,10 @@ function updateStatusBtn(frm) {
 
 
 function requestForReview(frm) {
-
-    if (frm.doc.status === "Completed") {
+    const allReviewed = frm.doc.levels.every(
+        level => level.status != null
+    );
+    if (allReviewed) {
         frm.set_read_only();
         frm.disable_save();
         frm.add_custom_button(__("Request for review"), function () {

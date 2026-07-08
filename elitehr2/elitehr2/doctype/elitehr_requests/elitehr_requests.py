@@ -23,7 +23,7 @@ class ElitehrRequests(Document):
         # check if request is add authorized device and its first one
         r = frappe.get_all("Elitehr Requests", filters={"employee": self.employee, "type": "ADD_AUTHORIZED_DEVICE"}, fields=["name"])
         if self.type == "ADD_AUTHORIZED_DEVICE" and len(r) == 0:
-            self.status = "Completed"
+            self.status = "Approve"
 
 
         
@@ -86,7 +86,6 @@ class ElitehrRequests(Document):
         frappe.log(f"self.levels[0].status: {self.levels[0].status}")
         if self.levels and all(l.status is not None for l in self.levels):
             self.status = self.levels[-1].status
-            self.status = "Completed"
 
 
 @frappe.whitelist()
