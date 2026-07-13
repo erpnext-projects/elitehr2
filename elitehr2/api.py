@@ -1,13 +1,14 @@
 import frappe
 from frappe import _
 from frappe.auth import LoginManager
-from frappe.utils import getdate,nowdate,today,get_first_day
+from frappe.utils import getdate,nowdate,today,get_first_day,add_days
 from datetime import datetime
 # from elitehr2.elitehr2.report.employee_leaves_balances.employee_leaves_balances import get_leave_summary 
 from  elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin import get_employee_attendance_handler,set_attendance,get_valid_attendance_site,get_employee_working_days_and_time
 from frappe.utils.file_manager import save_file
 import json
 from frappe.model.meta import get_meta
+from collections import defaultdict
 
 @frappe.whitelist(allow_guest=True)
 def login(username, password):
@@ -962,6 +963,40 @@ def get_manager_team_attendance_summary():
         "team_count": team_count,
         "data": attendance_records
     }
+
+@frappe.whitelist()
+def get_manager_team_week_attendance_summary():
+    manager = get_employee_logged_in()
+    team_members = get_manager_team_members(manager.name)
+    
+    from_date = add_days(today(), -6)
+    to_date = today()
+
+    grouped_by_date = defaultdict(list)
+
+
+    for t in team_members:
+        records = get_employee_attendance_handler(employee = t.name,from_date=from_date, to_date=to_date)
+        for record in records:
+            grouped_by_date[record["date"]].append(record)
+
+    # data = [
+    #     {
+    #         "date": date,
+    #     }
+    #     for date, employees in sorted(grouped_by_date.items())
+    # ]
+    return {
+        "status": "success",
+        "data": grouped_by_date
+    }
+    # return {
+    #     "status": "success",
+    #     "data": [
+    #         {date: employees}
+    #         for date, employees in grouped_by_date.items()
+    #     ]
+    # }
 
 
 @frappe.whitelist()

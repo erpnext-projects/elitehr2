@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_bulk_edit": 1,
  "allow_rename": 1,
  "autoname": "RWQUEST-.#####",
  "creation": "2026-02-14 15:00:46.425749",
@@ -452,7 +453,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Status",
-   "options": "New\nRejected\nApprove\nUnder Liquidation\nDisbursement of Dues\nCompleted\nRequest for review",
+   "options": "New\nRejected\nApproved\nUnder Liquidation\nDisbursement of Dues\nCompleted\nRequest for review",
    "read_only": 1
   },
   {
@@ -537,7 +538,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-05-13 10:14:55.038414",
+ "modified": "2026-07-13 23:11:00.242773",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Requests",

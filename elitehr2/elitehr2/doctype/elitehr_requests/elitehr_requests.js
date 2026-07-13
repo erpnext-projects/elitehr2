@@ -118,7 +118,7 @@ function updateStatusBtn(frm) {
                             label: 'Status',
                             fieldname: 'status',
                             fieldtype: 'Select',
-                            options: ["Rejected", "Approve", "Under Liquidation", "Disbursement of Dues"],
+                            options: ["Rejected", "Approved", "Under Liquidation", "Disbursement of Dues"],
                             reqd: 1,
                             default: level.status
                         }
