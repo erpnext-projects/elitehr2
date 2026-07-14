@@ -195,7 +195,7 @@ def payrloll(fromDate, toDate):
         )
         row["attedndace"] = frappe.get_all(
             "Elitehr Payroll Attendance",
-            filters={"parent": row.name},
+            filters={"parent": row.name,"parentfield": "attendance_table"},
             fields=["*"]
         )
 
