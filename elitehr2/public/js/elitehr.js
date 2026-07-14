@@ -214,7 +214,7 @@ frappe.getUserLocation = function(onSuccess) {
                 }
                 frappe.msgprint({ title: __('خطأ'), indicator: 'red', message: __(errorMsg) });
             },
-            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+            { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 }
         );
     } else {
         frappe.throw(__("متصفحك لا يدعم تتبع الموقع الجغرافي."));
