@@ -944,7 +944,7 @@ def get_manager_team_members(manager_name):
     return frappe.get_all(
         "Elitehr Employee",
         filters={"manager": manager_name, "status": "Active"},
-        fields=["name", "employee_name", "department", "department_name", "job_title"]
+        fields=["name", "employee_name", "department", "department_name", "job_title","login_data"]
     )
 
 
@@ -1079,3 +1079,98 @@ def update_request_approval_status(request_name, new_status):
             "success": False, 
             "message": _("Error not updated request.")
         }
+
+
+@frappe.whitelist()
+def get_team_activity():
+    manager = get_employee_logged_in()
+    members = get_manager_team_members(manager.name)
+
+
+    result = get_requests_updates(employees=members)
+    
+    return {
+        "success": True,
+        "data": {
+            "team": [m.get("employee_name") for m in members if m.get("employee_name")],
+            "activity": result
+        }
+        }
+
+
+def get_requests_updates(limit=500,employees=None):
+    if not employees:
+        return []
+    
+    requests = frappe.get_all(
+        "Elitehr Requests",
+        filters={
+            "employee": ["in", [e.get("name") for e in employees]]
+        },
+        fields=["name","employee","employee_name","request_type_name","creation"]
+    )
+    
+    if not requests:
+        return []
+    
+    requests_map = {
+        r["name"]: r
+        for r in requests
+    }
+    
+    versions = frappe.get_all(
+        "Version",
+        filters={
+            "ref_doctype": "Elitehr Requests",
+            "docname": ["in", list(requests_map.keys())]
+        },
+        fields=[
+            "owner",
+            "creation",
+            "docname",
+            "data"
+        ],
+        order_by="creation desc",
+        limit=limit
+    )
+
+    activities = []
+    for request in requests:
+        activities.append({
+            "type": "request_created",
+            "employee_name": request["employee_name"],
+            "request_name": request["name"],
+            "request_type": request["request_type_name"],
+            "date":  request["creation"]
+        })
+        
+    for version in versions:
+        data = json.loads(version.data or "{}")
+        
+        request = requests_map.get(version.docname)
+        if not request:
+            continue
+        
+        employee_name = request["employee_name"]
+        request_title = request["request_type_name"]
+
+        
+        for field, old_value, new_value in data.get("changed", []):
+
+            if field != "status":
+                continue
+            
+            activities.append({
+                "type": "request_status_changed",
+                "employee_name": employee_name,
+                "request_name": version.docname,
+                "request_type": request_title,
+                "status": new_value,
+                "date": version.creation
+            })
+
+    activities.sort(
+        key=lambda x: x["date"],
+        reverse=True
+    )
+    return activities
