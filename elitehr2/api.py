@@ -639,7 +639,8 @@ def get_mobile_home_statistics():
         "attendance_dayes": 0,
         "leaves_balance": 0,
         "pending_requests": 0,
-        "current_month_salary": 0
+        "current_month_salary": 0,
+        "late_minutes": 0
     }
     # attendance_dayes
     # from start of month to today 
@@ -648,6 +649,12 @@ def get_mobile_home_statistics():
     attendance = [a for a in attendance if a['status_code'] in ("Present", "Late", "Early Out")]
     attendance_dayes = len(attendance)
     final_result["attendance_dayes"] = attendance_dayes
+    
+    # late minutes
+    late_attendance = [a for a in attendance if a['status_code'] in ("Late")]
+    late_minutes = sum( int(a["late_minutes"])  for a in late_attendance)
+    final_result["late_minutes"] = late_minutes
+    
 
     # leaves
     leaves = get_employee_leave_summary()
