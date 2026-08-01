@@ -166,6 +166,10 @@ class ElitehrPayroll(Document):
 
         # Net Salary
         self.net_salary = (employee.salary + self.total_allowances) - (self.total_deductions)
+        
+        working_dayes_in_month = len([a for a in attendance if a.get("status_code") in ["Present","Late","Early Out"]])
+        if working_dayes_in_month == 0:
+            self.net_salary = 0
     
 @frappe.whitelist()
 def payrloll(fromDate, toDate):
