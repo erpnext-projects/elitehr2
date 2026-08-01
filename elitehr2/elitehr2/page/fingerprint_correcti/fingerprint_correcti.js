@@ -53,7 +53,7 @@ function loadRequests() {
 
 			const total = requests.length;
 			const newCount = requests.filter(r => r.status === "New").length;
-			const completed = requests.filter(r => r.status === "Completed").length;
+			const completed = requests.filter(r => r.status === "Approved").length;
 
 			// Cards
 			cardRow.html(`
@@ -91,9 +91,9 @@ function renderTable(requests) {
 		},
 		{
 			id: "status", name: "الحالة",
-			format: (value) => value == "Completed"
+			format: (value) => value == "Approved"
 				? `<span class="color3"><i class="fa fa-check-circle" aria-hidden="true"></i> معتمد</span>`
-				: `<span class="color1"><i class="fa fa-clock-o" aria-hidden="true"></i> قيد الانتظار</span>`
+				: `<span class="color1">${value}</span>`
 		},
 		{
 			id: "name", name: "الإجراءات",

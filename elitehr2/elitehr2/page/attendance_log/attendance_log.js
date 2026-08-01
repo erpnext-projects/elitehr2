@@ -210,7 +210,11 @@ function renderTable(requests,selectedDate) {
 					<button class="btn btn-xs btn-info btn-edit-attendance" 
 							data-employee="${row.employee}" 
 							style="padding: 2px 8px;"
-							onclick="frappe.new_doc('Elitehr Requests')">
+							onclick="frappe.new_doc('Elitehr Requests',{
+								employee: '${row.employee}',
+								type: 'ATTENDANCE_EDIT',
+								modification_date: '${selectedDate}'
+							})">
 						${__("Fingerprint correction request")}
 					</button>
 				`
