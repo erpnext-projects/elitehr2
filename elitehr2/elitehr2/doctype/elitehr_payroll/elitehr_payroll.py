@@ -168,6 +168,7 @@ class ElitehrPayroll(Document):
         self.net_salary = (employee.salary + self.total_allowances) - (self.total_deductions)
         
         working_dayes_in_month = len([a for a in attendance if a.get("status_code") in ["Present","Late","Early Out"]])
+        self.working_days = working_dayes_in_month
         if working_dayes_in_month == 0:
             self.net_salary = 0
     

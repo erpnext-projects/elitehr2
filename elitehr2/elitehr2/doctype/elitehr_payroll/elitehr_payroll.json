@@ -26,6 +26,7 @@
   "total_allowances",
   "column_break_oxmh",
   "department_name",
+  "working_days",
   "net_salary",
   "total_deductions",
   "section_break_rqyw",
@@ -243,12 +244,17 @@
    "fieldtype": "Check",
    "label": "Date is before month end",
    "read_only": 1
+  },
+  {
+   "fieldname": "working_days",
+   "fieldtype": "Read Only",
+   "label": "Working Days"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-08-01 12:21:46.110614",
+ "modified": "2026-08-01 12:43:55.773839",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Payroll",
