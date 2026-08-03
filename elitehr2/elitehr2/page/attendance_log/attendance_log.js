@@ -360,8 +360,10 @@ function showAttendanceModal(cardRow,tableContainer) {
 				label: __('بحث برقم الموظف (ID)'),
 				fieldtype: 'Data',
 				fieldname: 'employee_id',
+				options: "Barcode",
 				description: __('اضغط Enter بعد إدخال الكود')
-			}
+			},
+			
 		],
 		primary_action_label: __('تسجيل'),
 		primary_action(values) {
@@ -379,6 +381,17 @@ function showAttendanceModal(cardRow,tableContainer) {
 
 	d.$wrapper.on('click', '#start-scan-btn', function () {
 		d.fields_dict.employee_id.$input.focus();
+		
+		new frappe.ui.Scanner({
+			dialog: !0,
+			multiple: !1,
+			on_scan(e) {
+				d.set_value('employee_id', e.result.text);
+			}
+		})
+		
+	
+		
 	});
 
 
