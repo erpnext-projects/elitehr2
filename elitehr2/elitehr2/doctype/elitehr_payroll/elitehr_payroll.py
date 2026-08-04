@@ -47,13 +47,12 @@ class ElitehrPayroll(Document):
 
         # Attendance
         absents_total = 0
-        day_wage = round((self.basic_salary * 12) / 365,2)
+        day_wage = round(((self.basic_salary + self.total_allowances) * 12) / 365,2)
+        # day_wage = round((self.basic_salary + self.total_allowances) / 30)
         from_date, to_date = get_month_from_and_end_based_on_closing_day(self.date)
         # check end data and today
 
-        if getdate(self.date) > getdate(to_date):
-            frappe.throw("لا يمكن اختيار تاريخ في المستقبل")
-        elif getdate(self.date) < getdate(to_date):
+        if getdate(self.date) < getdate(to_date):
             self.date_is_before_month_end = True
             if not self.force_close_before_month_end:
                 frappe.msgprint("التاريخ المختار قبل نهاية الشهر، قم بتفعيل خيار السماح بالتقفيل قبل نهاية الشهر لاعتماد الراتب.")
@@ -62,15 +61,37 @@ class ElitehrPayroll(Document):
             self.date_is_before_month_end = False
             self.force_close_before_month_end = False
             
-        attendance = get_employee_attendance_handler(employee= self.employee,from_date= from_date,to_date=self.date)
+        attendance = get_employee_attendance_handler(employee= self.employee,from_date= from_date,to_date=to_date)
+        working_dayes_in_month = 0
+        
         self.set("attendance_table", [])
         self.set("gaps_table", [])
-        for day in attendance:
+        for index, day in enumerate(attendance):
+            
+            # make feutre days as present if day greater than selected date
+            if getdate(day.get("date")) > getdate(self.date):
+                day["status_code"] = "Present"
+                day["status"] = _("Present")
+                day["status_code"] = "Present"
+                day["status_color"] = "color3"
+                
+            
+            # make weekend days as absent if not present in before day attendance        
+            if day.get("status_code") == "Weekend":
+                previous_day = attendance[index - 1] if index > 0 else None
+                if previous_day and previous_day.get("status_code") == "Absent":
+                    day["status_code"] = "Absent"
+                    day["status"] = _("Absent")
+            
+            if day.get("status_code") in ["Present","Late","Early Out"]:
+                working_dayes_in_month += 1
+            
             # Attendance Penalty
             # penalty_type
             deduction_message = ""
             deduction_action = ""
             deduction_value = ""
+            
             ap = get_attendance_penalty(employee=self.employee, date=day.get("date"), status_code=day.get("status_code"), notify=False)
             if ap and ap.get("message"):
                 deduction_message = ap.get("message")
@@ -86,7 +107,6 @@ class ElitehrPayroll(Document):
                         absents_total = round(absents_total + ((day_wage/100) * ap.get("value")),2)
                     
                 
-            # frappe.log(f"Attendance penalty for {day.get('date')}: {ap}")
             
             data = {
                 "date": day.get("date"),
@@ -115,6 +135,14 @@ class ElitehrPayroll(Document):
             row for row in self.salary_correction
             if row.deduction_type != "Absence deduction"
         ]
+        
+        # working_dayes_in_month
+        # working_dayes_in_month = len([a for a in attendance if a.get("status_code") in ["Present","Late","Early Out"]])
+        self.working_days = working_dayes_in_month
+        if working_dayes_in_month == 0:
+            # if no working days, then no salary
+            absents_total = self.total_allowances + self.basic_salary
+        
         if absents_total > 0:
             self.append("salary_correction", {
                 "type" : "Deduction (-)",
@@ -138,7 +166,6 @@ class ElitehrPayroll(Document):
             }
             )
         for r in requests:
-            frappe.log(r) # name creation modification_type check in check out
             self.append("processing_requests", {
                 "request": r.name,
                 "request_name": r.request_type_name,
@@ -167,10 +194,10 @@ class ElitehrPayroll(Document):
         # Net Salary
         self.net_salary = (employee.salary + self.total_allowances) - (self.total_deductions)
         
-        working_dayes_in_month = len([a for a in attendance if a.get("status_code") in ["Present","Late","Early Out"]])
-        self.working_days = working_dayes_in_month
-        if working_dayes_in_month == 0:
-            self.net_salary = 0
+        # working_dayes_in_month = len([a for a in attendance if a.get("status_code") in ["Present","Late","Early Out"]])
+        # self.working_days = working_dayes_in_month
+        # if working_dayes_in_month == 0:
+        #     self.net_salary = 0
     
 @frappe.whitelist()
 def payrloll(fromDate, toDate):
