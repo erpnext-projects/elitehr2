@@ -29,6 +29,11 @@ frappe.ui.form.on("Elitehr Requests", {
     },
     end_date(frm) {
         calculate_total_days(frm);
+    },
+    request_type_name(frm){
+        if (!frm.doc.subject) {
+            frm.set_value("subject", frm.doc.request_type_name);
+        }   
     }
 });
 
