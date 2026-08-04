@@ -41,6 +41,17 @@ def login(username, password):
         "role": user.custom_assign_role
     }
 
+@frappe.whitelist()
+def refresh_token():
+    user = frappe.get_doc("User", frappe.session.user)
+    new_secret = frappe.generate_hash(length=15)
+    user.api_secret = new_secret
+    user.save(ignore_permissions=True)
+    access_token = f"{user.api_key}:{new_secret}"
+    return {
+        "access_token": access_token,
+        "message": "Token Updated successfully"
+    }
 
 @frappe.whitelist()
 def logout():
