@@ -465,20 +465,19 @@ def get_employee_attendance_handler(employee=None,from_date=None,to_date=None):
 
     from_date = getdate(from_date)
     to_date = getdate(to_date)
-
-    targetEmployees = []
-    if employee is None:
-        employees = frappe.get_all(
-            "Elitehr Employee",
-            filters={"status": "Active"},
-            fields=["name", "employee_name", "department","department_name","shift","job_title"]
-        )
-    else:
-        employees = frappe.get_all(
-            "Elitehr Employee",
-            filters={"name":employee},
-            fields=["name", "employee_name", "department", "department_name","shift","job_title"]
-        )
+    
+    filters={"status": "Active"}
+    if employee:
+        filters["name"] = employee
+    
+    employees = frappe.get_all(
+        "Elitehr Employee",
+        filters=filters,
+        fields=["name", "employee_name", "department","department_name","shift","job_title"]
+    )
+    
+    if not employees:
+        return []
 
 
     result = []
@@ -554,6 +553,7 @@ def check_employee_leave(employee, date):
         "Elitehr Requests",
         {
             "employee": employee,
+            "tye": "Leave",
             "status": "Completed",
             "start_date": ["<=", date],
             "end_date": [">=", date]
