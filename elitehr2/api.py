@@ -1,3 +1,5 @@
+from unittest import result
+
 import frappe
 from frappe import _
 from frappe.auth import LoginManager
@@ -340,16 +342,10 @@ def get_employee_requests(only_leave_requests=False):
         frappe.throw(_("No employee linked to this user"))
 
     filters = {"employee": employee.name}
-
-    result = []
-
+    
     if only_leave_requests:
         filters["type"] = "LEAVE"
-    
-        data = frappe.get_all(
-            "Elitehr Requests",
-            filters=filters,
-            fields=[
+        fields=[
                 "name",
                 "type",
                 "request_type_name",
@@ -362,60 +358,49 @@ def get_employee_requests(only_leave_requests=False):
                 "details",
                 "status",
                 "creation",
-            ],
-            order_by="name asc"
-        )
-
-        for row in data:
-
-            files = frappe.get_all(
-                "File",
-                filters={
-                    "attached_to_doctype": "Elitehr Requests",
-                    "attached_to_name": row.name
-                },
-                fields=["file_name", "file_url"]
-            )
-
-            result.append({
-                "id": row.name,
-                "type": row.type,
-                "type_name": row.request_type_name,
-                "leave_type": row.leave_type,
-                "leave_type_name": row.leave_type_name,
-                "start_date": row.start_date,
-                "end_date": row.end_date,
-                "total_days": row.total_days,
-                "subject": row.subject,
-                "details": row.details,
-                "status": _(row.status),
-                "creation": row.creation,
-                "files": files,
-                "history": get_request_status_history(row.name)
-            })
+            ]
     else:
         filters["type"] = ["!=", "LEAVE"]
-        data = frappe.get_all(
-            "Elitehr Requests",
-            filters=filters,
-            fields=["*"],
-            order_by="name asc"
-        )
+        fields = ["*"]
+
+    data = frappe.get_all(
+        "Elitehr Requests",
+        filters=filters,
+        fields=fields,
+        order_by="name asc"
+    )
+    
+    if not data:
+        return {"status": "success", "data": []}
+    
+    request_names = [row.name for row in data]
+    all_files = frappe.get_all(
+        "File",
+        filters={
+            "attached_to_doctype": "Elitehr Requests",
+            "attached_to_name": ("in", request_names) 
+        },
+        fields=["attached_to_name", "file_name", "file_url"]
+    )
+
+    files_map = defaultdict(list)
+    for f in all_files:
+        files_map[f.attached_to_name].append({
+            "file_name": f.file_name,
+            "file_url": f.file_url
+        })
         
-        for row in data:
-            row_dict = dict(row)
-            files = frappe.get_all(
-                    "File",
-                    filters={
-                        "attached_to_doctype": "Elitehr Requests",
-                        "attached_to_name": row.name
-                    },
-                    fields=["file_name", "file_url"]
-                )
-            row_dict["files"] = files
-            result.append(row_dict)
-
-
+    result = []
+    for row in data:
+        row_dict = dict(row)
+        row_dict["id"] = row.name
+        row_dict["files"] = files_map.get(row.name, [])
+        
+        if only_leave_requests:
+            row_dict["status"] = _(row.status)
+            row_dict["history"] = get_request_status_history(row.name)
+        result.append(row_dict)
+        
     return {
         "status": "success",
         "data": result
@@ -528,31 +513,72 @@ def get_employees_leave_summary(employees=None):
 
     if not employees:
         employees = frappe.get_all("Elitehr Employee", pluck="name")
+    if not employees:
+        return data
+    
+    employees_data = frappe.get_all(
+        "Elitehr Employee",
+        filters={"name": ("in", employees)},
+        fields=["name", "employee_name"]
+    )
+    employee_map = {
+        emp.name: emp.employee_name
+        for emp in employees_data
+    }
+    leave_rows = frappe.get_all(
+        "Elitehr Employee Leaves Child Table",
+        filters={
+            "parent": ("in", employees),
+            "parenttype": "Elitehr Employee"
+        },
+        fields=[
+            "parent",
+            "leave",
+            "leave_name",
+            "days"
+        ]
+    )
 
-    for emp_name in employees or []:
-        emp = frappe.get_doc("Elitehr Employee", emp_name)
+    used_rows = frappe.db.sql("""
+        SELECT
+            employee,
+            leave_type,
+            SUM(total_days) AS used_days
+        FROM `tabElitehr Requests`
+        WHERE
+            status='Completed'
+            AND employee IN %s
+        GROUP BY
+            employee,
+            leave_type
+    """, (tuple(employees),), as_dict=True)
 
-        for l in emp.table_leaves:
-            used_days = frappe.db.sql("""
-                SELECT SUM(total_days)
-                FROM `tabElitehr Requests`
-                WHERE employee=%s
-                AND leave_type=%s
-                AND status="Completed"
-                
-            """, (emp.name, l.leave))[0][0] or 0
+    used_map = {
+        (row.employee, row.leave_type): float(row.used_days or 0)
+        for row in used_rows
+    }
 
-            total_days = float(l.days or 0)
-            percentage = (used_days / total_days * 100) if total_days else 0
+    for leave in leave_rows:
 
-            data.append({
-                "employee": emp.name,
-                "employee_name": emp.employee_name,
-                "leave_name": l.leave_name or l.leave,
-                "days": l.days,
-                "used_days": used_days,
-                "percentage": round(percentage, 1),
-            })
+        total_days = float(leave.days or 0)
+        used_days = used_map.get(
+            (leave.parent, leave.leave),
+            0
+        )
+
+        percentage = (
+            used_days / total_days * 100
+            if total_days else 0
+        )
+
+        data.append({
+            "employee": leave.parent,
+            "employee_name": employee_map.get(leave.parent),
+            "leave_name": leave.leave_name or leave.leave,
+            "days": leave.days,
+            "used_days": used_days,
+            "percentage": round(percentage, 1),
+        })
 
     return data
 
