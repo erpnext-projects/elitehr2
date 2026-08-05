@@ -3,6 +3,8 @@ const monthsNames = [
 	"يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"
 ];
 
+let attendanceCache = {};
+
 frappe.pages['reports'].on_page_load = function(wrapper) {
 	var page = frappe.ui.make_app_page({
 		parent: wrapper,
@@ -75,30 +77,21 @@ function loadStatisticsData() {
 	const today = frappe.datetime.get_today();
     const from_date = frappe.datetime.month_start(today);
     const to_date = frappe.datetime.month_end(today);
-    frappe.call({
-        method: "elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin.get_employee_attendance_handler",
-        args: { 
-			from_date: from_date,
-            to_date: to_date
-		 },
-		 callback: function(r) {
-			let attendance = r.message
-			if (attendance) {			
-				let present = attendance.filter(e => e.status_code === "Present").length;
-				let absent = attendance.filter(e => e.status_code === "Absent").length;
-				let late = attendance.filter(e => e.status_code === "Late").length;
-			
-				// إجمالي سجلات الشهر
-				let totalAttendanceRecords = attendance.length;
-			
-				$("#attendanceRate .card-value").text(getPrecent(present,totalAttendanceRecords));
-				$("#lateRate .card-value").text(getPrecent(late,totalAttendanceRecords));
-				$("#absentRate .card-value").text(getPrecent(absent,totalAttendanceRecords));
-			}
-		 }
-    });
 
-
+	getAttendance(from_date, to_date, function(attendance) {
+		if (attendance) {			
+			let present = attendance.filter(e => e.status_code === "Present").length;
+			let absent = attendance.filter(e => e.status_code === "Absent").length;
+			let late = attendance.filter(e => e.status_code === "Late").length;
+		
+			// إجمالي سجلات الشهر
+			let totalAttendanceRecords = attendance.length;
+		
+			$("#attendanceRate .card-value").text(getPrecent(present,totalAttendanceRecords));
+			$("#lateRate .card-value").text(getPrecent(late,totalAttendanceRecords));
+			$("#absentRate .card-value").text(getPrecent(absent,totalAttendanceRecords));
+		}
+	})
 
 
 
@@ -635,34 +628,29 @@ function renderAttendanceOverview(container) {
 
 
 		const today = frappe.datetime.get_today();
-
-	frappe.call({
-		method: "elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin.get_employee_attendance_handler",
-		args: { 
-			from_date: moment(today).startOf("month").format("YYYY-MM-DD"),
-			to_date: moment(today).endOf("month").format("YYYY-MM-DD"),
-		},
-		callback: function (r) {
-			let data = r.message;
-			// console.log("r data");
-			// console.log(data);
-			const resultByDepartment = {};
-			data.forEach(item => {
-				const dept = item.department_name || "Unknown";
-				resultByDepartment[dept] = (resultByDepartment[dept] || 0) + 1;
-			});
-			const labels = Object.keys(resultByDepartment);
-			const values = Object.values(resultByDepartment);
-			initChart(
-				$("#monthlyAttendanceByDepartment"),
-				"doughnut",
-				{
-					labels: labels,
-					datasets: [{data: values,}]
-				},
-			);	
-		}
-	});
+		let from_date= moment(today).startOf("month").format("YYYY-MM-DD");
+		let to_date= moment(today).endOf("month").format("YYYY-MM-DD");
+		getAttendance(
+			from_date,
+			to_date,
+			function(data) {
+				const resultByDepartment = {};
+				data.forEach(item => {
+					const dept = item.department_name || "Unknown";
+					resultByDepartment[dept] = (resultByDepartment[dept] || 0) + 1;
+				});
+				const labels = Object.keys(resultByDepartment);
+				const values = Object.values(resultByDepartment);
+				initChart(
+					$("#monthlyAttendanceByDepartment"),
+					"doughnut",
+					{
+						labels: labels,
+						datasets: [{data: values,}]
+					},
+				);	
+			}
+		)
 
 
 	frappe.call({
@@ -706,39 +694,32 @@ function renderAttendanceOverview(container) {
 
 	// السبت = نرجع كام يوم؟
 	const diff = (new Date(today).getDay() + 1) % 7;
-	const from_date = frappe.datetime.add_days(today, -diff);
-	const to_date = today;
-	frappe.call({
-		method: "elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin.get_employee_attendance_handler",
-		args: { 
-			from_date: from_date,
-			to_date: to_date,
-		},
-		callback: function(r) {
-			let data = r.message || []
-			const resultByDate = {};
-			data.forEach(item => {
-				const date = item.date.split(" ")[0];
-				resultByDate[date] = resultByDate[date] || 0
-				if(["Present","Late"].includes(item.status_code)){								
-					resultByDate[date] = resultByDate[date] + 1;
-				}
-			});						
+	from_date = frappe.datetime.add_days(today, -diff);
+	to_date = today;
 
-			initChart($("#weeklyAttendanceTrend"), "line", {
-				labels: Object.keys(resultByDate),
-				datasets: [
-					{
-						label: "حاضر",
-						data: Object.values(resultByDate),
-						backgroundColor: "rgba(16,185,129,0.2)",
-						borderColor: "#10B981",
-						tension: 0.4,
-						fill: true
-					}
-				]
-			});
-		}
+	getAttendance(from_date, to_date, function(data) {
+		const resultByDate = {};
+		data.forEach(item => {
+			const date = item.date.split(" ")[0];
+			resultByDate[date] = resultByDate[date] || 0
+			if(["Present","Late"].includes(item.status_code)){								
+				resultByDate[date] = resultByDate[date] + 1;
+			}
+		});						
+
+		initChart($("#weeklyAttendanceTrend"), "line", {
+			labels: Object.keys(resultByDate),
+			datasets: [
+				{
+					label: "حاضر",
+					data: Object.values(resultByDate),
+					backgroundColor: "rgba(16,185,129,0.2)",
+					borderColor: "#10B981",
+					tension: 0.4,
+					fill: true
+				}
+			]
+		});
 	});
 				
 }
@@ -840,22 +821,18 @@ function renderAttendanceDetailedReport(container) {
 
 		}else if (attendanceDetailedReportFromDateField.get_value() && attendanceDetailedReportToDateField.get_value()) {
 			tableContainer.html('<p>جاري التحميل...</p>');
-			frappe.call({
-				method: "elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin.get_employee_attendance_handler",
-				args: { 
-					from_date: attendanceDetailedReportFromDateField.get_value(),
-					to_date: attendanceDetailedReportToDateField.get_value(),
-				},
-				callback: function(r) {
-					let data = r.message || []
+			let from_date = attendanceDetailedReportFromDateField.get_value();
+			let to_date = attendanceDetailedReportToDateField.get_value();
+			getAttendance(
+				from_date,
+				to_date,
+				function(data) {
 					attendanceDetailedReportSelectedFromDate = attendanceDetailedReportFromDateField.get_value();
 					attendanceDetailedReportSelectedEndDate = attendanceDetailedReportToDateField.get_value();
 					attendanceDetailedReportData = data;
-					// console.log("onFieldsUpdate data from server: ",data);
 					renderAttendanceDetailedReportTable(tableContainer,attendanceDetailedReportData);
-					
 				}
-			})
+			)
 		}
 	
 	}
@@ -948,4 +925,28 @@ function getPrecent(count,totalEmployee) {
 	return totalEmployee > 0
 				? (( count / totalEmployee) * 100).toFixed(1) + " %"
 				: "0 %"
+}
+
+
+
+function getAttendance(from_date, to_date, callback) {
+    const key = from_date + "_" + to_date;
+
+    if (key in attendanceCache) {
+		console.log("from cache");
+        callback(attendanceCache[key]);
+        return;
+    }
+
+    frappe.call({
+        method: "elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin.get_employee_attendance_handler",
+        args: {
+            from_date,
+            to_date
+        },
+        callback(r) {
+            attendanceCache[key] = r.message || [];
+            callback(attendanceCache[key]);
+        }
+    });
 }
