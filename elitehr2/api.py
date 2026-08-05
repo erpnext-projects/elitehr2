@@ -1,5 +1,3 @@
-from unittest import result
-
 import frappe
 from frappe import _
 from frappe.auth import LoginManager
