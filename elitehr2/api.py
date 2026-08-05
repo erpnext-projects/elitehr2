@@ -602,41 +602,54 @@ def get_employee_tasks():
         filters={ "responsable": emp.name },
         fields=["name", "task_title", "task_description", "priority", "due_date","status"]
     )
+    if not tasks:
+        return []
+    
+    task_names = [task.name for task in tasks]
+    
+    tags_data = frappe.get_all(
+        "Tag Link",
+        filters={
+            "document_type": "Elitehr Tasks",
+            "document_name": ("in", task_names)
+        },
+        fields=["document_name", "tag"]
+    )
+    tags_map = defaultdict(list)
+    for t in tags_data:
+        tags_map[t.document_name].append(t.tag)
+        
+    assigns_data = frappe.get_all(
+        "ToDo",
+        filters={
+            "reference_type": "Elitehr Tasks",
+            "reference_name": ("in", task_names),
+            "status": ["!=", "Cancelled"]
+        },
+        fields=["reference_name", "allocated_to"]
+    )
+    
+    user_emails = list(set([a.allocated_to for a in assigns_data if a.allocated_to]))
+    user_map = {}
+    if user_emails:
+        users = frappe.get_all(
+            "User",
+            filters={"name": ("in", user_emails)},
+            fields=["name", "full_name"]
+        )
+        # إنشاء قاموس: الإيميل -> الاسم الكامل
+        user_map = {u.name: u.full_name for u in users}
 
+    # ربط الإسنادات والأسماء بالمهمة الخاصة بها
+    assigns_map = defaultdict(list)
+    for a in assigns_data:
+        assigns_map[a.reference_name].append({
+            "email": a.allocated_to,
+            "name": user_map.get(a.allocated_to)
+        })
     result = []
-
+    
     for task in tasks:
-        tags = frappe.get_all(
-            "Tag Link",
-            filters={
-                "document_type": "Elitehr Tasks",
-                "document_name": task.name
-            },
-            pluck="tag"
-        )
-
-        assigns = frappe.get_all(
-            "ToDo",
-            filters={
-                "reference_type": "Elitehr Tasks",
-                "reference_name": task.name,
-                "status": ["!=", "Cancelled"]
-            },
-            fields=["allocated_to"]
-        )
-
-        assigns_data = [
-            {
-                "email": assign.allocated_to,
-                "name": frappe.db.get_value(
-                    "User",
-                    assign.allocated_to,
-                    "full_name"
-                )
-            }
-            for assign in assigns
-        ]
-
         result.append({
             "name": task.name,
             "title": task.task_title,
@@ -644,9 +657,10 @@ def get_employee_tasks():
             "priority": _(task.priority),
             "due_date": task.due_date,
             "status": _(task.status),
-            "tags": tags,
-            "assigns": assigns_data
+            "tags": tags_map.get(task.name, []),
+            "assigns": assigns_map.get(task.name, [])
         })
+        
     return result
 
 @frappe.whitelist()
