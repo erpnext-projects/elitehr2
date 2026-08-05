@@ -320,7 +320,7 @@ function renderCollectiveDisclosure(dataFromServer) {
 
 
 function openPayslipModal(row) {
-	console.log("row: ",row);
+	// console.log("row: ",row);
 	
     let d = new frappe.ui.Dialog({
         title: `${__("كشف راتب")} - ${row.employee_name}`,

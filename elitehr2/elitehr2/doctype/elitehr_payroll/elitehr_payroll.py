@@ -1,6 +1,8 @@
 # Copyright (c) 2026, Mohamed Elgohary and contributors
 # For license information, please see license.txt
 
+from collections import defaultdict
+
 import frappe
 from frappe import _
 from frappe.model.document import Document
@@ -208,34 +210,74 @@ def payrloll(fromDate, toDate):
             {"date": ("between", [fromDate, toDate])}
         ]
     )
+    if not result:
+        return {
+            "data": [],
+            "active_employee": frappe.db.count("Elitehr Employee")
+        }
+    
+    payroll_names = [row.name for row in result]
+    
+    allowances = frappe.get_all(
+        "Elitehr Employee Allowances",
+        filters={
+            "parent": ("in", payroll_names)
+        },
+        fields=["*"],
+        order_by="parent asc, idx asc"
+    )
+    allowances_map = defaultdict(list)
+    for row in allowances:
+        allowances_map[str(row.parent)].append(row)
+    
+        
+    deductions = frappe.get_all(
+        "Elitehr Employee Deductions",
+        filters={
+            "parent": ("in", payroll_names)
+        },
+        fields=["*"],
+        order_by="parent asc, idx asc"
+    )
+    deductions_map = defaultdict(list)
+    for row in deductions:
+        deductions_map[row.parent].append(row)
+        
+    salary_corrections = frappe.get_all(
+        "Elitehr Salary Corrections",
+        filters={
+            "parent": ("in", payroll_names)
+        },
+        fields=["*"],
+        order_by="parent asc, idx asc"
+    )
+    salary_correction_map = defaultdict(list)
+    for row in salary_corrections:
+        salary_correction_map[row.parent].append(row)
+        
+    attedndaces = frappe.get_all(
+        "Elitehr Payroll Attendance",
+        filters={
+            "parent": ("in", payroll_names),"parentfield": "attendance_table"
+        },
+        fields=["*"],
+        order_by="parent asc, idx asc"
+    )
+    attendance_map = defaultdict(list)
+    for row in attedndaces:
+        attendance_map[row.parent].append(row)
 
     for row in result:
-        row["allowances"] = frappe.get_all(
-            "Elitehr Employee Allowances",
-            filters={"parent": row.name},
-            fields=["*"] 
-        )
-        row["deductions"] = frappe.get_all(
-            "Elitehr Employee Deductions",
-            filters={"parent": row.name},
-            fields=["*"]
-        )
-        row["salary_correction"] = frappe.get_all(
-            "Elitehr Salary Corrections",
-            filters={"parent": row.name},
-            fields=["*"]
-        )
-        row["attedndace"] = frappe.get_all(
-            "Elitehr Payroll Attendance",
-            filters={"parent": row.name,"parentfield": "attendance_table"},
-            fields=["*"]
-        )
+        key = str(row.name)
+        row["allowances"] = allowances_map.get(key, [])
+        row["deductions"] = deductions_map.get(key, [])
+        row["salary_correction"] = salary_correction_map.get(key, [])
+        row["attedndace"] = attendance_map.get(key, [])
 
-    active_employees = frappe.db.count("Elitehr Employee")
 
     return {
         "data": result,
-        "active_employee": active_employees
+        "active_employee": frappe.db.count("Elitehr Employee")
     }
 
 
@@ -324,7 +366,7 @@ def process_payroll_background(date, force_close_before_month_end, user):
                     payroll_doc.force_close_before_month_end = True
                 payroll_doc.save()
                 successfully_processed_count += 1
-                frappe.db.commit()
+                
                 
             frappe.publish_realtime(
                 event='payroll_progress_update',
@@ -336,6 +378,7 @@ def process_payroll_background(date, force_close_before_month_end, user):
                 user=user
             )
         
+        frappe.db.commit()
         frappe.publish_realtime(
             event='payroll_process_complete',
             message={
