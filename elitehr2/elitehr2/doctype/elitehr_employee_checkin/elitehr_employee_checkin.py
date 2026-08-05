@@ -53,7 +53,7 @@ class ElitehrEmployeeCheckin(Document):
     def after_insert(self):
         try:
             if self.log_type == "Check In":
-                get_attendance_penalty(employee = self.employee, date = self.date,status_code="Late",notify=True)
+                get_attendance_penalty(employee = self.employee, date = self.date,status_code="Late",notify=True,can_prevent=True)
             elif self.log_type == "Check Out":
                 get_attendance_penalty(employee = self.employee, date = self.date,status_code="Early Out",notify=True)
         except Exception:
@@ -62,7 +62,7 @@ class ElitehrEmployeeCheckin(Document):
             
         
         
-def get_attendance_penalty(employee, date, status_code=None,notify=False):
+def get_attendance_penalty(employee, date, status_code=None,notify=False,can_prevent=False):
     attendace_status = get_employee_attendance(employee, date)
 
     # frappe.log(f"Attendance after save: {attendace_status}")
@@ -146,6 +146,9 @@ def get_attendance_penalty(employee, date, status_code=None,notify=False):
                 "type": "Alert",
             }).insert(ignore_permissions=True)
 
+        if can_prevent and target_action.get("prevent_attendance"):
+            frappe.throw(msg or _("Attendance action prevented due to policy violation."))
+        
         return target_action.as_dict()
 
 
