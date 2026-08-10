@@ -269,4 +269,23 @@ fixtures = [
     "Navbar Settings","Custom HTML Block","Kanban Board","System Settings","Elitehr Requests Types",
         {"doctype": "Custom Field", "filters": [["module", "=", "Elitehr2"]]},
         {"doctype": "Client Script", "filters": [["module", "=", "Elitehr2"]]},
+        {"doctype": "Server Script", "filters": [["module", "=", "Elitehr2"]]},
+        {
+            "dt": "Role",
+            "filters": [
+                ["name", "in", [
+                    "Elite HR Admin",
+                    "Elite HR Employee"
+                ]]
+            ]
+        },
+        {
+            "dt": "Custom DocPerm",
+            "filters": [
+                ["role", "in", [
+                    "Elite HR Admin",
+                    "Elite HR Employee"
+                ]]
+            ]
+        }
     ]

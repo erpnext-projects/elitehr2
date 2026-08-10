@@ -4,13 +4,13 @@
    {
     "column_name": "Open",
     "indicator": "Gray",
-    "order": "[\"TASK-00002\", \"TASK-00001\"]",
+    "order": "[\n \"TASK-00001\"\n]",
     "status": "Active"
    },
    {
     "column_name": "Closed",
     "indicator": "Gray",
-    "order": "[]",
+    "order": "[\n \"TASK-00002\",\n \"TASK-00003\",\n \"TASK-00004\"\n]",
     "status": "Active"
    },
    {

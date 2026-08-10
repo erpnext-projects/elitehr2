@@ -83,6 +83,9 @@ def createLoginData(name):
 
     email = emp.email.strip().lower()
     existing_user = frappe.db.exists("User", email)
+    
+    
+    
     if existing_user:
         frappe.throw(_("Login details already exist"))
 
@@ -91,7 +94,7 @@ def createLoginData(name):
         "email": email,
         "first_name": emp.employee_name,
         "enabled": 1,
-        "custom_assign_role": "System Manager",
+        "custom_assign_role": "Employee",
         "new_password": "Welcome@123",
         "language": "ar"
     })
@@ -128,6 +131,55 @@ def update_user_roles(doc, method=None):
             doc.append("roles", {
                 "role": "Raven User"
             })
+            
+            # Remove Employee permission
+            old_permission = frappe.db.exists(
+                "User Permission",
+                {
+                    "user": doc.name,
+                    "allow": "Elitehr Employee"
+                }
+            )
+            if old_permission:
+                frappe.delete_doc(
+                    "User Permission",
+                    old_permission,
+                    ignore_permissions=True
+                )
+        elif doc.custom_assign_role == "Employee":
+            doc.append("roles", {"role": "Elite HR Employee"})
+            employee = frappe.db.get_value(
+                "Elitehr Employee",
+                {"login_data": doc.name},
+                "name"
+            )
+            if employee:
+                old_permission = frappe.db.exists(
+                    "User Permission",
+                    {
+                        "user": doc.name,
+                        "allow": "Elitehr Employee"
+                    }
+                )
+                if old_permission:
+                    # Update existing permission instead of deleting/recreating
+                    permission = frappe.get_doc(
+                        "User Permission",
+                        old_permission
+                    )
+
+                    permission.for_value = employee
+                    permission.save(ignore_permissions=True)
+                else:
+                    # Create permission for himself
+                    frappe.get_doc({
+                        "doctype": "User Permission",
+                        "user": doc.name,
+                        "allow": "Elitehr Employee",
+                        "for_value": employee,
+                        "apply_to_all_doctypes": 1
+                    }).insert(ignore_permissions=True)
+            
 
 
 # @frappe.whitelist()

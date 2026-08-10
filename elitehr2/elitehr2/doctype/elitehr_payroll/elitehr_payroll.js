@@ -5,6 +5,9 @@ frappe.ui.form.on("Elitehr Payroll", {
 	refresh(frm) {
 
         if (!frm.is_new() && frm.doc.status == "Under review") {
+            if (!frappe.user.has_role("Elite HR Admin")) {
+                return
+            }
 			frm.add_custom_button("إعادة احتساب الراتب", () => {3
                 frappe.dom.freeze(__('جاري إعادة الاحتساب...'));
                 frm.dirty();

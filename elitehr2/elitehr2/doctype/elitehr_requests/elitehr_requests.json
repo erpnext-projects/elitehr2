@@ -538,7 +538,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-08-03 19:20:53.726507",
+ "modified": "2026-08-10 12:26:54.398043",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Requests",
@@ -554,6 +554,18 @@
    "read": 1,
    "report": 1,
    "role": "Elite HR Admin",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Elite HR Employee",
    "share": 1,
    "write": 1
   }

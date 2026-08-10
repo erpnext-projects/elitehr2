@@ -1,5 +1,29 @@
 // Copyright (c) 2026, Mohamed Elgohary and contributors
 // For license information, please see license.txt
+const REQUEST_EXTRA_STATUS = {
+    OVERTIME: [
+        "Disbursement of Dues"
+    ],
+
+    ADVANCE_SALARY: [
+        "Disbursement of Dues"
+    ],
+
+    EXPENSE_PURCHASE: [
+        "Under Liquidation",
+        "Disbursement of Dues"
+    ],
+
+    EXPENSE_TRAVEL: [
+        "Under Liquidation",
+        "Disbursement of Dues"
+    ],
+
+    MISSIONS: [
+        "Disbursement of Dues"
+    ],
+
+};
 
 frappe.ui.form.on("Elitehr Requests", {
     refresh(frm) {
@@ -57,6 +81,10 @@ function calculate_total_days(frm) {
 }
 
 function updateStatusBtn(frm) {
+    if (!frappe.user.has_role("Elite HR Admin")) {
+        return
+    }
+
     const allReviewed = frm.doc.levels.every(
         level => level.status != null
     );
@@ -117,13 +145,15 @@ function updateStatusBtn(frm) {
             })
 
             function add_btn(approved_by) {
+                const statusOptions = ["Rejected",...(REQUEST_EXTRA_STATUS[frm.doc.type] || []),"Completed"];
+
                 frm.add_custom_button(__("Edit Request Status"), function () {
                     frappe.prompt([
                         {
                             label: 'Status',
                             fieldname: 'status',
                             fieldtype: 'Select',
-                            options: ["Rejected", "Approved", "Under Liquidation", "Disbursement of Dues"],
+                            options: statusOptions,
                             reqd: 1,
                             default: level.status
                         }

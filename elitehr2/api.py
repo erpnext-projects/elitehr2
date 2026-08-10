@@ -508,7 +508,15 @@ def get_employee_leave_summary():
 def get_employees_leave_summary(employees=None):
 
     data = []
-
+    
+    if "Elite HR Employee" in frappe.get_roles():
+            employee = frappe.db.get_value(
+                "Elitehr Employee",
+                {"login_data": frappe.session.user},
+                "name"
+            )
+            employees = [employee]
+            
     if not employees:
         employees = frappe.get_all("Elitehr Employee", pluck="name")
     if not employees:

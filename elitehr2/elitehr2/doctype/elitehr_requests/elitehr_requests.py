@@ -90,9 +90,21 @@ class ElitehrRequests(Document):
 
 @frappe.whitelist()
 def get_requests_list(request_type):
+    filters={"request_type_code": request_type}
+    
+    if "Elite HR Employee" in frappe.get_roles():
+        employee = frappe.db.get_value(
+            "Elitehr Employee",
+            {"login_data": frappe.session.user},
+            "name"
+        )
+        if not employee:
+            return []
+        filters["employee"] = employee
+            
     requests = frappe.get_all(
         "Elitehr Requests",
-        filters={"request_type_code": request_type},
+        filters=filters,
         fields=["*"]
     )
     return requests

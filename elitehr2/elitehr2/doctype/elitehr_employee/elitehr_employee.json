@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_bulk_edit": 1,
  "autoname": "naming_series.#####",
  "creation": "2026-02-04 08:50:17.031749",
  "default_view": "List",
@@ -329,7 +330,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-05-25 11:54:46.063225",
+ "modified": "2026-08-10 13:30:20.902273",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Employee",

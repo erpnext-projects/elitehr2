@@ -4,13 +4,17 @@
  "docstatus": 0,
  "doctype": "Page",
  "idx": 0,
- "modified": "2026-04-10 22:52:33.232148",
+ "modified": "2026-08-10 12:55:04.024375",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "hr-dashboard",
  "owner": "Administrator",
  "page_name": "hr-dashboard",
- "roles": [],
+ "roles": [
+  {
+   "role": "Elite HR Admin"
+  }
+ ],
  "script": null,
  "standard": "Yes",
  "style": null,

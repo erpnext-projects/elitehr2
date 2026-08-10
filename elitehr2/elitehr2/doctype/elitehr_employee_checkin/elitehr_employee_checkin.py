@@ -457,6 +457,13 @@ def get_monthly_attendance_matrix(ref_date):
 @frappe.whitelist()
 def get_employee_attendance_handler(employee=None,from_date=None,to_date=None):
     
+    if "Elite HR Employee" in frappe.get_roles():
+        employee = frappe.db.get_value(
+            "Elitehr Employee",
+            {"login_data": frappe.session.user},
+            "name"
+        )
+        
     if from_date is None:
         from_date = today()
 
