@@ -108,7 +108,7 @@ def createLoginData(name):
     # allow_only_specific_module(email, "Core")
 
 
-    frappe.msgprint(_("تم اضافة صلاحية System Manager"))
+    frappe.msgprint(_("تم اضافة صلاحية موظف"))
     frappe.msgprint(_("تم ارسالة رسالة لتغيير كلمة المرور"))
     frappe.msgprint(_("تم اضافة الموظف بنجاح"))
     return {
