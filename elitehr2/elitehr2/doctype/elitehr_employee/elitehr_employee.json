@@ -254,6 +254,7 @@
   {
    "fieldname": "manager",
    "fieldtype": "Link",
+   "ignore_user_permissions": 1,
    "label": "Manager",
    "options": "Elitehr Employee"
   },
@@ -330,7 +331,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-08-10 13:30:20.902273",
+ "modified": "2026-08-10 14:47:23.388105",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Employee",
