@@ -81,103 +81,57 @@ function calculate_total_days(frm) {
 }
 
 function updateStatusBtn(frm) {
-    if (!frappe.user.has_role("Elite HR Admin")) {
-        return
-    }
-
-    const allReviewed = frm.doc.levels.every(
-        level => level.status != null
-    );
-    if (allReviewed) {
+    // التحقق المبدئي في الـ Client
+    const allReviewed = frm.doc.levels.every(level => level.status != null);
+    if (allReviewed || frm.doc.status === "Completed") {
         return;
     }
-    if (frm.doc.status != "Completed") {
-        for (const index in frm.doc.levels) {
-            const level = frm.doc.levels[index];
-            
-            if (!level.responsible_id) {
-                console.error("level not have responsible id")
-                return;
-            }
-            
-            frappe.call({
-                method: "frappe.client.get",
-                args: {
-                    doctype: "Elitehr Employee",
-                    name: level.responsible_id
-                },
-                callback: function (r) {   
-                    let emp = r.message;        
-                    if (emp) {
-                        if (emp.login_data == frappe.session.user) {
-                            add_btn(emp.employee_name);
-                        }
-                    }
-                }
-            })
 
-            // التفويضات
-            frappe.call({
-                method: "frappe.client.get_list",
-                args: {
-                    doctype: "Elitehr Authorization Management",
-                    filters: {
-                        authorizer_original_authorizer: level.responsible_id,
-                        start_date: ["<=", frappe.datetime.get_today()],
-                        to_date: [">=", frappe.datetime.get_today()],
-                        request_type_optional: ["in", [null, frm.doc.type]],
-                        docstatus: 1
-                    },
-                    fields: ["*"]
-                },
-                callback: function (r) {
-                    let data = r.message;
-                    data.forEach(row => {
-                        console.log(row);    
-                        if (row.delegator_email == frappe.session.user) {
-                            add_btn(row.delegator_name);
-                            return;
-                        }
-                            
-                        
-                    });
-                }
-            })
-
-            function add_btn(approved_by) {
-                const statusOptions = ["Rejected",...(REQUEST_EXTRA_STATUS[frm.doc.type] || []),"Completed"];
-
-                frm.add_custom_button(__("Edit Request Status"), function () {
-                    frappe.prompt([
-                        {
-                            label: 'Status',
-                            fieldname: 'status',
-                            fieldtype: 'Select',
-                            options: statusOptions,
-                            reqd: 1,
-                            default: level.status
-                        }
-                    ], (values) => {
-                        frappe.call({
-                            method: "elitehr2.elitehr2.doctype.elitehr_requests.elitehr_requests.update_approval",
-                            args: {
-                                docname: frm.doc.name,
-                                status: values.status,
-                                level_name: level.name,
-                                approved_by: approved_by
-                            },
-                            callback: function () {
-                                frm.reload_doc();
-                            }
-                        });
-                    })
-
-
-                });
+    // طلب واحد فقط للسيرفر بدلاً من اللوب والمتكررات
+    frappe.call({
+        method: "elitehr2.elitehr2.doctype.elitehr_requests.elitehr_requests.check_user_approval_rights", 
+        args: {
+            docname: frm.doc.name
+        },
+        callback: function (r) {
+            if (r.message && r.message.can_approve) {
+                render_status_button(frm, r.message);
             }
         }
-    }
+    });
 }
+
+
+function render_status_button(frm, approval_data) {
+    const statusOptions = ["Approved", ...(REQUEST_EXTRA_STATUS[frm.doc.type] || []), "Rejected"];
+
+    frm.add_custom_button(__("Edit Request Status"), function () {
+        frappe.prompt([
+            {
+                label: 'Status',
+                fieldname: 'status',
+                fieldtype: 'Select',
+                options: statusOptions,
+                reqd: 1,
+                default: approval_data.current_status
+            }
+        ], (values) => {
+            frappe.call({
+                method: "elitehr2.elitehr2.doctype.elitehr_requests.elitehr_requests.update_approval",
+                args: {
+                    docname: frm.doc.name,
+                    status: values.status,
+                    level_name: approval_data.level_name,
+                    approved_by: approval_data.approved_by
+                },
+                callback: function () {
+                    frm.reload_doc();
+                }
+            });
+        });
+    });
+}
+
 
 
 function requestForReview(frm) {

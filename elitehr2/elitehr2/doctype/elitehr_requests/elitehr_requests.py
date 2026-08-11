@@ -5,7 +5,7 @@
 from frappe.model.document import Document
 import frappe
 from frappe import _
-from frappe.utils import date_diff
+from frappe.utils import date_diff,today
 from datetime import datetime
 
 class ElitehrRequests(Document):
@@ -100,7 +100,16 @@ def get_requests_list(request_type):
         )
         if not employee:
             return []
-        filters["employee"] = employee
+        
+        subordinates = frappe.get_all(
+            "Elitehr Employee", 
+            filters={"manager": employee}, 
+            pluck="name"
+        )
+        
+        allowed_employees = [employee] + subordinates
+        filters["employee"] = ["in", allowed_employees]
+        
             
     requests = frappe.get_all(
         "Elitehr Requests",
@@ -299,3 +308,67 @@ def get_leaves_summary_monthly_yearly(year=None):
     """, (year,tuple(leave_types)), as_dict=True)
 
     return data
+
+
+@frappe.whitelist()
+def check_user_approval_rights(docname):
+    doc = frappe.get_doc("Elitehr Requests", docname)
+    
+    # 1. إذا كان الطلب مكتمل أو تم مراجعة كل المستويات، نوقف التحقق
+    all_reviewed = all(level.status is not None for level in doc.levels)
+    if all_reviewed or doc.status in ["Approved","Rejected"]:
+        return {"can_approve": False}
+
+    current_user = frappe.session.user
+    current_date = today()
+
+    # جلب الموظف المرتبط بـ User الحالي
+    user_emp = frappe.db.get_value(
+        "Elitehr Employee", 
+        {"login_data": current_user}, 
+        ["name", "employee_name"], 
+        as_dict=True
+    )
+
+    for level in doc.levels:
+        # إذا كان المستوى مراجعاً بالفعل، نتخطاه للمستوى التالي
+        if level.status:
+            continue
+
+        resp_id = level.responsible_id
+        if not resp_id:
+            continue
+
+        # أ) حالة 1: المستخدم الحالي هو المسؤول المباشر عن هذا المستوى
+        if user_emp and user_emp.name == resp_id:
+            return {
+                "can_approve": True,
+                "level_name": level.name,
+                "current_status": level.status,
+                "approved_by": user_emp.employee_name
+            }
+
+        # ب) حالة 2: المستخدم الحالي مفوّض (Delegated) عن المسؤول
+        delegations = frappe.get_all(
+            "Elitehr Authorization Management",
+            filters={
+                "authorizer_original_authorizer": resp_id,
+                "delegator_email": current_user,
+                "start_date": ["<=", current_date],
+                "to_date": [">=", current_date],
+                "docstatus": 1
+            },
+            fields=["delegator_name", "request_type_optional"]
+        )
+
+        for delg in delegations:
+            # التحقق من أن نوع الطلب مطابق أو عام (None)
+            if not delg.request_type_optional or delg.request_type_optional == doc.type:
+                return {
+                    "can_approve": True,
+                    "level_name": level.name,
+                    "current_status": level.status,
+                    "approved_by": delg.delegator_name
+                }
+
+    return {"can_approve": False}

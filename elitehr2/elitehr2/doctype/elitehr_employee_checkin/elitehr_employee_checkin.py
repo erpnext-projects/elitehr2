@@ -464,6 +464,7 @@ def get_employee_attendance_handler(employee=None,from_date=None,to_date=None):
             "name"
         )
         
+        
     if from_date is None:
         from_date = today()
 
@@ -474,8 +475,15 @@ def get_employee_attendance_handler(employee=None,from_date=None,to_date=None):
     to_date = getdate(to_date)
     
     filters={"status": "Active"}
-    if employee:
-        filters["name"] = employee
+
+        
+    subordinates = frappe.get_all(
+        "Elitehr Employee", 
+        filters={"manager": employee}, 
+        pluck="name"
+    )
+    allowed_employees = [employee] + subordinates
+    filters["name"] = ["in", allowed_employees]
     
     employees = frappe.get_all(
         "Elitehr Employee",

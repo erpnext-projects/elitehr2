@@ -9,6 +9,11 @@ from elitehr2.install import allow_only_specific_module
 from frappe.utils import get_first_day, get_last_day, add_months, flt, today
 
 class ElitehrEmployee(Document):
+    def on_update(self):
+        if self.login_data and frappe.db.exists("User", self.login_data):
+            user_doc = frappe.get_doc("User", self.login_data)
+            user_doc.save(ignore_permissions=True)
+    
     def before_save(self):
         if not self.department and self.fingerprint_sites:
             self.department = self.fingerprint_sites[0].site_name
@@ -99,9 +104,18 @@ def createLoginData(name):
         "language": "ar"
     })
     
+    user_doc.append("roles", {
+        "role": "Elite HR Employee"
+    })
+    user_doc.append("roles", {
+        "role": "Raven User"
+    })
+    
     user_doc.insert()
     emp.login_data = user_doc.name
     emp.save()
+    
+    
     
     # Allow Modules
     allow_only_specific_module(email, "Elitehr2")
@@ -119,69 +133,99 @@ def createLoginData(name):
 
 # used in hook in use core doctye
 def update_user_roles(doc, method=None):  
-    if doc.get("custom_assign_role"):
-        doc.set("roles", [])
-        if doc.custom_assign_role == "System Manager":
-            doc.append("roles", {
-                "role": "Elite HR Admin"
-            })
-            doc.append("roles", {
-                "role": "Raven Admin"
-            })
-            doc.append("roles", {
-                "role": "Raven User"
-            })
+    #  التحقق مما إذا كان المستخدم يمتلك دور Elite HR Employee
+    is_employee = any(row.role == "Elite HR Employee" for row in doc.roles)
+    
+    # إذا لم يكن يمتلك الدور، نقوم بحذف كل صلاحيات النظام المتعلقة به نظافةً للقاعدة
+    if not is_employee:
+        frappe.db.delete("User Permission", {
+            "user": doc.name,
+            "allow": "Elitehr Employee"
+        })
+        return
+
+    # جلب الموظف المرتبط بالمستخدم
+    employee = frappe.db.get_value(
+        "Elitehr Employee",
+        {"login_data": doc.name},
+        fieldname=["name","manager"],
+        as_dict=True
+    )
+
+    if not employee:
+        return
+    
+    # has manager
+    manager_user = None
+    if employee.manager:
+        
+        manager_user = frappe.db.get_value("Elitehr Employee", employee.manager, "login_data")
+        if manager_user:
+            # check لو الصلاحية موجودة مسبقاً عشان ميعملش خطأ
+            if not frappe.db.exists("User Permission", {
+                "user": manager_user,
+                "allow": "Elitehr Employee",
+                "for_value": employee.name
+            }):
+                frappe.get_doc({
+                    "doctype": "User Permission",
+                    "user": manager_user,
+                    "allow": "Elitehr Employee",
+                    "for_value": employee.name,
+                    "apply_to_all_doctypes": 0 
+                }).insert(ignore_permissions=True)
+    # تنظيف: حذف الصلاحيات من أي مدير سابق
+    valid_users = [doc.name]
+    if manager_user:
+        valid_users.append(manager_user)
+    other_manager_perms = frappe.get_all(
+        "User Permission",
+        filters={
+            "allow": "Elitehr Employee",
+            "for_value": employee.name,
+            "user": ["not in", valid_users]
+        },
+        pluck="name"
+    )
+    for perm_name in other_manager_perms:
+        frappe.delete_doc("User Permission", perm_name, ignore_permissions=True)
+
+    #  تكوين قائمة القيم المسموحة (الموظف نفسه + المرؤوسين التابعين له)
+    allowed_values = [employee.name]
+    subordinates = frappe.get_all(
+        "Elitehr Employee", 
+        filters={"manager": employee.name}, 
+        pluck="name"
+    )
+    allowed_values.extend(subordinates)
+
+    # جلب الصلاحيات الحالية الموجودة في قاعدة البيانات لهذا المستخدم
+    existing_permissions = frappe.get_all(
+        "User Permission",
+        filters={"user": doc.name, "allow": "Elitehr Employee"},
+        fields=["name", "for_value"]
+    )
+    
+    # تحويلها إلى قاموس (Dictionary) لتسهيل المقارنة
+    existing_map = {p.for_value: p.name for p in existing_permissions}
+
+    # إضافة الصلاحيات الجديدة التي لم تكن موجودة
+    for val in allowed_values:
+        if val not in existing_map:
+            frappe.get_doc({
+                "doctype": "User Permission",
+                "user": doc.name,
+                "allow": "Elitehr Employee",
+                "for_value": val,
+                "apply_to_all_doctypes": 1
+            }).insert(ignore_permissions=True)
+
+    # حذف الصلاحيات القديمة لموظفين لم يعودوا تابعين له أو تم إلغاؤهم
+    for val, perm_name in existing_map.items():
+        if val not in allowed_values:
+            frappe.delete_doc("User Permission", perm_name, ignore_permissions=True)
             
-            # Remove Employee permission
-            old_permission = frappe.db.exists(
-                "User Permission",
-                {
-                    "user": doc.name,
-                    "allow": "Elitehr Employee"
-                }
-            )
-            if old_permission:
-                frappe.delete_doc(
-                    "User Permission",
-                    old_permission,
-                    ignore_permissions=True
-                )
-        elif doc.custom_assign_role == "Employee":
-            doc.append("roles", {"role": "Elite HR Employee"})
-            employee = frappe.db.get_value(
-                "Elitehr Employee",
-                {"login_data": doc.name},
-                "name"
-            )
-            if employee:
-                old_permission = frappe.db.exists(
-                    "User Permission",
-                    {
-                        "user": doc.name,
-                        "allow": "Elitehr Employee"
-                    }
-                )
-                if old_permission:
-                    # Update existing permission instead of deleting/recreating
-                    permission = frappe.get_doc(
-                        "User Permission",
-                        old_permission
-                    )
-
-                    permission.for_value = employee
-                    permission.save(ignore_permissions=True)
-                else:
-                    # Create permission for himself
-                    frappe.get_doc({
-                        "doctype": "User Permission",
-                        "user": doc.name,
-                        "allow": "Elitehr Employee",
-                        "for_value": employee,
-                        "apply_to_all_doctypes": 1
-                    }).insert(ignore_permissions=True)
             
-
-
 # @frappe.whitelist()
 # def test(doc):
 #     # هذه الدالة الآن خارج الكلاس لتسهيل استدعائها من الـ Action
