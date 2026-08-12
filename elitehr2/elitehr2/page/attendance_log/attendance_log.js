@@ -8,6 +8,9 @@ let tableContainer = $('<div class="requests-table" dir="rtl"></div>');
 
 let manualBtn;
 let deviceBtn;
+let attendanceCache = {}
+let employee = null;
+let department = null;
 
 frappe.pages['attendance-log'].on_page_load = function (wrapper) {
 	var page = frappe.ui.make_app_page({
@@ -55,6 +58,27 @@ frappe.pages['attendance-log'].on_page_load = function (wrapper) {
 			loadStatistics(selectedDate);
 		}
 	})
+	page.add_field({
+		fieldtype: 'Link',
+		label: __('Employee'),
+		options: "Elitehr Employee",
+		fieldname: 'employee',
+		onchange: function () {
+			employee = selectedEmployee = page.fields_dict.employee.get_value();
+			loadStatistics(selectedDate);
+		}
+	})
+
+	page.add_field({
+		fieldtype: 'Link',
+		label: __('Department'),
+		options: "Elitehr Fingerprint Sites",
+		fieldname: 'department',
+		onchange: function () {
+			department = selectedEmployee = page.fields_dict.department.get_value();
+			loadStatistics(selectedDate);
+		}
+	})
 
 	// Load data
 	loadStatistics(selectedDate);
@@ -79,7 +103,7 @@ frappe.pages['attendance-log'].on_page_load = function (wrapper) {
 }
 
 function update_page() {
-	loadStatistics(selectedDate);
+	loadStatistics(selectedDate,true);
 }
 function toggleAttendanceButtons() {
 
@@ -107,7 +131,7 @@ function manualAttendanceRegistration() {
 							indicator: 'green'
 						});
 						// تحديث البيانات
-						loadStatistics(frappe.datetime.get_today());
+						loadStatistics(frappe.datetime.get_today(),true);
 					}
 				}
 			});
@@ -115,20 +139,48 @@ function manualAttendanceRegistration() {
 	)
 }
 
+function fetchData(callback, forceRefresh = false	) {
+	const key = selectedDate
+	if (!forceRefresh && attendanceCache[selectedDate]) {
+		console.log("from cache");
+        callback(attendanceCache[key]);
+        return;
+    }
 
-function loadStatistics(selectedDate) {
-	// const cardRow = $(".cardContainers")
+	console.log("from server");
+
 	frappe.call({
 		method: "elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin.get_employee_attendance_handler",
 		args: { from_date: selectedDate },
 		callback: function (r) {
-			const requests = r.message || [];
+			attendanceCache[key] = r.message || [];
+			callback(attendanceCache[key])
+		}
+	});
+}
 
+
+function loadStatistics(selectedDate, forceRefresh = false) {
+	// const cardRow = $(".cardContainers")
+	// frappe.call({
+	// 	method: "elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin.get_employee_attendance_handler",
+	// 	args: { from_date: selectedDate },
+	// 	callback: function (r) {
+	fetchData(function(requests) {
+			
+			if (employee) {				
+				requests = requests.filter(r=> r.employee == employee)
+			}
+			if (department) {				
+				requests = requests.filter(r=> r.department == department)
+			}
+
+			
 			const presentCount = requests.filter(r => r.status_code == "Present" || r.status_code == "Late" || r.status_code == "Early Out").length;
 			const absentCount = requests.filter(r => r.status_code == "Absent").length;
 			const lateCount = requests.filter(r => r.status_code == "Late").length;
 			const leaveCount = requests.filter(r => r.status_code == "Leave" || r.status_code == "Weekend").length;
-			console.log("attendance_log/loadStatistics/requests", requests);
+			// console.log("attendance_log/loadStatistics/requests", requests);
 			
 
 			// Cards
@@ -153,8 +205,10 @@ function loadStatistics(selectedDate) {
 
 			renderTable(requests,selectedDate);
 			toggleAttendanceButtons();
-		}
-	});
+	}, forceRefresh)
+			
+	// 	}
+	// });
 }
 
 
@@ -280,7 +334,7 @@ function renderTable(requests,selectedDate) {
 							if (!r.exc) {
 								frappe.show_alert({ message: __(`تم تسجيل ${__(logType)} بنجاح`), subtitle: 'success' });
 								// إعادة تحميل البيانات لتحديث الجدول والكروت
-								loadStatistics(selectedDate);
+								loadStatistics(selectedDate, true);
 							} else {
 								btn.prop('disabled', false).text(__('Check Out'));
 							}
@@ -409,7 +463,7 @@ function submitAttendance(emp_id, d) {
 				callback: function (r) {
 					if (r.message) {
 						frappe.show_alert({ message: __('تم التسجيل بنجاح'), subtitle: 'success' });
-						loadStatistics(frappe.datetime.get_today());
+						loadStatistics(frappe.datetime.get_today(),true);
 						d.hide();
 					}
 				}

@@ -477,8 +477,7 @@ def get_employee_attendance_handler(employee=None,from_date=None,to_date=None,ch
     
     filters={"status": "Active"}
 
-    if not employee:
-        return []
+    
     
         
     is_check_sub = cint(check_subordinates) == 1 or str(check_subordinates).lower() == "true"
@@ -491,17 +490,25 @@ def get_employee_attendance_handler(employee=None,from_date=None,to_date=None,ch
             pluck="name"
         )
         allowed_employees.extend(subordinates)
-        
-    filters = {
-        "status": "Active",
-        "name": ["in", allowed_employees]
-    }
     
-    employees = frappe.get_all(
-        "Elitehr Employee",
-        filters=filters,
-        fields=["name", "employee_name", "department","department_name","shift","job_title"]
-    )
+    
+    if employee is None:
+            employees = frappe.get_all(
+                "Elitehr Employee",
+                filters={"status": "Active"},
+                fields=["name", "employee_name", "department","department_name","shift","job_title"]
+            )
+    else:
+        filters = {
+            "status": "Active",
+            "name": ["in", allowed_employees]
+        }
+        
+        employees = frappe.get_all(
+            "Elitehr Employee",
+            filters=filters,
+            fields=["name", "employee_name", "department","department_name","shift","job_title"]
+        )
     
     if not employees:
         return []
