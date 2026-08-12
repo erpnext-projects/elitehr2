@@ -78,12 +78,12 @@ class ElitehrPayroll(Document):
                 day["status_color"] = "color3"
                 
             
-            # make weekend days as absent if not present in before day attendance        
-            if day.get("status_code") == "Weekend":
-                previous_day = attendance[index - 1] if index > 0 else None
-                if previous_day and previous_day.get("status_code") == "Absent":
-                    day["status_code"] = "Absent"
-                    day["status"] = _("Absent")
+            # # make weekend days as absent if not present in before day attendance        
+            # if day.get("status_code") == "Weekend":
+            #     previous_day = attendance[index - 1] if index > 0 else None
+            #     if previous_day and previous_day.get("status_code") == "Absent":
+            #         day["status_code"] = "Absent"
+            #         day["status"] = _("Absent")
             
             if day.get("status_code") in ["Present","Late","Early Out"]:
                 working_dayes_in_month += 1
@@ -102,11 +102,15 @@ class ElitehrPayroll(Document):
                 deduction_value = ap.get("value") 
 
                 # absents_total
+                salary = self.basic_salary + self.total_allowances
+                day_dedction = salary / 30
                 if day.get("status_code") == "Absent" and ap and ap.get("value"):
                     if ap.get("action") == "Days":
-                        absents_total = round(absents_total + (day_wage * ap.get("value")),2)
+                        # absents_total = round(absents_total + (day_wage * ap.get("value")),2)
+                        absents_total = flt(absents_total + (day_dedction * ap.get("value")),2)
                     elif ap.get("action") == "Percentage":
-                        absents_total = round(absents_total + ((day_wage/100) * ap.get("value")),2)
+                        # absents_total = round(absents_total + ((day_wage/100) * ap.get("value")),2)
+                        absents_total = flt(absents_total + ((day_dedction/100) * ap.get("value")),2)
                     
                 
             

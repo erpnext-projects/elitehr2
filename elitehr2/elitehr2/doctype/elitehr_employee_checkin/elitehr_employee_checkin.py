@@ -6,7 +6,7 @@ from frappe import _
 from frappe.model.document import Document
 from collections import defaultdict
 from datetime import datetime, timedelta,date
-from frappe.utils import get_datetime, time_diff_in_seconds, format_datetime, now_datetime, nowtime, get_first_day, get_last_day, add_months, flt, today,add_days,getdate
+from frappe.utils import get_datetime, time_diff_in_seconds, format_datetime, now_datetime, nowtime, get_first_day, get_last_day, add_months, flt, today,add_days,getdate,cint
 import calendar
 import math
 
@@ -406,7 +406,8 @@ def get_monthly_attendance_matrix(ref_date):
 
     rows = get_employee_attendance_handler(
         from_date=from_date,
-        to_date=to_date
+        to_date=to_date,
+        check_subordinates = True
     ) or []
 
 
@@ -455,9 +456,9 @@ def get_monthly_attendance_matrix(ref_date):
 
 # دالة الاساسية
 @frappe.whitelist()
-def get_employee_attendance_handler(employee=None,from_date=None,to_date=None):
+def get_employee_attendance_handler(employee=None,from_date=None,to_date=None,check_subordinates = False):
     
-    if "Elite HR Employee" in frappe.get_roles():
+    if not employee and "Elite HR Employee" in frappe.get_roles():
         employee = frappe.db.get_value(
             "Elitehr Employee",
             {"login_data": frappe.session.user},
@@ -476,14 +477,25 @@ def get_employee_attendance_handler(employee=None,from_date=None,to_date=None):
     
     filters={"status": "Active"}
 
+    if not employee:
+        return []
+    
         
-    subordinates = frappe.get_all(
-        "Elitehr Employee", 
-        filters={"manager": employee}, 
-        pluck="name"
-    )
-    allowed_employees = [employee] + subordinates
-    filters["name"] = ["in", allowed_employees]
+    is_check_sub = cint(check_subordinates) == 1 or str(check_subordinates).lower() == "true"
+    allowed_employees = [employee]
+    
+    if is_check_sub:
+        subordinates = frappe.get_all(
+            "Elitehr Employee", 
+            filters={"manager": employee}, 
+            pluck="name"
+        )
+        allowed_employees.extend(subordinates)
+        
+    filters = {
+        "status": "Active",
+        "name": ["in", allowed_employees]
+    }
     
     employees = frappe.get_all(
         "Elitehr Employee",
@@ -498,12 +510,30 @@ def get_employee_attendance_handler(employee=None,from_date=None,to_date=None):
     result = []
     for emp in employees:
         working_days = get_employee_working_days_and_time(emp)
+
+        # make weekend days as absent if not present in before day attendance    
+        prev_date = add_days(from_date, -1)
+        prev_attendance = get_employee_attendance(date=prev_date, employee=emp.name)
+        prev_status_code = prev_attendance.get("status_code") if prev_attendance else None
+        
         indexDate = from_date
         while indexDate <= to_date:
             weekday = getdate(indexDate).strftime("%A")  # Saturday, Sunday...
             # return weekday
             # check is weekend
             if weekday not in working_days:
+                
+                # make weekend days as absent if not present in before day attendance    
+                if prev_status_code == "Absent":
+                    status_name = _("Absent")
+                    status_code = "Absent"
+                    status_color = "red"  
+                else:
+                    status_name = _("Weekend")
+                    status_code = "Weekend"
+                    status_color = ""
+                    
+                    
                 result.append({
                     "employee": emp.name,
                     "employee_name": emp.employee_name,
@@ -515,13 +545,16 @@ def get_employee_attendance_handler(employee=None,from_date=None,to_date=None):
                     "f_checkin_lat":"",
                     "f_checkin_long":"",
                     "check_out": "",
-                    "status": _("Weekend"),
-                    "status_code": "Weekend",
+                    "status": status_name,
+                    "status_code": status_code,
                     "working_hours": 0,
                     "working_seconds": 0,
                     "late_minutes": 0,
-                    "status_color": ""
+                    "status_color": status_color
                 })
+                # make weekend days as absent if not present in before day attendance   
+                prev_status_code = status_code
+                
                 indexDate = add_days(indexDate, 1)
                 continue
 
@@ -545,6 +578,9 @@ def get_employee_attendance_handler(employee=None,from_date=None,to_date=None):
                     "late_minutes": 0,
                     "status_color": ""
                 })
+                # make weekend days as absent if not present in before day attendance   
+                prev_status_code = "Leave"
+                
                 indexDate = add_days(indexDate, 1)
                 continue
 
@@ -556,6 +592,14 @@ def get_employee_attendance_handler(employee=None,from_date=None,to_date=None):
                 day_result["department_name"] = emp.department_name
                 day_result["job_title"] = emp.job_title
                 result.append(day_result)
+                
+                # make weekend days as absent if not present in before day attendance   
+                prev_status_code = day_result.get("status_code")
+                
+            else:
+                # make weekend days as absent if not present in before day attendance   
+                prev_status_code = None
+                
             indexDate = add_days(indexDate, 1)    
     
     # frappe.log(f"get_employee_attendance_handler/ results: {result}")
