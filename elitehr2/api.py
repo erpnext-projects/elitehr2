@@ -1018,9 +1018,29 @@ def get_manager_team_attendance_summary():
     team_members = get_manager_team_members(manager.name)
     team_count = len(team_members)
 
+    employee_names = [t.name for t in team_members]
+    employee_phones = frappe.get_all(
+        "Elitehr Employee",
+        filters={"name": ["in", employee_names]},
+        fields=["name", "phone_number"]
+    )
+    phone_map = {
+        employee.name: employee.phone_number or ""
+        for employee in employee_phones
+    }
+    
     attendance_records = []
     for t in team_members:
-        attendance_records.append(get_employee_attendance_handler(employee = t.name,from_date=today(), to_date=today()))
+        attendance = get_employee_attendance_handler(
+            employee=t.name,
+            from_date=today(),
+            to_date=today()
+        )
+        for record in attendance:
+            record["phone_number"] = phone_map.get(t.name, "")
+            
+        attendance_records.append(attendance)
+
 
     return {
         "status": "success",
