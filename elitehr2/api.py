@@ -4,7 +4,7 @@ from frappe.auth import LoginManager
 from frappe.utils import getdate,nowdate,today,get_first_day,add_days
 from datetime import datetime
 # from elitehr2.elitehr2.report.employee_leaves_balances.employee_leaves_balances import get_leave_summary 
-from  elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin import get_employee_attendance_handler,set_attendance,get_valid_attendance_site,get_employee_working_days_and_time
+from  elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin import get_employee_attendance_handler,set_attendance,get_valid_attendance_site,get_employee_working_days_and_time,get_month_from_and_end_based_on_closing_day
 from frappe.utils.file_manager import save_file
 import json
 from frappe.model.meta import get_meta
@@ -1238,3 +1238,17 @@ def get_requests_updates(limit=500,employees=None):
         reverse=True
     )
     return activities
+
+
+@frappe.whitelist()
+def get_employee_month_attendance(employee_id,date):
+    emp = get_employee_logged_in()
+
+    from_date, to_date = get_month_from_and_end_based_on_closing_day(date)
+    res = get_employee_attendance_handler(employee=employee_id,from_date= from_date,to_date=to_date)
+    # from_date
+    
+    return {
+            "success": True,
+            "data": res
+        }
