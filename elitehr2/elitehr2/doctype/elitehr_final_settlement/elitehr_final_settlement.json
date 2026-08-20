@@ -1,0 +1,264 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "creation": "2026-08-17 19:19:08.347826",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_tjnt",
+  "amended_from",
+  "section_break_gguk",
+  "employee",
+  "job_title",
+  "date_of_appointment",
+  "net_salary",
+  "column_break_lvzr",
+  "type_of_termination_of_service",
+  "type_of_contract",
+  "years_of_service",
+  "section_break_yrko",
+  "date_of_termination_of_service",
+  "column_break_jcbs",
+  "last_day_of_work",
+  "column_break_pkvq",
+  "remaining_vacation_days",
+  "section_break_gpdp",
+  "disbursement",
+  "vacation_allowance",
+  "remaining_days_salary",
+  "end_of_service_reward",
+  "additional_bonuses",
+  "other_benefits",
+  "column_break_yjuf",
+  "deductions",
+  "loan_balance",
+  "credit_balance",
+  "other_discounts",
+  "section_break_cxry",
+  "notes",
+  "summary_of_the_settlement_account_section",
+  "column_break_pazm",
+  "disbursement_container",
+  "deductions_table",
+  "section_break_pchw",
+  "net_settlement"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_tjnt",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Elitehr Final settlement",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "section_break_gguk",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "label": "Employee",
+   "options": "Elitehr Employee"
+  },
+  {
+   "fieldname": "column_break_lvzr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "type_of_termination_of_service",
+   "fieldtype": "Select",
+   "label": "Type of termination of service",
+   "options": "Resignation\nContract Expiration\nTermination\nRetirement"
+  },
+  {
+   "fieldname": "section_break_yrko",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fetch_from": "employee.job_title",
+   "fieldname": "job_title",
+   "fieldtype": "Read Only",
+   "label": "Job Title"
+  },
+  {
+   "fetch_from": "employee.type_of_contract",
+   "fieldname": "type_of_contract",
+   "fieldtype": "Read Only",
+   "label": "Type Of Contract"
+  },
+  {
+   "fetch_from": "employee.date_of_appointment",
+   "fieldname": "date_of_appointment",
+   "fieldtype": "Read Only",
+   "label": "Date Of Appointment"
+  },
+  {
+   "fetch_from": "employee.net_salary",
+   "fieldname": "net_salary",
+   "fieldtype": "Read Only",
+   "label": "Net salary"
+  },
+  {
+   "fieldname": "years_of_service",
+   "fieldtype": "Read Only",
+   "label": "Years of service"
+  },
+  {
+   "fieldname": "date_of_termination_of_service",
+   "fieldtype": "Date",
+   "label": "Date of termination of service"
+  },
+  {
+   "fieldname": "column_break_jcbs",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "last_day_of_work",
+   "fieldtype": "Date",
+   "label": "Last day of work"
+  },
+  {
+   "fieldname": "column_break_pkvq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "remaining_vacation_days",
+   "fieldtype": "Int",
+   "label": "Remaining vacation days"
+  },
+  {
+   "fieldname": "section_break_gpdp",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "disbursement",
+   "fieldtype": "Heading",
+   "label": "Disbursement"
+  },
+  {
+   "fieldname": "column_break_yjuf",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "deductions",
+   "fieldtype": "Heading",
+   "label": "Deductions"
+  },
+  {
+   "fieldname": "additional_bonuses",
+   "fieldtype": "Float",
+   "label": "Additional bonuses"
+  },
+  {
+   "fieldname": "other_benefits",
+   "fieldtype": "Float",
+   "label": "Other benefits"
+  },
+  {
+   "fieldname": "loan_balance",
+   "fieldtype": "Float",
+   "label": "Loan balance"
+  },
+  {
+   "fieldname": "credit_balance",
+   "fieldtype": "Float",
+   "label": "Credit balance"
+  },
+  {
+   "fieldname": "other_discounts",
+   "fieldtype": "Float",
+   "label": "Other discounts"
+  },
+  {
+   "fieldname": "section_break_cxry",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes",
+   "placeholder": "Additional notes regarding the settlement..."
+  },
+  {
+   "fieldname": "summary_of_the_settlement_account_section",
+   "fieldtype": "Section Break",
+   "label": "Summary of the settlement account"
+  },
+  {
+   "fieldname": "column_break_pazm",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "disbursement_container",
+   "fieldtype": "HTML"
+  },
+  {
+   "fieldname": "deductions_table",
+   "fieldtype": "HTML"
+  },
+  {
+   "fieldname": "section_break_pchw",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "net_settlement",
+   "fieldtype": "Float",
+   "label": "Net settlement",
+   "precision": "2",
+   "read_only": 1
+  },
+  {
+   "fieldname": "end_of_service_reward",
+   "fieldtype": "Float",
+   "label": "End Of Service Reward"
+  },
+  {
+   "fieldname": "remaining_days_salary",
+   "fieldtype": "Float",
+   "label": "Remaining Days Salary"
+  },
+  {
+   "fieldname": "vacation_allowance",
+   "fieldtype": "Float",
+   "label": "Vacation Allowance"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-08-18 18:26:26.226369",
+ "modified_by": "Administrator",
+ "module": "Elitehr2",
+ "name": "Elitehr Final settlement",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}
