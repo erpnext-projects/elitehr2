@@ -1,5 +1,5 @@
 
-let attendanceTimeInterval = null;
+
 let selectedDate = frappe.datetime.get_today();
 const wrapperContent = $('<div dir="rtl" class="custom-page"></div>');
 let cardRow = $('<div class="cardContainers"></div>');
@@ -89,8 +89,13 @@ frappe.pages['attendance-log'].on_page_load = function (wrapper) {
 		manualAttendanceRegistration();
 	});
 
-	deviceBtn = page.add_inner_button(__("جهاز تسجيل الحضور"), function () {
-		showAttendanceModal(cardRow, tableContainer);
+	deviceBtn = page.add_inner_button(__("Attendance recording device"), function () {
+		frappe.showAttendanceModal(
+			(values, d) => {
+				submitAttendance(values.employee_id, d)
+			}
+		);
+
 	});
 
 	page.add_inner_button(__("Update"), function () {
@@ -388,68 +393,7 @@ function showMapDialog(lat, lng, empName) {
 }
 
 
-function showAttendanceModal(cardRow,tableContainer) {
-	let now = new Date();
-	let date = now.toLocaleDateString("ar-EG");
 
-	let d = new frappe.ui.Dialog({
-		title: __('جهاز تسجيل الحضور والإنصراف'),
-		fields: [
-			{
-				fieldtype: 'HTML',
-				fieldname: 'realtime_display',
-				options: `
-						<div class="text-center" style="padding: 20px; background: #f8f9fa; border-radius: 10px; margin-bottom: 15px;">
-							<h1 id="modal-live-time" style="font-weight: bold; color: #171717; font-size: 3rem; margin: 0;">00:00:00</h1>
-							<h3 id="modal-live-date" style="margin-bottom: 5px;">---</h3>
-						</div>
-						<div class="text-center" style="margin-bottom: 20px;">
-							<button class="btn btn-primary btn-lg btn-block" id="start-scan-btn">
-								<i class="fa fa-qrcode"></i> ${__("ابدأ المسح (Scan)")}
-							</button>
-						</div>
-					`
-			},
-			{
-				label: __('بحث برقم الموظف (ID)'),
-				fieldtype: 'Data',
-				fieldname: 'employee_id',
-				options: "Barcode",
-				description: __('اضغط Enter بعد إدخال الكود')
-			},
-			
-		],
-		primary_action_label: __('تسجيل'),
-		primary_action(values) {
-			submitAttendance(values.employee_id, d);
-		}
-	});
-
-	d.show();
-
-	d.on_page_show = function () {
-		d.$wrapper.find('#modal-live-date').text(date);
-		startTimeOnlyTimer(d);
-	};
-
-
-	d.$wrapper.on('click', '#start-scan-btn', function () {
-		d.fields_dict.employee_id.$input.focus();
-		
-		new frappe.ui.Scanner({
-			dialog: !0,
-			multiple: !1,
-			on_scan(e) {
-				d.set_value('employee_id', e.result.text);
-			}
-		})
-		
-	
-		
-	});
-
-
-}
 
 
 function submitAttendance(emp_id, d) {
@@ -476,21 +420,3 @@ function submitAttendance(emp_id, d) {
 
 
 
-function startTimeOnlyTimer(dialog) {
-
-	clearInterval(attendanceTimeInterval);
-
-	function updateTime() {
-		let now = new Date();
-
-		let time = now.toLocaleTimeString('ar-EG');
-
-		let timeEl = dialog?.$wrapper?.find('#modal-live-time');
-		if (timeEl?.length) timeEl.text(time);
-	}
-
-	// عرض فوري
-	updateTime();
-
-	attendanceTimeInterval = setInterval(updateTime, 1000);
-}
