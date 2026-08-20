@@ -1,12 +1,11 @@
 {
  "actions": [],
- "allow_rename": 1,
- "autoname": "field:worker_number",
+ "allow_bulk_edit": 1,
+ "autoname": ".{the_contract}.-.#####",
  "creation": "2026-04-19 10:36:59.588826",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "worker_number",
   "idresidence_number",
   "nationality",
   "job_title",
@@ -20,14 +19,6 @@
   "notes"
  ],
  "fields": [
-  {
-   "fieldname": "worker_number",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Worker Number",
-   "reqd": 1,
-   "unique": 1
-  },
   {
    "fieldname": "idresidence_number",
    "fieldtype": "Data",
@@ -94,11 +85,11 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-04-19 11:15:26.732157",
+ "modified": "2026-08-16 13:13:48.121868",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Supply Contract Workers",
- "naming_rule": "By fieldname",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {
