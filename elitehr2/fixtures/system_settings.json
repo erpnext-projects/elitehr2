@@ -60,7 +60,7 @@
   "max_report_rows": 100000,
   "max_signups_allowed_per_hour": 300,
   "minimum_password_score": "2",
-  "modified": "2026-07-17 22:51:04.108571",
+  "modified": "2026-08-16 12:54:41.304694",
   "name": "System Settings",
   "number_format": "#,###.##",
   "only_allow_system_managers_to_upload_public_files": 0,
