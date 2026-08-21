@@ -10,10 +10,24 @@ from frappe.utils import get_first_day, get_last_day, add_months, flt, today
 
 class ElitehrEmployee(Document):
     def on_update(self):
-        if self.login_data and frappe.db.exists("User", self.login_data):
-            user_doc = frappe.get_doc("User", self.login_data)
-            user_doc.save(ignore_permissions=True)
-    
+        # 1. تحديث صلاحيات الموظف نفسه (إن وجد له حساب)
+        if self.login_data:
+            sync_user_permissions(self.login_data)
+
+        # 2. تحديث صلاحيات المدير الجديد (مثل: خالد)
+        if self.manager:
+            manager_user = frappe.db.get_value("Elitehr Employee", self.manager, "login_data")
+            if manager_user:
+                sync_user_permissions(manager_user)
+
+        # 3. تحديث صلاحيات المدير القديم (إذا تم تغيير المدير)
+        if not self.is_new():
+            previous_doc = self.get_doc_before_save()
+            if previous_doc and previous_doc.manager and previous_doc.manager != self.manager:
+                old_manager_user = frappe.db.get_value("Elitehr Employee", previous_doc.manager, "login_data")
+                if old_manager_user:
+                    sync_user_permissions(old_manager_user)
+                    
     def before_save(self):
         if not self.department and self.fingerprint_sites:
             self.department = self.fingerprint_sites[0].site_name
@@ -130,9 +144,73 @@ def createLoginData(name):
         "modified": emp.modified
     }
 
+def update_user_roles(doc, method=None):
+    """Hook يُستدعى عند حفظ شاشة User"""
+    sync_user_permissions(doc.name)
+    
+def sync_user_permissions(user_id):
+    """دالة موحدة لإعادة بناء الصلاحيات لأي مستخدم بشكل نظيف وصحيح"""
+    if not user_id or not frappe.db.exists("User", user_id):
+        return
+
+    # 1. التحقق من أن المستخدم يمتلك دور Elite HR Employee
+    user_roles = frappe.get_roles(user_id)
+    if "Elite HR Employee" not in user_roles:
+        # حذف جميع الصلاحيات في حال سحب الدور منه
+        old_perms = frappe.get_all(
+            "User Permission",
+            filters={"user": user_id, "allow": "Elitehr Employee"},
+            pluck="name"
+        )
+        for perm in old_perms:
+            frappe.delete_doc("User Permission", perm, ignore_permissions=True)
+        return
+
+    # 2. جلب سجل الموظف المرتبط بهذا المستخدم
+    emp = frappe.db.get_value(
+        "Elitehr Employee",
+        {"login_data": user_id},
+        ["name"],
+        as_dict=True
+    )
+    if not emp:
+        return
+
+    # 3. تجميع قائمة الموظفين المسموح برؤيتهم: (الموظف نفسه + كل المرؤوسين المباشرين له)
+    subordinates = frappe.get_all(
+        "Elitehr Employee",
+        filters={"manager": emp.name},
+        pluck="name"
+    )
+    
+    allowed_employees = set([emp.name] + subordinates)
+
+    # 4. جلب الصلاحيات الحالية المسجلة في قاعدة البيانات لهذا المستخدم
+    existing_perms = frappe.get_all(
+        "User Permission",
+        filters={"user": user_id, "allow": "Elitehr Employee"},
+        fields=["name", "for_value"]
+    )
+    existing_map = {p.for_value: p.name for p in existing_perms}
+
+    # 5. إضافة الصلاحيات الناقصة (مع جعل apply_to_all_doctypes = 1)
+    for emp_name in allowed_employees:
+        if emp_name not in existing_map:
+            frappe.get_doc({
+                "doctype": "User Permission",
+                "user": user_id,
+                "allow": "Elitehr Employee",
+                "for_value": emp_name,
+                "apply_to_all_doctypes": 1  # أساسي لرؤية كافة المستندات (الإجازات، الحضور...)
+            }).insert(ignore_permissions=True)
+
+    # 6. حذف الصلاحيات الزائدة (لموظفين لم يعودوا تابعين له)
+    for emp_name, perm_name in existing_map.items():
+        if emp_name not in allowed_employees:
+            frappe.delete_doc("User Permission", perm_name, ignore_permissions=True)
 
 # used in hook in use core doctye
-def update_user_roles(doc, method=None):  
+def update_user_roles_old(doc, method=None):  
     #  التحقق مما إذا كان المستخدم يمتلك دور Elite HR Employee
     is_employee = any(row.role == "Elite HR Employee" for row in doc.roles)
     
