@@ -92,7 +92,7 @@ function add_btn_show_employee_card(frm) {
                 employee_id: frm.doc.name,
                 phone: frm.doc.phone_number,
                 email: frm.doc.email,
-                national_id: frm.doc.account_number != "" ? `********${frm.doc.account_number.slice(-4)}` : '',
+                national_id: frm.doc.account_number ? `********${frm.doc.account_number.slice(-4)}` : '',
                 qr_data: frm.doc.name
             };
             frappe.show_employee_card(card_data);
