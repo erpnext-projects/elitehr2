@@ -76,8 +76,8 @@ frappe.pages['missions'].on_page_load = function(wrapper) {
 			{ id: "creation", name: "تاريخ الطلب",
 				format: (value) => value ? value.split(' ')[0] : ''
 			},
-			{ id: "docstatus", name: "الحالة",
-				format: (value) => value == 1
+			{ id: "status", name: "الحالة",
+				format: (value) => value == "Approved"
 					? `<span class="color3"><i class="fa fa-check-circle" aria-hidden="true"></i> معتمد</span>`
 					: `<span class="color1"><i class="fa fa-clock-o" aria-hidden="true"></i> قيد الانتظار</span>`
 			},

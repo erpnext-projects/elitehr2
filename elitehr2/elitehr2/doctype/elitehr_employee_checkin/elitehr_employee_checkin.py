@@ -827,7 +827,7 @@ def set_attendance(logType,employee,latitude,Longitude,device_name,device_id):
 @frappe.whitelist()
 def set_attendance_by_employee_id(employee_id,latitude,longitude,device_name,device_id):
     employees = frappe.get_all("Elitehr Employee", 
-        filters={"employee_id": employee_id}, 
+        filters={"name": employee_id}, 
         fields=["name", "employee_name"]
     )
 

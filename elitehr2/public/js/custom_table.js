@@ -66,7 +66,7 @@ class CustomTable {
                 // دالة الجمع: بتمشي على data وتجمع الـ id بتاع العمود ده
                 const total = this.data.reduce((sum, row) => {
                     return sum + (parseFloat(row[col.id]) || 0);
-                }, 0);
+                }, 0).toFixed(2);
                 // لو العمود له تنسيق (format) نطبقه على المجموع برضه
                 footerValue = col.format ? col.format(total) : total;
                 hasFoot = true

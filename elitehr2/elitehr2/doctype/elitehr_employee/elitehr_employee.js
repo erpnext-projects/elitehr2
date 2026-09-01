@@ -28,10 +28,10 @@ frappe.ui.form.on("Elitehr Employee", {
         });
 
         frm.add_custom_button(frappe._("Employee Leave Balance"), function () {
-
-            frappe.set_route("query-report", "Employee Leaves balances", {
-                employee: frm.doc.name
-            });
+            frappe.route_options = {
+                "employee": frm.doc.name
+            };
+            frappe.set_route( "employee-leaves-balances");
 
         });
 

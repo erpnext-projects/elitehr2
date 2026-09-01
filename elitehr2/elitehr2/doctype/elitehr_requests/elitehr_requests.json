@@ -453,6 +453,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Status",
+   "no_copy": 1,
    "options": "New\nRejected\nApproved\nUnder Liquidation\nDisbursement of Dues\nCompleted\nRequest for review",
    "read_only": 1
   },
@@ -465,6 +466,7 @@
    "fieldname": "levels",
    "fieldtype": "Table",
    "label": "Levels",
+   "no_copy": 1,
    "options": "Elitehr Request Approvals",
    "read_only": 1
   },
@@ -539,7 +541,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-08-10 18:20:17.047976",
+ "modified": "2026-08-24 18:56:00.586425",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Requests",

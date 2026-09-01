@@ -18,7 +18,8 @@ class ElitehrRequests(Document):
 
     def before_save(self):
         self.getRequestLevels()
-        self.checkAllLevelsApproved()
+        self.checkRequestStatusFromLevel()
+        # self.checkAllLevelsApproved()
 
         # check if request is add authorized device and its first one
         r = frappe.get_all("Elitehr Requests", filters={"employee": self.employee, "type": "ADD_AUTHORIZED_DEVICE"}, fields=["name"])
@@ -81,11 +82,17 @@ class ElitehrRequests(Document):
                 })
                 frappe.log(self.levels)
 
-    def checkAllLevelsApproved(self):
-        # Check if all levels have been approved
-        frappe.log(f"self.levels[0].status: {self.levels[0].status}")
-        if self.levels and all(l.status is not None for l in self.levels):
-            self.status = self.levels[-1].status
+    # def checkAllLevelsApproved(self):
+    #     # Check if all levels have been approved
+    #     if self.levels and all(l.status is not None for l in self.levels):
+    #         self.status = self.levels[-1].status
+    def checkRequestStatusFromLevel(self):
+        if any(l.status == "Rejected" for l in self.levels):
+            self.status = "Rejected"
+        elif all(l.status == "Approved" for l in self.levels):
+            self.status = "Approved"
+        else:
+            self.status = "New"
 
 
 @frappe.whitelist()
@@ -314,9 +321,11 @@ def get_leaves_summary_monthly_yearly(year=None):
 def check_user_approval_rights(docname):
     doc = frappe.get_doc("Elitehr Requests", docname)
     
-    # 1. إذا كان الطلب مكتمل أو تم مراجعة كل المستويات، نوقف التحقق
-    all_reviewed = all(level.status is not None for level in doc.levels)
-    if all_reviewed or doc.status in ["Approved","Rejected"]:
+    # 1. إذا كان الطلب مكتمل او مرفوض، نوقف التحقق
+    # all_reviewed = all(level.status is not None for level in doc.levels)
+    # if all_reviewed or doc.status in ["Approved","Rejected"]:
+    #     return {"can_approve": False}
+    if doc.status in ["Approved","Rejected"]:
         return {"can_approve": False}
 
     current_user = frappe.session.user
@@ -332,8 +341,8 @@ def check_user_approval_rights(docname):
 
     for level in doc.levels:
         # إذا كان المستوى مراجعاً بالفعل، نتخطاه للمستوى التالي
-        if level.status:
-            continue
+        # if level.status:
+        #     continue
 
         resp_id = level.responsible_id
         if not resp_id:

@@ -97,17 +97,13 @@ class ElitehrEmployee(Document):
 @frappe.whitelist()
 def createLoginData(name):
     emp = frappe.get_doc("Elitehr Employee", name)
-    if emp.email == None:
+    if not emp.email or not emp.email.strip():
         frappe.throw(_("Please add the employee's email address."))
 
     email = emp.email.strip().lower()
-    existing_user = frappe.db.exists("User", email)
-    
-    
-    
-    if existing_user:
+    if frappe.db.exists("User", email):
         frappe.throw(_("Login details already exist"))
-
+        
     user_doc = frappe.get_doc({
         "doctype": "User",
         "email": email,
@@ -115,26 +111,18 @@ def createLoginData(name):
         "enabled": 1,
         "custom_assign_role": "Employee",
         "new_password": "Welcome@123",
-        "language": "ar"
+        "language": "ar",
+        "roles": [
+            {"role": "Elite HR Employee"},
+            {"role": "Raven User"}
+        ]
     })
-    
-    user_doc.append("roles", {
-        "role": "Elite HR Employee"
-    })
-    user_doc.append("roles", {
-        "role": "Raven User"
-    })
-    
-    user_doc.insert()
-    emp.login_data = user_doc.name
-    emp.save()
-    
-    
+    user_doc.insert(ignore_permissions=True)
+    emp.db_set("login_data", user_doc.name)
     
     # Allow Modules
     allow_only_specific_module(email, "Elitehr2")
     # allow_only_specific_module(email, "Core")
-
 
     frappe.msgprint(_("تم اضافة صلاحية موظف"))
     frappe.msgprint(_("تم ارسالة رسالة لتغيير كلمة المرور"))
@@ -173,8 +161,23 @@ def sync_user_permissions(user_id):
         ["name"],
         as_dict=True
     )
+    
     if not emp:
         return
+
+    # Show Login User
+    if not frappe.db.exists("User Permission", {
+        "user": user_id,
+        "allow": "User",
+        "for_value": user_id
+    }):
+        frappe.get_doc({
+            "doctype": "User Permission",
+            "user": user_id,
+            "allow": "User",
+            "for_value": user_id,
+            "apply_to_all_doctypes": 1 
+        }).insert(ignore_permissions=True)
 
     # 3. تجميع قائمة الموظفين المسموح برؤيتهم: (الموظف نفسه + كل المرؤوسين المباشرين له)
     subordinates = frappe.get_all(

@@ -81,13 +81,11 @@ function calculate_total_days(frm) {
 }
 
 function updateStatusBtn(frm) {
-    // التحقق المبدئي في الـ Client
-    const allReviewed = frm.doc.levels.every(level => level.status != null);
-    if (allReviewed || frm.doc.status === "Completed") {
+
+    if (frm.doc.status == "Approved" || frm.doc.status == "Rejected" ) {
         return;
     }
 
-    // طلب واحد فقط للسيرفر بدلاً من اللوب والمتكررات
     frappe.call({
         method: "elitehr2.elitehr2.doctype.elitehr_requests.elitehr_requests.check_user_approval_rights", 
         args: {
@@ -135,12 +133,7 @@ function render_status_button(frm, approval_data) {
 
 
 function requestForReview(frm) {
-    const allReviewed = 
-    frm.doc.levels.length > 0 &&
-    frm.doc.levels.every(
-        level => level.status != null
-    );
-    if (allReviewed) {
+    if (frm.doc.status == "Approved" || frm.doc.status == "Rejected" ) {
         frm.set_read_only();
         frm.disable_save();
         frm.add_custom_button(__("Request for review"), function () {

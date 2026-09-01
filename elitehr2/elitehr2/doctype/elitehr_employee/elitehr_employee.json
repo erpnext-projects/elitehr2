@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_bulk_edit": 1,
- "autoname": "naming_series.#####",
+ "autoname": "format:{naming_series} {employee_id}",
  "creation": "2026-02-04 08:50:17.031749",
  "default_view": "List",
  "doctype": "DocType",
@@ -116,7 +116,8 @@
    "label": "ID",
    "no_copy": 1,
    "options": "Emp-",
-   "reqd": 1
+   "reqd": 1,
+   "sort_options": 1
   },
   {
    "fieldname": "branche",
@@ -283,6 +284,7 @@
    "fieldname": "login_data",
    "fieldtype": "Link",
    "label": "Login data",
+   "no_copy": 1,
    "options": "User",
    "read_only": 1
   },
@@ -331,11 +333,11 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-08-10 19:08:27.700144",
+ "modified": "2026-08-25 18:09:07.832904",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Employee",
- "naming_rule": "Expression",
+ "naming_rule": "Expression (old style)",
  "owner": "Administrator",
  "permissions": [
   {

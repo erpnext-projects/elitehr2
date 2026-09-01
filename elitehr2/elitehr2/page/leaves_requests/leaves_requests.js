@@ -99,7 +99,7 @@ function renderTable(requests) {
 				{ id: "total_days", name: "عدد الأيام" },
 				{
 					id: "status", name: "الحالة",
-					format: (value) => value == "Completed" ? `<span class='color3'><i class="fa fa-check-circle" aria-hidden="true"></i> مكتمل</span>` : `<span class='color1'><i class="fa fa-clock-o" aria-hidden="true"></i> قيد الانتظار</span>`
+					format: (value) => value == "Approved" ? `<span class='color3'><i class="fa fa-check-circle" aria-hidden="true"></i> مكتمل</span>` : `<span class='color1'><i class="fa fa-clock-o" aria-hidden="true"></i> قيد الانتظار</span>`
 				},
 				{ id: "name", name: "الإجراءات", format: value => `<a href='/desk/elitehr-requests/${value}'><i class="fa fa-eye" aria-hidden="true"></i> عرض وتعديل</a>` }
 		

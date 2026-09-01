@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_bulk_edit": 1,
  "allow_rename": 1,
  "creation": "2026-02-14 14:06:55.171602",
  "doctype": "DocType",
@@ -26,7 +27,7 @@
    "fieldname": "country",
    "fieldtype": "Select",
    "label": "Country",
-   "options": "\u0627\u0644\u0645\u0645\u0644\u0643\u0629 \u0627\u0644\u0639\u0631\u0628\u064a\u0629 \u0627\u0644\u0633\u0639\u0648\u062f\u064a\u0629\n\u0627\u0644\u0625\u0645\u0627\u0631\u0627\u062a \u0627\u0644\u0639\u0631\u0628\u064a\u0629 \u0627\u0644\u0645\u062a\u062d\u062f\u0629\n\u0645\u0635\u0631"
+   "options": "Saudi Arabia\nEgypt"
   },
   {
    "fieldname": "column_break_dazn",
@@ -78,7 +79,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-06-05 16:50:15.443185",
+ "modified": "2026-09-01 22:34:12.401168",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Company",

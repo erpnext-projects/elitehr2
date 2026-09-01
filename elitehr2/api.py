@@ -505,11 +505,17 @@ def get_employee_leave_summary():
 
 
 @frappe.whitelist()
-def get_employees_leave_summary(employees=None):
+def get_employees_leave_summary(employees=None, year=None):
 
     data = []
     
-    if "Elite HR Employee" in frappe.get_roles():
+    if not year:
+        year = getdate(nowdate()).year
+    else:
+        year = int(year)
+    
+    roles = frappe.get_roles()
+    if "Elite HR Employee" in roles and "Elite HR Admin" not in roles:
             employee = frappe.db.get_value(
                 "Elitehr Employee",
                 {"login_data": frappe.session.user},
@@ -522,6 +528,10 @@ def get_employees_leave_summary(employees=None):
     if not employees:
         return data
     
+    if isinstance(employees, str):
+        employees = [employees]
+        
+    
     employees_data = frappe.get_all(
         "Elitehr Employee",
         filters={"name": ("in", employees)},
@@ -531,11 +541,16 @@ def get_employees_leave_summary(employees=None):
         emp.name: emp.employee_name
         for emp in employees_data
     }
+    
+    start_date = f"{year}-01-01 00:00:00"
+    end_date = f"{year}-12-31 23:59:59"
+    
     leave_rows = frappe.get_all(
         "Elitehr Employee Leaves Child Table",
         filters={
             "parent": ("in", employees),
-            "parenttype": "Elitehr Employee"
+            "parenttype": "Elitehr Employee",
+            "creation": ["between", [start_date, end_date]]
         },
         fields=[
             "parent",
@@ -552,12 +567,14 @@ def get_employees_leave_summary(employees=None):
             SUM(total_days) AS used_days
         FROM `tabElitehr Requests`
         WHERE
-            status='Completed'
-            AND employee IN %s
+            type='LEAVE'
+            AND status='Approved'
+            AND employee IN %(employees)s
+            AND YEAR(creation) = %(year)s
         GROUP BY
             employee,
             leave_type
-    """, (tuple(employees),), as_dict=True)
+    """, { "employees":tuple(employees), "year": year }, as_dict=True)
 
     used_map = {
         (row.employee, row.leave_type): float(row.used_days or 0)
@@ -584,6 +601,7 @@ def get_employees_leave_summary(employees=None):
             "days": leave.days,
             "used_days": used_days,
             "percentage": round(percentage, 1),
+            "avilable": int(leave.days) - int(used_days)
         })
 
     return data
@@ -747,14 +765,14 @@ def set_employee_attendance(attendace_type,lat,long,phone_name,phone_id):
     # check phone_id in employee Requests and its Completed
     allowed_devices = frappe.db.exists("Elitehr Requests", {
         "employee": emp.name,
-        "status": "Completed",
+        "status": "Approved",
         "device_id": phone_id
     })
 
     # check if request for this device is already created and pending
     pending_request = frappe.db.exists("Elitehr Requests", {
         "employee": emp.name,
-        "status": ["!=", "Completed"],
+        "status": ["!=", "Approved"],
         "device_id": phone_id,
         "type": "ADD_AUTHORIZED_DEVICE"
     })
