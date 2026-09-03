@@ -94,12 +94,12 @@ function renderTable(requests) {
 				{ id: "department", name: "القسم" },		
 				{ id: "leave_type", name: "نوع الاجازة", format: value => leaveTypeMap[value] || value },
 				{ id: "creation", name: "تاريخ الطلب", format: (value) => value ? value.split(' ')[0] : '' },
-				{ id: "start_date", name: "تاريخ البدء" },
+				{ id: "start_date", name: "تاريخ البدء" }, 
 				{ id: "end_date", name: "تاريخ الانتهاء" },
 				{ id: "total_days", name: "عدد الأيام" },
 				{
 					id: "status", name: "الحالة",
-					format: (value) => value == "Approved" ? `<span class='color3'><i class="fa fa-check-circle" aria-hidden="true"></i> مكتمل</span>` : `<span class='color1'><i class="fa fa-clock-o" aria-hidden="true"></i> قيد الانتظار</span>`
+					format: (value) => value == "Approved" ? `<span class='color3'><i class="fa fa-check-circle" aria-hidden="true"></i> معتمد</span >` : `<span class='color1'><i class="fa fa-clock-o" aria-hidden="true"></i> ${__(value)} </span>`
 				},
 				{ id: "name", name: "الإجراءات", format: value => `<a href='/desk/elitehr-requests/${value}'><i class="fa fa-eye" aria-hidden="true"></i> عرض وتعديل</a>` }
 		
