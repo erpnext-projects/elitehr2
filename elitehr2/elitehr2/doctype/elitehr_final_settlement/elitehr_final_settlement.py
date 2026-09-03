@@ -5,8 +5,8 @@ from elitehr2.api import get_employees_leave_summary
 import frappe
 from frappe import _
 from frappe.model.document import Document
-from frappe.utils import  flt, getdate, date_diff
-from elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin import get_month_from_and_end_based_on_closing_day , get_attendance_penalty
+from frappe.utils import  flt, getdate, date_diff,today
+from elitehr2.elitehr2.doctype.elitehr_employee_checkin.elitehr_employee_checkin import get_month_from_and_end_based_on_closing_day , get_attendance_penalty,get_employee_attendance_handler
 class ElitehrFinalsettlement(Document):
     def validate(self):
         self.calculate_settlement()
@@ -40,7 +40,7 @@ class ElitehrFinalsettlement(Document):
         
     def set_advance_salary(self):
         if self.last_day_of_work:
-            self.remaining_days_salary = current_month_salary(date=self.last_day_of_work) or 0
+            self.remaining_days_salary = current_month_salary(employee = self.employee,date=self.last_day_of_work,salary=self.net_salary) or 0
         else:
             self.remaining_days_salary = 0
     
@@ -178,18 +178,25 @@ class ElitehrFinalsettlement(Document):
 
 
 
-def current_month_salary(date): 
+def current_month_salary(employee,date,salary): 
+    day_wage = salary / 30
     from_date, to_date = get_month_from_and_end_based_on_closing_day(date)
-    payroll = frappe.db.get_value(
-        "Elitehr Payroll",
-        {
-        "date": ["between",[from_date,to_date]],
-        "status": "Approved"
-        },
-        "net_salary"
-    )
     
-    if not payroll:
-        frappe.throw(_("No approved payroll found for the specified date."))
-        
-    return payroll
+    attendance = get_employee_attendance_handler(employee= employee,from_date= from_date,to_date=date)
+    
+    deduction_total_price = 0
+    cout_days = len(attendance)
+    for index, day in enumerate(attendance):
+        ap = get_attendance_penalty(employee=employee, date=day.get("date"), status_code=day.get("status_code"), notify=False)
+        if ap:
+            if day.get("status_code") == "Absent" and ap and ap.get("value"):
+                if ap.get("action") == "Days":
+                    deduction_total_price = deduction_total_price + (day_wage * ap.get("value"))
+                elif ap.get("action") == "Percentage":
+                    deduction_total_price = fltdeduction_total_price + ((day_wage/100) * ap.get("value"))
+
+    balance_due = day_wage * cout_days
+    net_salary = balance_due - deduction_total_price
+
+    frappe.log(attendance)
+    return net_salary   
