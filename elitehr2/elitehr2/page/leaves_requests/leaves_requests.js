@@ -97,7 +97,7 @@ function renderTable(requests) {
 				{ id: "start_date", name: "تاريخ البدء" }, 
 				{ id: "end_date", name: "تاريخ الانتهاء" },
 				{ id: "total_days", name: "عدد الأيام" },
-				{
+				{ 
 					id: "status", name: "الحالة",
 					format: (value) => value == "Approved" ? `<span class='color3'><i class="fa fa-check-circle" aria-hidden="true"></i> معتمد</span >` : `<span class='color1'><i class="fa fa-clock-o" aria-hidden="true"></i> ${__(value)} </span>`
 				},
