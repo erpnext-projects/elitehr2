@@ -82,7 +82,7 @@ function calculate_total_days(frm) {
 
 function updateStatusBtn(frm) {
 
-    if (frm.doc.status == "Approved" || frm.doc.status == "Rejected" ) {
+    if (frm.doc.status == "Approved" || frm.doc.status == "Rejected" || frm.is_new()) {
         return;
     }
 
