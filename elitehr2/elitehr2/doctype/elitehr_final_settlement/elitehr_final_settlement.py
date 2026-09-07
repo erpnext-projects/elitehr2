@@ -13,7 +13,7 @@ class ElitehrFinalsettlement(Document):
         
     def calculate_settlement(self):
         self.set_loan_balance()
-        self.set_advance_salary()
+        self.set_remaining_days_salary()
         self.set_remaining_vacation_days()
         self.calculate_vacation_allowance()
         self.calculate_years_of_service()
@@ -38,11 +38,13 @@ class ElitehrFinalsettlement(Document):
 
         self.loan_balance = flt(total_loans)
         
-    def set_advance_salary(self):
-        if self.last_day_of_work:
-            self.remaining_days_salary = current_month_salary(employee = self.employee,date=self.last_day_of_work,salary=self.net_salary) or 0
-        else:
-            self.remaining_days_salary = 0
+    def set_remaining_days_salary(self):
+        if self.worked_days:
+            self.remaining_days_salary = (self.net_salary / 30) * self.worked_days
+        # if self.last_day_of_work:
+        #     self.remaining_days_salary = current_month_salary(employee = self.employee,date=self.last_day_of_work,salary=self.net_salary) or 0
+        # else:
+        #     self.remaining_days_salary = 0
     
     def set_remaining_vacation_days(self):
         # الاجازات المتبقية

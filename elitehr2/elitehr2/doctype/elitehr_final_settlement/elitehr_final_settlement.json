@@ -17,6 +17,7 @@
   "type_of_termination_of_service",
   "type_of_contract",
   "years_of_service",
+  "worked_days",
   "section_break_yrko",
   "date_of_termination_of_service",
   "column_break_jcbs",
@@ -253,13 +254,19 @@
    "label": "Vacation Allowance",
    "precision": "2",
    "read_only": 1
+  },
+  {
+   "fieldname": "worked_days",
+   "fieldtype": "Float",
+   "label": "Worked Days",
+   "precision": "2"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-01 21:42:07.165588",
+ "modified": "2026-09-07 19:08:13.797791",
  "modified_by": "Administrator",
  "module": "Elitehr2",
  "name": "Elitehr Final settlement",
