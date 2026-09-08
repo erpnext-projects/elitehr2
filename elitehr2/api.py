@@ -395,7 +395,7 @@ def get_employee_requests(only_leave_requests=False):
         row_dict["files"] = files_map.get(row.name, [])
         
         if only_leave_requests:
-            row_dict["status"] = _(row.status)
+            row_dict["status"] = row.status
             row_dict["history"] = get_request_status_history(row.name)
         result.append(row_dict)
         
